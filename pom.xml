@@ -54,5 +54,86 @@
 
     <properties>
         <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
+        <openMRSVersion>2.0.4</openMRSVersion>
+        <openMRSRuntimeVersion>1.9.3</openMRSRuntimeVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
+        <openmrsAtomfeedVersion>2.5.6</openmrsAtomfeedVersion>
+        <openmrsOwaVersion>1.7.0</openmrsOwaVersion>
+        <atomfeed.version>1.9.4</atomfeed.version>
+        <legacyuiVersion>1.0</legacyuiVersion>
     </properties>
+    
+    <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openmrs.api</groupId>
+        <artifactId>openmrs-api</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>jar</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.web</groupId>
+        <artifactId>openmrs-web</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>jar</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.api</groupId>
+        <artifactId>openmrs-api</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.web</groupId>
+        <artifactId>openmrs-web</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.test</groupId>
+        <artifactId>openmrs-test</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>pom</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>webservices.rest-omod</artifactId>
+        <version>${webservicesRestModuleVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>webservices.rest-omod-common</artifactId>
+        <version>${webservicesRestModuleVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ict4h.openmrs</groupId>
+        <artifactId>openmrs-atomfeed-omod</artifactId>
+        <version>${openmrsAtomfeedVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ict4h.openmrs</groupId>
+        <artifactId>openmrs-atomfeed-common</artifactId>
+        <version>${openmrsAtomfeedVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!-- End OpenMRS core -->
+
+      <dependency>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>legacyui-omod</artifactId>
+        <version>${legacyuiVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
 </project>

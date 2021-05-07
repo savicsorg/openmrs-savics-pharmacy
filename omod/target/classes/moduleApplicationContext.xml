@@ -25,17 +25,30 @@
 
     <context:component-scan base-package="org.openmrs.module.savicspharmacy" />
 
+    <bean id="pharmacyDao" class="org.openmrs.module.savicspharmacy.api.dao.impl.PharmacyDaoImpl">
+        <property name="dbSessionFactory">
+            <ref bean="dbSessionFactory"/>
+        </property>
+    </bean> 
+    
+    <bean id="pharmacyServiceImpl" class="org.openmrs.module.savicspharmacy.api.service.impl.PharmacyServiceImpl">
+        <property name="dao">
+            <ref bean="pharmacyDao"/>
+        </property>
+        <property name="locationService">
+            <ref bean="locationService"/>
+        </property>
+    </bean>
+    
     <!-- Wraps SavicsPharmacyModuleService methods in DB transactions and OpenMRS interceptors,
     which set audit info like dateCreated, changedBy, etc.-->
-    <bean id="savicspharmacy.SavicsPharmacyModuleService"
-            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+    <bean id="pharmacyService"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager" />
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.savicspharmacy.api.impl.SavicsPharmacyModuleServiceImpl">
-                <property name="dao" ref="savicspharmacy.SavicsPharmacyModuleDao" />
-            </bean>
+            <ref bean="pharmacyServiceImpl"/>
         </property>
         <property name="preInterceptors">
             <ref bean="serviceInterceptors" />
@@ -49,9 +62,9 @@
     calling Context.getService(SavicsPharmacyModuleService.class) -->
     <bean parent="serviceContext">
         <property name="moduleService">
-            <list>
-                <value>org.openmrs.module.savicspharmacy.api.SavicsPharmacyModuleService</value>
-                <ref bean="savicspharmacy.SavicsPharmacyModuleService" />
+            <list merge="true">
+                <value>org.openmrs.module.savicspharmacy.api.service.PharmacyService</value>
+                <ref bean="pharmacyService" />
             </list>
         </property>
     </bean>

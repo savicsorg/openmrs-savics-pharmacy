@@ -20,5 +20,12 @@
   		    http://www.springframework.org/schema/util
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<context:component-scan base-package="org.openmrs.module.savicspharmacy.web.controller" />
+    <context:component-scan base-package="org.openmrs.module.savicspharmacy.web.controller" />
+    <!-- Add here beans related to the web context -->
+    <!-- Annotation based controllers -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    
+    <bean id="pharmacyDao" class="org.openmrs.module.savicspharmacy.api.dao.impl.PharmacyDaoImpl">
+        <property name="dbSessionFactory" ref="dbSessionFactory"></property>
+    </bean>
 </beans>

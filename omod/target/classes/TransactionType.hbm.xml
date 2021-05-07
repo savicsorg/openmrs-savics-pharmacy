@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pharm" name="org.openmrs.module.savicspharmacy.api.entity.TransactionType" table="pharm_transaction_type">
+    <id name="code" type="string">
+      <column length="10" name="code"/>
+      <generator class="identity"/>
+    </id>
+    <property name="id" type="int">
+      <column name="id" not-null="true" unique="true"/>
+    </property>
+    <property name="uuid" type="string">
+      <column length="38" name="uuid" not-null="true"/>
+    </property>
+    <property name="name" type="string">
+      <column length="20" name="name"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="transactions" table="pharm_transaction">
+      <key>
+        <column length="10" name="transaction_type_code" not-null="true"/>
+      </key>
+      <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.Transaction"/>
+    </set>
+  </class>
+</hibernate-mapping>
