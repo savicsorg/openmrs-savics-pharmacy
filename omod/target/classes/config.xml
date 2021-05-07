@@ -100,9 +100,9 @@
         org.openmrs.module.savicspharmacy.api.entity
     </packagesWithMappedClasses>-->
     <!--<mapping class="org.openmrs.module.savicspharmacy.api.entity.Unit"/>-->
-<!--    <mappingFiles>
-
-    </mappingFiles>-->
+    <mappingFiles>
+        Unit.hbm.xml
+    </mappingFiles>
 	
     <!-- Internationalization -->
     <!-- All message codes should start with savicspharmacy.* -->

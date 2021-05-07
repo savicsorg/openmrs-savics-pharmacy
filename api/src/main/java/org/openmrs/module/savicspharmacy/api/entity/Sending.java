@@ -67,14 +67,6 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 		this.sendingAmount = sendingAmount;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Set getSendingDetails() {
 		return this.sendingDetails;
 	}

@@ -10,22 +10,22 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.CustomerType" fetch="select" name="customerType">
       <column name="customer_type_id" not-null="true"/>
     </many-to-one>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
-    <property name="code" type="string">
+    <property name="code" type="java.lang.String">
       <column length="10" name="code"/>
     </property>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column name="name"/>
     </property>
-    <property name="address" type="string">
+    <property name="address" type="java.lang.String">
       <column name="address"/>
     </property>
-    <property name="email" type="string">
+    <property name="email" type="java.lang.String">
       <column length="100" name="email"/>
     </property>
-    <property name="tel" type="string">
+    <property name="tel" type="java.lang.String">
       <column length="20" name="tel"/>
     </property>
     <property name="patientId" type="java.lang.Integer">

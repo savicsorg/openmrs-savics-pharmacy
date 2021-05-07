@@ -90,13 +90,4 @@ public class OrderDetail extends BaseOpenmrsData implements java.io.Serializable
 	public void setOrderLineAmount(Double orderLineAmount) {
 		this.orderLineAmount = orderLineAmount;
 	}
-	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 }

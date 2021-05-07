@@ -59,14 +59,6 @@ public class StocktakeDetail extends BaseOpenmrsData implements java.io.Serializ
 		this.id = id;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Integer getItemStock() {
 		return this.itemStock;
 	}

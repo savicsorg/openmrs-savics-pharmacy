@@ -57,14 +57,6 @@ public class Reception extends BaseOpenmrsData implements java.io.Serializable {
 		this.date = date;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Set getReceptionDetails() {
 		return this.receptionDetails;
 	}

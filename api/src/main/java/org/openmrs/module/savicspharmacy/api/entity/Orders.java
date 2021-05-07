@@ -99,14 +99,6 @@ public class Orders extends BaseOpenmrsData implements java.io.Serializable {
 		this.dateReception = dateReception;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Set getOrderDetails() {
 		return this.orderDetails;
 	}

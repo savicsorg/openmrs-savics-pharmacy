@@ -60,14 +60,6 @@ public class SendingDetail extends BaseOpenmrsData implements java.io.Serializab
 		this.id = id;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Integer getSendingDetailsQuantity() {
 		return this.sendingDetailsQuantity;
 	}

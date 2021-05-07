@@ -10,13 +10,13 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation" fetch="select" name="location">
       <column name="location_id" not-null="true"/>
     </many-to-one>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
-    <property name="date" type="date">
+    <property name="date" type="java.util.Date">
       <column length="10" name="date"/>
     </property>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column length="100" name="name"/>
     </property>
     <set fetch="select" inverse="true" lazy="true" name="stocktakeDetails" table="pharm_stocktake_detail">

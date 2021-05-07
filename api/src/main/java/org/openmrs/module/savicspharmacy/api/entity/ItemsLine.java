@@ -60,14 +60,6 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 		this.id = id_1;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public String getItemBatch() {
 		return this.itemBatch;
 	}

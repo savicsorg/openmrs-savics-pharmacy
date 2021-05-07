@@ -7,10 +7,10 @@
       <column name="id"/>
       <generator class="identity"/>
     </id>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column length="20" name="name"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
 <!--    <set fetch="select" inverse="true" lazy="true" name="customers" table="pharm_customer">

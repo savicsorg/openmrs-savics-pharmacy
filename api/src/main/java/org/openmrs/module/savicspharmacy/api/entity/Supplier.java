@@ -35,14 +35,6 @@ public class Supplier extends BaseOpenmrsData implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public String getCode() {
 		return this.code;
 	}

@@ -16,10 +16,10 @@
         <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.TransactionType" fetch="select" name="transactionType">
             <column length="10" name="transaction_type_code" not-null="true"/>
         </many-to-one>
-        <property name="uuid" type="string">
+        <property name="uuid" type="java.lang.String">
             <column length="38" name="uuid" not-null="true"/>
         </property>
-        <property name="date" type="date">
+        <property name="date" type="java.util.Date">
             <column length="10" name="date"/>
         </property>
         <property name="transactionTypeId" type="int">
@@ -28,10 +28,10 @@
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity"/>
         </property>
-        <property name="itemBatch" type="string">
+        <property name="itemBatch" type="java.lang.String">
             <column length="50" name="item_batch"/>
         </property>
-        <property name="itemExpiryDate" type="date">
+        <property name="itemExpiryDate" type="java.util.Date">
             <column length="10" name="item_expiry_date"/>
         </property>
         <property name="personId" type="java.lang.Integer">
@@ -40,7 +40,7 @@
         <property name="amount" type="java.lang.Double">
             <column name="amount" precision="22" scale="0"/>
         </property>
-        <property name="status" type="string">
+        <property name="status" type="java.lang.String">
             <column length="10" name="status"/>
         </property>
         <property name="sendingId" type="java.lang.Integer">
@@ -52,7 +52,7 @@
         <property name="stocktakeId" type="java.lang.Integer">
             <column name="stocktake_id"/>
         </property>
-        <property name="adjustmentDate" type="date">
+        <property name="adjustmentDate" type="java.util.Date">
             <column length="10" name="adjustment_date"/>
         </property>
     </class>

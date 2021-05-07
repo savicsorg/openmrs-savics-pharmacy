@@ -73,14 +73,6 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 		this.unit = unit;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public String getCode() {
 		return this.code;
 	}

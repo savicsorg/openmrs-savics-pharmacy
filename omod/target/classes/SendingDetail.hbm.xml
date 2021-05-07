@@ -20,7 +20,7 @@
     <property name="id_1" type="int">
       <column name="id" not-null="true" unique="true"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
     <property name="sendingDetailsQuantity" type="java.lang.Integer">
@@ -29,10 +29,10 @@
     <property name="sendingDetailsValue" type="java.lang.Integer">
       <column name="sending_details_value"/>
     </property>
-    <property name="sendingItemBatch" type="string">
+    <property name="sendingItemBatch" type="java.lang.String">
       <column length="50" name="sending_item_batch"/>
     </property>
-    <property name="sendingItemExpiryDate" type="date">
+    <property name="sendingItemExpiryDate" type="java.util.Date">
       <column length="10" name="sending_item_expiry_date"/>
     </property>
   </class>

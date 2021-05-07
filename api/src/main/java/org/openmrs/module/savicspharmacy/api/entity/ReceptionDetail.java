@@ -92,12 +92,4 @@ public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializ
 		this.itemExpiryDate = itemExpiryDate;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 }

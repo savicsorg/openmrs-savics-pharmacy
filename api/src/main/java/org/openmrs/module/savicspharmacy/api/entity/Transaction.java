@@ -76,14 +76,6 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 		this.transactionType = transactionType;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Date getDate() {
 		return this.date;
 	}

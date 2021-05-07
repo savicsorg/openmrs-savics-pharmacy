@@ -45,14 +45,6 @@ public class Route extends BaseOpenmrsData implements java.io.Serializable {
 		this.name = name;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Set getItems() {
 		return this.items;
 	}

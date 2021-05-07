@@ -40,14 +40,6 @@ public class Stocktake extends BaseOpenmrsData implements java.io.Serializable {
 		this.location = location;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public Date getDate() {
 		return this.date;
 	}

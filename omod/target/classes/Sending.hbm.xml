@@ -13,13 +13,13 @@
     <many-to-one class="org.openmrs.Person" fetch="select" name="person">
       <column name="person_id" not-null="true"/>
     </many-to-one>
-    <property name="date" type="date">
+    <property name="date" type="java.util.Date">
       <column length="10" name="date"/>
     </property>
     <property name="sendingAmount" type="java.lang.Double">
       <column name="sending_amount" precision="22" scale="0"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
     <set fetch="select" inverse="true" lazy="true" name="sendingDetails" table="pharm_sending_detail">

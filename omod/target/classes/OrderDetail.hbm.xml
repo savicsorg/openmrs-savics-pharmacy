@@ -32,7 +32,7 @@
     <property name="orderLineAmount" type="java.lang.Double">
       <column name="order_line_amount" precision="22" scale="0"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
   </class>

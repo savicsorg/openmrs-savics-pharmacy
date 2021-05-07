@@ -13,22 +13,22 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Supplier" fetch="select" name="supplier">
       <column name="supplier_id" not-null="true"/>
     </many-to-one>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column name="name"/>
     </property>
-    <property name="date" type="date">
+    <property name="date" type="java.util.Date">
       <column length="10" name="date"/>
     </property>
     <property name="amount" type="java.lang.Double">
       <column name="amount" precision="22" scale="0"/>
     </property>
-    <property name="dateApprobation" type="date">
+    <property name="dateApprobation" type="java.util.Date">
       <column length="10" name="date_approbation"/>
     </property>
-    <property name="dateReception" type="date">
+    <property name="dateReception" type="java.util.Date">
       <column length="10" name="date_reception"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
     <set fetch="select" inverse="true" lazy="true" name="orderDetails" table="pharm_order_detail">

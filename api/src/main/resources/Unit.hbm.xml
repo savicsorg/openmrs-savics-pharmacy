@@ -7,20 +7,20 @@
       <column name="id"/>
       <generator class="identity"/>
     </id>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
-    <property name="code" type="string">
+    <property name="code" type="java.lang.String">
       <column length="10" name="code"/>
     </property>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column length="50" name="name"/>
     </property>
-    <set fetch="select" inverse="true" lazy="true" name="items" table="pharm_item">
+<!--    <set fetch="select" inverse="true" lazy="true" name="items" table="pharm_item">
       <key>
         <column name="unit_id" not-null="true"/>
       </key>
       <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.Item"/>
-    </set>
+    </set>-->
   </class>
 </hibernate-mapping>

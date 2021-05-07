@@ -26,13 +26,13 @@
     <property name="quantityReceived" type="java.lang.Integer">
       <column name="quantity_received"/>
     </property>
-    <property name="itemBatch" type="string">
+    <property name="itemBatch" type="java.lang.String">
       <column length="50" name="item_batch"/>
     </property>
-    <property name="itemExpiryDate" type="date">
+    <property name="itemExpiryDate" type="java.util.Date">
       <column length="10" name="item_expiry_date"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
   </class>

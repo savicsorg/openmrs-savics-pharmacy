@@ -13,16 +13,16 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Unit" fetch="select" name="unit">
       <column name="unit_id" not-null="true"/>
     </many-to-one>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
-    <property name="code" type="string">
+    <property name="code" type="java.lang.String">
       <column length="10" name="code"/>
     </property>
-    <property name="name" type="string">
+    <property name="name" type="java.lang.String">
       <column name="name"/>
     </property>
-    <property name="description" type="string">
+    <property name="description" type="java.lang.String">
       <column name="description"/>
     </property>
     <property name="sellPrice" type="java.lang.Double">

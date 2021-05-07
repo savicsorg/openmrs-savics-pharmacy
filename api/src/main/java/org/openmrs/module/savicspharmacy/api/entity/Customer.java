@@ -47,14 +47,6 @@ public class Customer extends BaseOpenmrsData implements java.io.Serializable {
 		this.customerType = customerType;
 	}
 	
-	public String getUuid() {
-		return this.uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public String getCode() {
 		return this.code;
 	}

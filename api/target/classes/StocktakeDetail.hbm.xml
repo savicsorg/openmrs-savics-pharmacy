@@ -20,7 +20,7 @@
     <property name="id_1" type="int">
       <column name="id" not-null="true" unique="true"/>
     </property>
-    <property name="uuid" type="string">
+    <property name="uuid" type="java.lang.String">
       <column length="38" name="uuid" not-null="true"/>
     </property>
     <property name="itemStock" type="java.lang.Integer">
@@ -29,7 +29,7 @@
     <property name="itemPhysicalStock" type="java.lang.Integer">
       <column name="item_physical_stock"/>
     </property>
-    <property name="stocktakeLineComments" type="string">
+    <property name="stocktakeLineComments" type="java.lang.String">
       <column name="stocktake_line_comments"/>
     </property>
     <property name="adjustQuantity" type="java.lang.Integer">
