@@ -45,24 +45,24 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pharm?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
-    <mapping resource="org/openmrs/module/savicspharmacy/Stocktake.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Item.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/OrderDetail.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Sending.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Supplier.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Unit.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Customer.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/ItemsLine.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Person.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/CustomerType.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Transaction.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Order.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/PharmacyLocation.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/TransactionType.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Person.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Stocktake.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Unit.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/StocktakeDetail.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/ItemsLine.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Route.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/PharmacyOrder.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/SendingDetail.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/CustomerType.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Customer.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Reception.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/ReceptionDetail.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Route.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Location.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/TransactionType.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/SendingDetail.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/StocktakeDetail.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/Item.hbm.xml"/>
+    <mapping resource="org/openmrs/module/savicspharmacy/Supplier.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

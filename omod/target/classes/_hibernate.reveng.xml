@@ -41,23 +41,23 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="pharm"/>
-  <table-filter match-name="items_line"/>
-  <table-filter match-name="order_detail"/>
-  <table-filter match-name="person"/>
-  <table-filter match-name="reception"/>
-  <table-filter match-name="route"/>
-  <table-filter match-name="unit"/>
-  <table-filter match-name="item"/>
-  <table-filter match-name="stocktake_detail"/>
   <table-filter match-name="customer"/>
-  <table-filter match-name="reception_detail"/>
-  <table-filter match-name="stocktake"/>
+  <table-filter match-name="reception"/>
   <table-filter match-name="supplier"/>
-  <table-filter match-name="sending"/>
+  <table-filter match-name="person"/>
+  <table-filter match-name="item"/>
+  <table-filter match-name="sending_detail"/>
+  <table-filter match-name="reception_detail"/>
+  <table-filter match-name="pharmacy_location"/>
+  <table-filter match-name="route"/>
   <table-filter match-name="customer_type"/>
   <table-filter match-name="transaction_type"/>
-  <table-filter match-name="location"/>
-  <table-filter match-name="order"/>
-  <table-filter match-name="sending_detail"/>
+  <table-filter match-name="unit"/>
+  <table-filter match-name="pharmacy_order"/>
+  <table-filter match-name="stocktake_detail"/>
   <table-filter match-name="transaction"/>
+  <table-filter match-name="order_detail"/>
+  <table-filter match-name="items_line"/>
+  <table-filter match-name="stocktake"/>
+  <table-filter match-name="sending"/>
 </hibernate-reverse-engineering>

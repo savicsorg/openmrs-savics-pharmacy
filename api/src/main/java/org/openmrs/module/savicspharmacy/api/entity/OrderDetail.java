@@ -1,6 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
-// Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1
+// Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
 import org.openmrs.BaseOpenmrsData;
 
@@ -13,7 +13,7 @@ public class OrderDetail extends BaseOpenmrsData implements java.io.Serializable
 	
 	private Item item;
 	
-	private Orders order;
+	private PharmacyOrder pharmacyOrder;
 	
 	private Integer id;
 	
@@ -28,7 +28,7 @@ public class OrderDetail extends BaseOpenmrsData implements java.io.Serializable
 	private String uuid;
 	
 	public OrderDetailId getPk() {
-		return pk;
+		return this.pk;
 	}
 	
 	public void setPk(OrderDetailId pk) {
@@ -43,12 +43,12 @@ public class OrderDetail extends BaseOpenmrsData implements java.io.Serializable
 		this.item = item;
 	}
 	
-	public Orders getOrder() {
-		return this.order;
+	public PharmacyOrder getPharmacyOrder() {
+		return this.pharmacyOrder;
 	}
 	
-	public void setOrder(Orders order) {
-		this.order = order;
+	public void setPharmacyOrder(PharmacyOrder pharmacyOrder) {
+		this.pharmacyOrder = pharmacyOrder;
 	}
 	
 	public Integer getId() {
@@ -90,4 +90,5 @@ public class OrderDetail extends BaseOpenmrsData implements java.io.Serializable
 	public void setOrderLineAmount(Double orderLineAmount) {
 		this.orderLineAmount = orderLineAmount;
 	}
+	
 }

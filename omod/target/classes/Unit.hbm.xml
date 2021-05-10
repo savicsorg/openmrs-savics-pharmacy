@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="pharm" name="org.openmrs.module.savicspharmacy.api.entity.Unit" table="pharm_unit">
+  <class  name="org.openmrs.module.savicspharmacy.api.entity.Unit" table="pharm_unit">
     <id name="id" type="java.lang.Integer">
       <column name="id"/>
       <generator class="identity"/>
     </id>
-    <property name="uuid" type="java.lang.String">
+    <property name="uuid" type="string">
       <column length="38" name="uuid" not-null="true"/>
     </property>
-    <property name="code" type="java.lang.String">
+    <property name="code" type="string">
       <column length="10" name="code"/>
     </property>
-    <property name="name" type="java.lang.String">
+    <property name="name" type="string">
       <column length="50" name="name"/>
     </property>
-<!--    <set fetch="select" inverse="true" lazy="true" name="items" table="pharm_item">
+    <set fetch="select" inverse="true" lazy="true" name="items" table="pharm_item">
       <key>
         <column name="unit_id" not-null="true"/>
       </key>
       <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.Item"/>
-    </set>-->
+    </set>
   </class>
 </hibernate-mapping>

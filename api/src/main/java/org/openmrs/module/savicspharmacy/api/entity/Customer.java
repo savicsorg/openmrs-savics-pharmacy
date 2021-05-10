@@ -1,6 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
-// Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1
+// Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class Customer extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Integer patientId;
 	
-	//	private Set sendings = new HashSet(0);
+	private Set sendings = new HashSet(0);
 	
 	public Integer getId() {
 		return this.id;
@@ -95,12 +95,12 @@ public class Customer extends BaseOpenmrsData implements java.io.Serializable {
 		this.patientId = patientId;
 	}
 	
-	//	public Set getSendings() {
-	//		return this.sendings;
-	//	}
-	//	
-	//	public void setSendings(Set sendings) {
-	//		this.sendings = sendings;
-	//	}
+	public Set getSendings() {
+		return this.sendings;
+	}
+	
+	public void setSendings(Set sendings) {
+		this.sendings = sendings;
+	}
 	
 }

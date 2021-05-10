@@ -1,6 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
-// Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1
+// Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,5 +52,4 @@ public class TransactionType extends BaseOpenmrsData implements java.io.Serializ
 	public void setTransactions(Set transactions) {
 		this.transactions = transactions;
 	}
-	
 }

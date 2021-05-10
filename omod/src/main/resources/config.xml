@@ -12,12 +12,14 @@
 			${project.parent.description}
 	</description>
         
-        <!-- Required Modules -->
-        <require_modules>
-            <require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
-            <require_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</require_module>
-        </require_modules>
-        <!-- / Required Modules -->
+            <!-- Required Modules -->
+    <require_modules>
+        <require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
+        <require_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</require_module>
+        <!--<require_module version="${openmrsOwaVersion}">org.openmrs.module.owa</require_module>-->
+    </require_modules>
+    <!-- / Required Modules -->
+    
 
 	<activator>org.openmrs.module.savicspharmacy.SavicsPharmacyModuleActivator</activator>
 	
@@ -43,11 +45,34 @@
 		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
 	</advice>
 	 /AOP -->
-          <advice>
+         
+         <advice>
             <point>org.openmrs.module.savicspharmacy.api.service.PharmacyService</point>
             <class>org.openmrs.module.savicspharmacy.atomfeed.PharmacyAdvice</class>
         </advice>
         
+	<!-- Maps hibernate file's, if present -->
+        <mappingFiles>
+            Customer.hbm.xml
+            CustomerType.hbm.xml
+            Item.hbm.xml
+            ItemsLine.hbm.xml
+            OrderDetail.hbm.xml
+            PharmacyLocation.hbm.xml
+            PharmacyOrder.hbm.xml
+            Reception.hbm.xml
+            ReceptionDetail.hbm.xml
+            Route.hbm.xml
+            Sending.hbm.xml
+            SendingDetail.hbm.xml
+            Stocktake.hbm.xml
+            StocktakeDetail.hbm.xml
+            Supplier.hbm.xml
+            Transaction.hbm.xml
+            TransactionType.hbm.xml
+            Unit.hbm.xml
+        </mappingFiles>
+	
 	
 	<!-- Required Privileges 
 	<privilege>
@@ -95,14 +120,7 @@
     </servlet>
     -->
     <!-- /Servlets -->
-    <!--    
-    <packagesWithMappedClasses>
-        org.openmrs.module.savicspharmacy.api.entity
-    </packagesWithMappedClasses>-->
-    <!--<mapping class="org.openmrs.module.savicspharmacy.api.entity.Unit"/>-->
-    <mappingFiles>
-<!--        Unit.hbm.xml-->
-    </mappingFiles>
+	
 	
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->

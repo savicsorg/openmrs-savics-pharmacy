@@ -1,6 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
-// Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1
+// Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
 import org.openmrs.BaseOpenmrsData;
 
@@ -28,7 +28,7 @@ public class StocktakeDetail extends BaseOpenmrsData implements java.io.Serializ
 	private Integer adjustQuantity;
 	
 	public StocktakeDetailId getPk() {
-		return pk;
+		return this.pk;
 	}
 	
 	public void setPk(StocktakeDetailId pk) {

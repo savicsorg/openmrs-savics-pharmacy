@@ -23,7 +23,7 @@ import org.openmrs.module.webservices.rest.web.representation.FullRepresentation
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 
-@Resource(name = RestConstants.VERSION_1 + PharmacyRest.PHARMA_NAMESPACE + "/unit", supportedClass = Unit.class, supportedOpenmrsVersions = { "2.*.*" })
+@Resource(name = RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE + "/unit", supportedClass = Unit.class, supportedOpenmrsVersions = { "2.*.*" })
 public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 	
 	@Override
@@ -37,8 +37,8 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("code");
 			description.addProperty("name");
+			description.addProperty("code");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -46,8 +46,8 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("code");
 			description.addProperty("name");
+			description.addProperty("code");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -56,8 +56,8 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("code");
 			description.addProperty("name");
+			description.addProperty("code");
 			description.addSelfLink();
 			return description;
 		}
@@ -66,19 +66,18 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		System.out.println("---- doGetAll ");
-		List<Unit> districtList = Context.getService(PharmacyService.class).getAll(Unit.class, context.getLimit(),
+		List<Unit> unitList = Context.getService(PharmacyService.class).getAll(Unit.class, context.getLimit(),
 		    context.getStartIndex());
-		System.out.println(districtList.toString());
-		return new AlreadyPaged<Unit>(context, districtList, false);
+		System.out.println(unitList.toString());
+		return new AlreadyPaged<Unit>(context, unitList, false);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		String value = context.getParameter("name");
-		List<Unit> districtList = Context.getService(PharmacyService.class).doSearch(Unit.class, "name", value,
+		List<Unit> unitList = Context.getService(PharmacyService.class).doSearch(Unit.class, "name", value,
 		    context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<Unit>(context, districtList, false);
+		return new AlreadyPaged<Unit>(context, unitList, false);
 	}
 	
 	@Override
@@ -97,17 +96,14 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 		if (propertiesToCreate.get("name") == null || propertiesToCreate.get("code") == null) {
 			throw new ConversionException("Required properties: name, code");
 		}
-		System.out.println("-----------------------------");
-		System.out.println(propertiesToCreate);
-		System.out.println();
-		Unit unit = this.constructDistrict(null, propertiesToCreate);
+		Unit unit = this.constructUnit(null, propertiesToCreate);
 		Context.getService(PharmacyService.class).upsert(unit);
 		return ConversionUtil.convertToRepresentation(unit, context.getRepresentation());
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		Unit unit = this.constructDistrict(uuid, propertiesToUpdate);
+		Unit unit = this.constructUnit(uuid, propertiesToUpdate);
 		Context.getService(PharmacyService.class).upsert(unit);
 		return ConversionUtil.convertToRepresentation(unit, context.getRepresentation());
 	}
@@ -122,7 +118,7 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 		Context.getService(PharmacyService.class).delete(unit);
 	}
 	
-	private Unit constructDistrict(String uuid, SimpleObject properties) {
+	private Unit constructUnit(String uuid, SimpleObject properties) {
 		Unit unit;
 		
 		if (uuid != null) {
@@ -138,16 +134,14 @@ public class UnitRequestResource extends DataDelegatingCrudResource<Unit> {
 			if (properties.get("code") != null) {
 				unit.setCode((String) properties.get("code"));
 			}
-			
 		} else {
 			unit = new Unit();
 			if (properties.get("name") == null || properties.get("code") == null) {
-				throw new IllegalPropertyException("Required parameters: name, name");
+				throw new IllegalPropertyException("Required parameters: name, code");
 			}
 			unit.setName((String) properties.get("name"));
 			unit.setCode((String) properties.get("code"));
 		}
-		
 		return unit;
 	}
 	

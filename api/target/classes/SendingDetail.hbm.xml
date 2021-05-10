@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="pharm" name="org.openmrs.module.savicspharmacy.api.entity.SendingDetail" table="pharm_sending_detail">
+  <class  name="org.openmrs.module.savicspharmacy.api.entity.SendingDetail" table="pharm_sending_detail">
     <composite-id class="org.openmrs.module.savicspharmacy.api.entity.SendingDetailId" name="pk">
       <key-property name="itemId" type="int">
         <column name="item_id"/>
@@ -17,10 +17,10 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Sending" fetch="select" insert="false" name="sending" update="false">
       <column name="sending_id" not-null="true"/>
     </many-to-one>
-    <property name="id_1" type="int">
+    <property name="id" type="int">
       <column name="id" not-null="true" unique="true"/>
     </property>
-    <property name="uuid" type="java.lang.String">
+    <property name="uuid" type="string">
       <column length="38" name="uuid" not-null="true"/>
     </property>
     <property name="sendingDetailsQuantity" type="java.lang.Integer">
@@ -29,10 +29,10 @@
     <property name="sendingDetailsValue" type="java.lang.Integer">
       <column name="sending_details_value"/>
     </property>
-    <property name="sendingItemBatch" type="java.lang.String">
+    <property name="sendingItemBatch" type="string">
       <column length="50" name="sending_item_batch"/>
     </property>
-    <property name="sendingItemExpiryDate" type="java.util.Date">
+    <property name="sendingItemExpiryDate" type="date">
       <column length="10" name="sending_item_expiry_date"/>
     </property>
   </class>

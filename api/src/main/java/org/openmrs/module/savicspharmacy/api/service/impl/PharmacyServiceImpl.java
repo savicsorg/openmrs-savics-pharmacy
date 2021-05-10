@@ -34,17 +34,13 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	
 	@Override
 	public List getAll(Class t) {
-		System.out.println(">>>>> PharmacyServiceImpl get all, class = " + t);
 		List entityList = this.dao.getAll(t);
-		System.out.println(">>>>> PharmacyServiceImpl entityList  = " + entityList);
 		return entityList;
 	}
 	
 	@Override
 	public List getAll(Class t, Integer limit, Integer offset) {
-		System.out.println("--------- PharmacyServiceImpl getAll 2, class = " + t);
 		List entityList = this.dao.getAll(t, limit, offset);
-		System.out.println("--------- PharmacyServiceImpl getAll 2  = " + entityList);
 		
 		return entityList;
 		

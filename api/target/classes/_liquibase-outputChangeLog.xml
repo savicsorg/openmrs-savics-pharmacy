@@ -2,8 +2,8 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     
     
-    <changeSet author="anatoleabe (generated)" id="1620352753858-1">
-        <createTable tableName="pharm_customer">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-1">
+        <createTable tableName="customer">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -21,8 +21,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-2">
-        <createTable tableName="pharm_customer_type">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-2">
+        <createTable tableName="customer_type">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -32,8 +32,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-3">
-        <createTable tableName="pharm_item">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-3">
+        <createTable tableName="item">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -59,8 +59,8 @@
             <column name="stock_max" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-4">
-        <createTable tableName="pharm_items_line">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-4">
+        <createTable tableName="items_line">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -79,8 +79,35 @@
             <column name="item_soh" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-5">
-        <createTable tableName="pharm_location">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-5">
+        <createTable tableName="order_detail">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="item_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_line_quantity" type="INT"/>
+            <column name="item_soh" type="INT"/>
+            <column name="item_amc" type="INT"/>
+            <column name="order_line_amount" type="DOUBLE"/>
+            <column defaultValue="" name="uuid" type="VARCHAR(38)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-6">
+        <createTable tableName="person">
+            <column autoIncrement="true" name="person_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-7">
+        <createTable tableName="pharmacy_location">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -91,8 +118,8 @@
             <column name="name" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-6">
-        <createTable tableName="pharm_order">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-8">
+        <createTable tableName="pharmacy_order">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -112,35 +139,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-7">
-        <createTable tableName="pharm_order_detail">
-            <column autoIncrement="true" name="id" type="INT">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="item_id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="order_id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="order_line_quantity" type="INT"/>
-            <column name="item_soh" type="INT"/>
-            <column name="item_amc" type="INT"/>
-            <column name="order_line_amount" type="DOUBLE"/>
-            <column defaultValue="" name="uuid" type="VARCHAR(38)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-<!--    <changeSet author="anatoleabe (generated)" id="1620352753858-8">
-        <createTable tableName="pharm_person">
-            <column autoIncrement="true" name="person_id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>-->
-    <changeSet author="anatoleabe (generated)" id="1620352753858-9">
-        <createTable tableName="pharm_reception">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-9">
+        <createTable tableName="reception">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -158,8 +158,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-10">
-        <createTable tableName="pharm_reception_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-10">
+        <createTable tableName="reception_detail">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -178,8 +178,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-11">
-        <createTable tableName="pharm_route">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-11">
+        <createTable tableName="route">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -190,8 +190,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-12">
-        <createTable tableName="pharm_sending">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-12">
+        <createTable tableName="sending">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -208,8 +208,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-13">
-        <createTable tableName="pharm_sending_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-13">
+        <createTable tableName="sending_detail">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -228,8 +228,8 @@
             <column name="sending_item_expiry_date" type="date"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-14">
-        <createTable tableName="pharm_stocktake">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-14">
+        <createTable tableName="stocktake">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -243,8 +243,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-15">
-        <createTable tableName="pharm_stocktake_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-15">
+        <createTable tableName="stocktake_detail">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -263,8 +263,8 @@
             <column name="adjust_quantity" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-16">
-        <createTable tableName="pharm_supplier">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-16">
+        <createTable tableName="supplier">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -278,8 +278,8 @@
             <column name="tel" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-17">
-        <createTable tableName="pharm_transaction">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-17">
+        <createTable tableName="transaction">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -311,8 +311,8 @@
             <column name="adjustment_date" type="date"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-18">
-        <createTable tableName="pharm_transaction_type">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-18">
+        <createTable tableName="transaction_type">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -325,8 +325,8 @@
             <column name="name" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-19">
-        <createTable tableName="pharm_unit">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-19">
+        <createTable tableName="unit">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
@@ -337,163 +337,163 @@
             <column name="name" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-20">
-        <createIndex indexName="FKpharm_cust449636" tableName="pharm_customer">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-20">
+        <createIndex indexName="FKpharm_cust449636" tableName="customer">
             <column name="customer_type_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-21">
-        <createIndex indexName="FKpharm_item577093" tableName="pharm_item">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-21">
+        <createIndex indexName="FKpharm_item577093" tableName="item">
             <column name="unit_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-22">
-        <createIndex indexName="FKpharm_item581647" tableName="pharm_item">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-22">
+        <createIndex indexName="FKpharm_item581647" tableName="item">
             <column name="route_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-23">
-        <createIndex indexName="FKpharm_item774750" tableName="pharm_items_line">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-23">
+        <createIndex indexName="FKpharm_item774750" tableName="items_line">
             <column name="location_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-24">
-        <createIndex indexName="FKpharm_orde784692" tableName="pharm_order_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-24">
+        <createIndex indexName="FKpharm_orde784692" tableName="order_detail">
             <column name="order_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-25">
-        <createIndex indexName="FKpharm_orde820648" tableName="pharm_order">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-25">
+        <createIndex indexName="FKpharm_orde820648" tableName="pharmacy_order">
             <column name="person_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-26">
-        <createIndex indexName="FKpharm_orde883098" tableName="pharm_order">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-26">
+        <createIndex indexName="FKpharm_orde883098" tableName="pharmacy_order">
             <column name="supplier_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-27">
-        <createIndex indexName="FKpharm_rece13494" tableName="pharm_reception_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-27">
+        <createIndex indexName="FKpharm_rece13494" tableName="reception_detail">
             <column name="item_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-28">
-        <createIndex indexName="FKpharm_rece377506" tableName="pharm_reception">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-28">
+        <createIndex indexName="FKpharm_rece377506" tableName="reception">
             <column name="person_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-29">
-        <createIndex indexName="FKpharm_rece738543" tableName="pharm_reception">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-29">
+        <createIndex indexName="FKpharm_rece738543" tableName="reception">
             <column name="order_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-30">
-        <createIndex indexName="FKpharm_send193203" tableName="pharm_sending">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-30">
+        <createIndex indexName="FKpharm_send193203" tableName="sending">
             <column name="person_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-31">
-        <createIndex indexName="FKpharm_send269367" tableName="pharm_sending">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-31">
+        <createIndex indexName="FKpharm_send269367" tableName="sending">
             <column name="customer_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-32">
-        <createIndex indexName="FKpharm_send286846" tableName="pharm_sending_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-32">
+        <createIndex indexName="FKpharm_send286846" tableName="sending_detail">
             <column name="sending_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-33">
-        <createIndex indexName="FKpharm_stoc255778" tableName="pharm_stocktake_detail">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-33">
+        <createIndex indexName="FKpharm_stoc255778" tableName="stocktake_detail">
             <column name="stocktake_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-34">
-        <createIndex indexName="FKpharm_stoc941420" tableName="pharm_stocktake">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-34">
+        <createIndex indexName="FKpharm_stoc941420" tableName="stocktake">
             <column name="location_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-35">
-        <createIndex indexName="FKpharm_tran28186" tableName="pharm_transaction">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-35">
+        <createIndex indexName="FKpharm_tran28186" tableName="transaction">
             <column name="transaction_type_code"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-36">
-        <createIndex indexName="FKpharm_tran828906" tableName="pharm_transaction">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-36">
+        <createIndex indexName="FKpharm_tran828906" tableName="transaction">
             <column name="location_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-37">
-        <createIndex indexName="FKpharm_tran892810" tableName="pharm_transaction">
+    <changeSet author="anatoleabe (generated)" id="1620641683809-37">
+        <createIndex indexName="FKpharm_tran892810" tableName="transaction">
             <column name="item_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-38">
-        <addForeignKeyConstraint baseColumnNames="customer_type_id" baseTableName="customer" constraintName="FKpharm_cust449636" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_customer_type" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-38">
+        <addForeignKeyConstraint baseColumnNames="customer_type_id" baseTableName="customer" constraintName="FKpharm_cust449636" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="customer_type" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-39">
-        <addForeignKeyConstraint baseColumnNames="unit_id" baseTableName="item" constraintName="FKpharm_item577093" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_unit" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-39">
+        <addForeignKeyConstraint baseColumnNames="unit_id" baseTableName="item" constraintName="FKpharm_item577093" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="unit" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-40">
-        <addForeignKeyConstraint baseColumnNames="route_id" baseTableName="item" constraintName="FKpharm_item581647" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_route" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-40">
+        <addForeignKeyConstraint baseColumnNames="route_id" baseTableName="item" constraintName="FKpharm_item581647" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="route" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-41">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="items_line" constraintName="FKpharm_item710846" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-41">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="items_line" constraintName="FKpharm_item710846" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-42">
-        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="items_line" constraintName="FKpharm_item774750" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_location" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-42">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="items_line" constraintName="FKpharm_item774750" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharmacy_location" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-43">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="order_detail" constraintName="FKpharm_orde637966" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-43">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="order_detail" constraintName="FKpharm_orde637966" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-44">
-        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_detail" constraintName="FKpharm_orde784692" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_order" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-44">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_detail" constraintName="FKpharm_orde784692" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharmacy_order" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-45">
-        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="order" constraintName="FKpharm_orde820648" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="pharm_person" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-45">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="pharmacy_order" constraintName="FKpharm_orde820648" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="person" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-46">
-        <addForeignKeyConstraint baseColumnNames="supplier_id" baseTableName="order" constraintName="FKpharm_orde883098" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_supplier" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-46">
+        <addForeignKeyConstraint baseColumnNames="supplier_id" baseTableName="pharmacy_order" constraintName="FKpharm_orde883098" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="supplier" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-47">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="reception_detail" constraintName="FKpharm_rece13494" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-47">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="reception_detail" constraintName="FKpharm_rece13494" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-48">
-        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="reception" constraintName="FKpharm_rece377506" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="pharm_person" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-48">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="reception" constraintName="FKpharm_rece377506" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="person" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-49">
-        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="reception" constraintName="FKpharm_rece738543" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_order" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-49">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="reception" constraintName="FKpharm_rece738543" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharmacy_order" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-50">
-        <addForeignKeyConstraint baseColumnNames="reception_id" baseTableName="reception_detail" constraintName="FKpharm_rece853587" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_reception" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-50">
+        <addForeignKeyConstraint baseColumnNames="reception_id" baseTableName="reception_detail" constraintName="FKpharm_rece853587" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="reception" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-51">
-        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="sending" constraintName="FKpharm_send193203" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="pharm_person" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-51">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="sending" constraintName="FKpharm_send193203" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="person" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-52">
-        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="sending" constraintName="FKpharm_send269367" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_customer" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-52">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="sending" constraintName="FKpharm_send269367" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="customer" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-53">
-        <addForeignKeyConstraint baseColumnNames="sending_id" baseTableName="sending_detail" constraintName="FKpharm_send286846" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_sending" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-53">
+        <addForeignKeyConstraint baseColumnNames="sending_id" baseTableName="sending_detail" constraintName="FKpharm_send286846" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="sending" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-54">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="sending_detail" constraintName="FKpharm_send540246" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-54">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="sending_detail" constraintName="FKpharm_send540246" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-55">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="stocktake_detail" constraintName="FKpharm_stoc122383" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-55">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="stocktake_detail" constraintName="FKpharm_stoc122383" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-56">
-        <addForeignKeyConstraint baseColumnNames="stocktake_id" baseTableName="stocktake_detail" constraintName="FKpharm_stoc255778" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_stocktake" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-56">
+        <addForeignKeyConstraint baseColumnNames="stocktake_id" baseTableName="stocktake_detail" constraintName="FKpharm_stoc255778" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="stocktake" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-57">
-        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="stocktake" constraintName="FKpharm_stoc941420" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_location" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-57">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="stocktake" constraintName="FKpharm_stoc941420" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharmacy_location" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-58">
-        <addForeignKeyConstraint baseColumnNames="transaction_type_code" baseTableName="transaction" constraintName="FKpharm_tran28186" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="code" referencedTableName="pharm_transaction_type" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-58">
+        <addForeignKeyConstraint baseColumnNames="transaction_type_code" baseTableName="transaction" constraintName="FKpharm_tran28186" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="code" referencedTableName="transaction_type" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-59">
-        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="transaction" constraintName="FKpharm_tran828906" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_location" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-59">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="transaction" constraintName="FKpharm_tran828906" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharmacy_location" />
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620352753858-60">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="transaction" constraintName="FKpharm_tran892810" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" validate="true"/>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-60">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="transaction" constraintName="FKpharm_tran892810" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" />
     </changeSet>
 </databaseChangeLog>

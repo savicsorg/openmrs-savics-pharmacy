@@ -6,17 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMA_NAMESPACE)
+@RequestMapping("/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE)
 public class PharmacyRest extends MainResourceController {
 	
 	/**
 	 * * @see org.openmrs.module.webservices.rest.web.v1_0.controller.
 	 * BaseRestController#getNamespace()
 	 */
-	public static final String PHARMA_NAMESPACE = "/savicspharmacy";
+	public static final String PHARMACY_NAMESPACE = "/savicspharmacy";
 	
 	@Override
 	public String getNamespace() {
-		return RestConstants.VERSION_1 + PHARMA_NAMESPACE;
+		return RestConstants.VERSION_1 + PHARMACY_NAMESPACE;
 	}
 }

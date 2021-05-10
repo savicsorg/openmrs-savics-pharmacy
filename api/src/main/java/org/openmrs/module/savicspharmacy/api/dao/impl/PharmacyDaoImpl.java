@@ -13,9 +13,9 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.APIException;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
-import org.openmrs.module.savicspharmacy.api.dao.PharmacyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.openmrs.module.savicspharmacy.api.dao.PharmacyDao;
 
 @Repository
 public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {

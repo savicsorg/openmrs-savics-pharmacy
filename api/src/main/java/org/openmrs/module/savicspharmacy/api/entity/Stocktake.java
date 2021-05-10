@@ -1,6 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
-// Generated May 7, 2021 2:32:33 AM by Hibernate Tools 4.3.1
+// Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ public class Stocktake extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Integer id;
 	
-	private PharmacyLocation location;
+	private PharmacyLocation pharmacyLocation;
 	
 	private String uuid;
 	
@@ -32,12 +32,12 @@ public class Stocktake extends BaseOpenmrsData implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	public PharmacyLocation getLocation() {
-		return this.location;
+	public PharmacyLocation getPharmacyLocation() {
+		return this.pharmacyLocation;
 	}
 	
-	public void setLocation(PharmacyLocation location) {
-		this.location = location;
+	public void setPharmacyLocation(PharmacyLocation pharmacyLocation) {
+		this.pharmacyLocation = pharmacyLocation;
 	}
 	
 	public Date getDate() {

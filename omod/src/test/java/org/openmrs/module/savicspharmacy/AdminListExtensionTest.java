@@ -13,9 +13,9 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.openmrs.module.Extension;
-import org.openmrs.module.savicspharmacy.extension.html.AdminList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import org.openmrs.module.savicspharmacy.extension.html.AdminList;
 
 /**
  * This test validates the AdminList extension class
