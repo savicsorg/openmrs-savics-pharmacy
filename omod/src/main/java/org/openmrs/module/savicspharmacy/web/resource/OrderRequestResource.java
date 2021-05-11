@@ -139,20 +139,20 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 		Person person = null;
 		if (properties.get("person") != null) {
 			Integer personId = properties.get("person");
-			person = (Person) Context.getService(PharmacyService.class).getEntityByid(Person.class, "person", personId);
+			person = (Person) Context.getService(PharmacyService.class).getEntityByid(Person.class, "id", personId);
 		}
 		
 		Supplier supplier = null;
 		if (properties.get("supplier") != null) {
 			Integer supplierId = properties.get("supplier");
-			supplier = (Supplier) Context.getService(PharmacyService.class).getEntityByid(Supplier.class, "supplier",
+			supplier = (Supplier) Context.getService(PharmacyService.class).getEntityByid(Supplier.class, "id",
 			    supplierId);
 		}
 		
 		if (uuid != null) {
 			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByUuid(PharmacyOrder.class, uuid);
 			if (order == null) {
-				throw new IllegalPropertyException("Items line not exist");
+				throw new IllegalPropertyException("Orders not exist");
 			}
 			
 			if (properties.get("name") != null) {

@@ -151,12 +151,12 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 		Unit unit = null;
 		if (properties.get("unit") != null) {
 			Integer unitId = properties.get("unit");
-			unit = (Unit) Context.getService(PharmacyService.class).getEntityByid(Unit.class, "unit", unitId);
+			unit = (Unit) Context.getService(PharmacyService.class).getEntityByid(Unit.class, "id", unitId);
 		}
 		Route route = null;
 		if (properties.get("route") != null) {
 			Integer routeId = properties.get("route");
-			route = (Route) Context.getService(PharmacyService.class).getEntityByid(Route.class, "route", routeId);
+			route = (Route) Context.getService(PharmacyService.class).getEntityByid(Route.class, "id", routeId);
 		}
 		if (uuid != null) {
 			item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class, uuid);

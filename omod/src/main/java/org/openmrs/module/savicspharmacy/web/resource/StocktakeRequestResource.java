@@ -134,7 +134,7 @@ public class StocktakeRequestResource extends DataDelegatingCrudResource<Stockta
 		if (properties.get("pharmacyLocation") != null) {
 			Integer pharmacyLocationId = properties.get("pharmacyLocation");
 			pharmacyLocation = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(
-			    PharmacyLocation.class, "pharmacyLocation", pharmacyLocationId);
+			    PharmacyLocation.class, "id", pharmacyLocationId);
 		}
 		
 		if (uuid != null) {

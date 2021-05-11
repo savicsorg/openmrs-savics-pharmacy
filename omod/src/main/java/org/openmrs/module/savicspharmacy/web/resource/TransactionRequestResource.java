@@ -169,18 +169,18 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 		if (properties.get("transactionType") != null) {
 			Integer transactionTypeId = properties.get("transactionType");
 			transactionType = (TransactionType) Context.getService(PharmacyService.class).getEntityByid(
-			    TransactionType.class, "transactionType", transactionTypeId);
+			    TransactionType.class, "id", transactionTypeId);
 		}
 		PharmacyLocation pharmacyLocation = null;
 		if (properties.get("pharmacyLocation") != null) {
 			Integer pharmacyLocationId = properties.get("pharmacyLocation");
 			pharmacyLocation = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(
-			    PharmacyLocation.class, "pharmacyLocation", pharmacyLocationId);
+			    PharmacyLocation.class, "id", pharmacyLocationId);
 		}
 		Item item = null;
 		if (properties.get("item") != null) {
 			Integer itemId = properties.get("item");
-			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "item", itemId);
+			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		if (uuid != null) {
 			transaction = (Transaction) Context.getService(PharmacyService.class).getEntityByUuid(Transaction.class, uuid);

@@ -140,14 +140,14 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		Item item = null;
 		if (properties.get("item") != null) {
 			Integer itemId = properties.get("item");
-			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "item", itemId);
+			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		
 		PharmacyLocation location = null;
 		if (properties.get("location") != null) {
 			Integer locationId = properties.get("location");
 			location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(PharmacyLocation.class,
-			    "location", locationId);
+			    "id", locationId);
 		}
 		
 		if (uuid != null) {

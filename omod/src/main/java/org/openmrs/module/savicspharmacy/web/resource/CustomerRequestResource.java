@@ -144,7 +144,7 @@ public class CustomerRequestResource extends DataDelegatingCrudResource<Customer
 		if (properties.get("customerType") != null) {
 			Integer customerTypeId = properties.get("customerType");
 			customerType = (CustomerType) Context.getService(PharmacyService.class).getEntityByid(CustomerType.class,
-			    "customerType", customerTypeId);
+			    "id", customerTypeId);
 		}
 		if (uuid != null) {
 			customer = (Customer) Context.getService(PharmacyService.class).getEntityByUuid(Customer.class, uuid);
