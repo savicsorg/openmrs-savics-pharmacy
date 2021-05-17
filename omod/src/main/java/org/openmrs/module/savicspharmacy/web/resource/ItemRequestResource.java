@@ -210,7 +210,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			item.setName((String) properties.get("name"));
 			item.setCode((String) properties.get("code"));
 			item.setDescription((String) properties.get("description"));
-			item.setBuyPrice((Integer) properties.get("buyPrice"));
+			item.setBuyPrice((Double) properties.get("buyPrice"));
 			item.setSellPrice((Double) properties.get("sellPrice"));
 			item.setVirtualstock((Integer) properties.get("virtualstock"));
 			item.setSoh((Integer) properties.get("soh"));
