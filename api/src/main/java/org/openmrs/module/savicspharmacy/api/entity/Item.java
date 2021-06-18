@@ -36,6 +36,8 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	private Integer stockMin;
 	
 	private Integer stockMax;
+        
+        private Double AMC;
 	
 	private Set stocktakeDetails = new HashSet(0);
 	
@@ -192,5 +194,13 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	public void setReceptionDetails(Set receptionDetails) {
 		this.receptionDetails = receptionDetails;
 	}
-	
+
+    public Double getAMC() {
+        return AMC;
+    }
+
+    public void setAMC(Double AMC) {
+        this.AMC = AMC;
+    }
+      	
 }
