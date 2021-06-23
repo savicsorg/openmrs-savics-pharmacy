@@ -32,6 +32,9 @@ public interface PharmacyService<T extends Serializable> extends OpenmrsService 
 	public List<T> doSearch(Class<T> t, String key, String value, Integer limit, Integer offset) throws APIException;
 	
 	@Transactional(readOnly = true)
+	public List<T> getByMasterId(Class<T> t, String key, int value, Integer limit, Integer offset) throws APIException;
+	
+	@Transactional(readOnly = true)
 	T getEntity(Class<T> t, Object id) throws APIException;
 	
 	@Transactional(readOnly = true)

@@ -93,6 +93,14 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	}
 	
 	@Override
+	public List getFromMasterId(Class t, String key, int value, Integer limit, Integer offset) {
+		getSession().createCriteria(t).list();
+		Criteria criteria = getSession().createCriteria(t);
+		criteria.add(Restrictions.eq(key, value));
+		return criteria.list();
+	}
+	
+	@Override
 	public T getEntity(Class t, Object id) {
 		DbSession session = dbSessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(t);

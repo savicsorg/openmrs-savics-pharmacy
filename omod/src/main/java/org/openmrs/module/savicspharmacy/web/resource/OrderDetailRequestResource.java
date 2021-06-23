@@ -48,7 +48,7 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			description.addProperty("itemSoh");
 			description.addProperty("itemAmc");
 			description.addProperty("orderLineAmount");
-                        description.addProperty("uuid");
+			description.addProperty("uuid");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -62,7 +62,7 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			description.addProperty("itemSoh");
 			description.addProperty("itemAmc");
 			description.addProperty("orderLineAmount");
-                        description.addProperty("uuid");
+			description.addProperty("uuid");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -77,7 +77,7 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			description.addProperty("itemSoh");
 			description.addProperty("itemAmc");
 			description.addProperty("orderLineAmount");
-                        description.addProperty("uuid");
+			description.addProperty("uuid");
 			description.addSelfLink();
 			return description;
 		}
@@ -86,17 +86,17 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		List<OrderDetail> agentList = Context.getService(PharmacyService.class).getAll(OrderDetail.class,
+		List<OrderDetail> orderDetailList = Context.getService(PharmacyService.class).getAll(OrderDetail.class,
 		    context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<OrderDetail>(context, agentList, false);
+		return new AlreadyPaged<OrderDetail>(context, orderDetailList, false);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		String value = context.getParameter("orderLineQuantity");
-		List<OrderDetail> agentList = Context.getService(PharmacyService.class).doSearch(OrderDetail.class, "orderLineQuantity",
-		    value, context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<OrderDetail>(context, agentList, false);
+		Integer value = Integer.parseInt(context.getParameter("orderId"));
+		List<OrderDetail> orderDetailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
+		    "pharmacyOrder.id", value, context.getLimit(), context.getStartIndex());
+		return new AlreadyPaged<OrderDetail>(context, orderDetailList, false);
 	}
 	
 	@Override
@@ -116,7 +116,7 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			throw new ConversionException("Required properties: orderLineQuantity");
 		}
 		
-		OrderDetail orderDetail = this.constructOrderDetail(null, propertiesToCreate);                                                
+		OrderDetail orderDetail = this.constructOrderDetail(null, propertiesToCreate);
 		Context.getService(PharmacyService.class).upsert(orderDetail);
 		return ConversionUtil.convertToRepresentation(orderDetail, context.getRepresentation());
 	}
@@ -160,7 +160,7 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			}
 			
 			if (properties.get("orderLineQuantity") != null) {
-				orderDetail.setOrderLineQuantity((Integer)properties.get("orderLineQuantity"));
+				orderDetail.setOrderLineQuantity((Integer) properties.get("orderLineQuantity"));
 			}
 			
 			if (properties.get("itemSoh") != null) {
@@ -180,10 +180,10 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			if (properties.get("orderLineQuantity") == null) {
 				throw new IllegalPropertyException("Required parameters: orderLineQuantity");
 			}
-                        orderDetail.setOrderLineQuantity((Integer)properties.get("orderLineQuantity"));
-                        orderDetail.setItemSoh((Integer) properties.get("itemSoh"));
-                        orderDetail.setItemAmc((Integer) properties.get("itemAmc"));
-                        orderDetail.setOrderLineAmount((Double) properties.get("orderLineAmount"));
+			orderDetail.setOrderLineQuantity((Integer) properties.get("orderLineQuantity"));
+			orderDetail.setItemSoh((Integer) properties.get("itemSoh"));
+			orderDetail.setItemAmc((Integer) properties.get("itemAmc"));
+			orderDetail.setOrderLineAmount((Double) properties.get("orderLineAmount"));
 		}
 		
 		return orderDetail;

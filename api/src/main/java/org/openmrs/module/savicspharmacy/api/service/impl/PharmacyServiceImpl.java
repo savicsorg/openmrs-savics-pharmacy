@@ -52,6 +52,11 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	}
 	
 	@Override
+	public List getByMasterId(Class t, String key, int value, Integer limit, Integer offset) {
+		return this.dao.getFromMasterId(t, key, value, limit, offset);
+	}
+	
+	@Override
 	public T getEntity(Class t, Object id) {
 		return (T) this.dao.getEntity(t, id);
 	}
