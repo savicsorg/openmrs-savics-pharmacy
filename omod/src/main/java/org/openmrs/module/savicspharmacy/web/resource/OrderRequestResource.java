@@ -158,8 +158,8 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 		
 		Person person = null;
 		if (properties.get("person") != null) {
-                    String personId = properties.get("person");
-                    person = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, personId);
+			String personId = properties.get("person");
+			person = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, personId);
 		}
 		
 		Supplier supplier = null;

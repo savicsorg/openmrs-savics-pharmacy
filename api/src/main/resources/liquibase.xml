@@ -492,5 +492,24 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-60">
         <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_transaction" constraintName="FKpharm_tran892810" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
     </changeSet>
+    <changeSet author="enokby" id="1620641683809-61">
+        <sql dbms="mysql" endDelimiter="\nGO" splitStatements="true" stripComments="true">
+            drop table pharm_order_detail;
+
+            CREATE TABLE IF NOT EXISTS `pharm_order_detail` (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              `item_id` int(11) NOT NULL,
+              `order_id` int(11) NOT NULL,
+              `order_line_quantity` int(11) DEFAULT NULL,
+              `item_soh` int(11) DEFAULT NULL,
+              `item_amc` int(11) DEFAULT NULL,
+              `order_line_amount` double DEFAULT NULL,
+              `uuid` varchar(128) NOT NULL DEFAULT '',
+              CONSTRAINT `fk_pharm_order_detail_item` FOREIGN KEY (`item_id`) REFERENCES `pharm_item` (`id`),
+              CONSTRAINT `fk_pharm_order_detail_order` FOREIGN KEY (`order_id`) REFERENCES `pharm_pharmacy_order` (`id`)
+            );
+            <comment>revert primary key to id</comment>
+        </sql>
+    </changeSet>
     
 </databaseChangeLog>

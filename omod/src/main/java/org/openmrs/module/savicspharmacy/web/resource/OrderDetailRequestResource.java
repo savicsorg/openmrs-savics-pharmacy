@@ -144,13 +144,14 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 		Item item = null;
 		if (properties.get("item") != null) {
 			Integer itemId = properties.get("item");
-			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Person.class, "id", itemId);
+			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		
 		PharmacyOrder order = null;
 		if (properties.get("pharmacyOrder") != null) {
 			Integer orderId = properties.get("pharmacyOrder");
-			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(Supplier.class, "id", orderId);
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
+			    orderId);
 		}
 		
 		if (uuid != null) {
