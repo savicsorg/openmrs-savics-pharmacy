@@ -160,19 +160,19 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			}
 			
 			if (properties.get("orderLineQuantity") != null) {
-				orderDetail.setOrderLineQuantity((Integer) properties.get("orderLineQuantity"));
+				orderDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
 			}
 			
 			if (properties.get("itemSoh") != null) {
-				orderDetail.setItemSoh((Integer) properties.get("itemSoh"));
+				orderDetail.setItemSoh(Integer.valueOf(properties.get("itemSoh").toString()));
 			}
 			
 			if (properties.get("itemAmc") != null) {
-				orderDetail.setItemAmc((Integer) properties.get("itemAmc"));
+				orderDetail.setItemAmc(Integer.valueOf(properties.get("itemAmc").toString()));
 			}
 			
 			if (properties.get("orderLineAmount") != null) {
-				orderDetail.setOrderLineAmount((Double) properties.get("orderLineAmount"));
+				orderDetail.setOrderLineAmount(Double.valueOf(properties.get("orderLineAmount").toString()));
 			}
 			
 		} else {
@@ -180,10 +180,10 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			if (properties.get("orderLineQuantity") == null) {
 				throw new IllegalPropertyException("Required parameters: orderLineQuantity");
 			}
-			orderDetail.setOrderLineQuantity((Integer) properties.get("orderLineQuantity"));
-			orderDetail.setItemSoh((Integer) properties.get("itemSoh"));
-			orderDetail.setItemAmc((Integer) properties.get("itemAmc"));
-			orderDetail.setOrderLineAmount((Double) properties.get("orderLineAmount"));
+			orderDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
+			orderDetail.setItemSoh(Integer.valueOf(properties.get("itemSoh").toString()));
+			orderDetail.setItemAmc(Integer.valueOf(properties.get("itemAmc").toString()));
+			orderDetail.setOrderLineAmount(Double.valueOf(properties.get("orderLineAmount").toString()));
 		}
 		
 		return orderDetail;

@@ -1,5 +1,8 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -17,6 +20,8 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openmrs.Person;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder;
 import org.openmrs.module.savicspharmacy.api.entity.Supplier;
@@ -110,17 +115,31 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 		if (propertiesToCreate.get("name") == null) {
 			throw new ConversionException("Required properties: name");
 		}
+		try {
+			PharmacyOrder order = this.constructAgent(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(order);
+			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+		}
+		catch (ParseException e) {
+			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		}
 		
-		PharmacyOrder order = this.constructAgent(null, propertiesToCreate);
-		Context.getService(PharmacyService.class).upsert(order);
-		return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		PharmacyOrder order = this.constructAgent(uuid, propertiesToUpdate);
-		Context.getService(PharmacyService.class).upsert(order);
-		return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+		PharmacyOrder order;
+		try {
+			order = this.constructAgent(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(order);
+			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+		
 	}
 	
 	@Override
@@ -133,13 +152,14 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 		Context.getService(PharmacyService.class).delete(order);
 	}
 	
-	private PharmacyOrder constructAgent(String uuid, SimpleObject properties) {
+	private PharmacyOrder constructAgent(String uuid, SimpleObject properties) throws ParseException {
 		PharmacyOrder order;
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Person person = null;
 		if (properties.get("person") != null) {
-			Integer personId = properties.get("person");
-			person = (Person) Context.getService(PharmacyService.class).getEntityByid(Person.class, "id", personId);
+                    String personId = properties.get("person");
+                    person = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, personId);
 		}
 		
 		Supplier supplier = null;
@@ -159,19 +179,19 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			}
 			
 			if (properties.get("date") != null) {
-				order.setDate((Date) properties.get("date"));
+				order.setDate(simpleDateFormat.parse(properties.get("acquisitionDate").toString()));
 			}
 			
 			if (properties.get("dateApprobation") != null) {
-				order.setDateApprobation((Date) properties.get("dateApprobation"));
+				order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
 			}
 			
 			if (properties.get("dateReception") != null) {
-				order.setDateReception((Date) properties.get("dateReception"));
+				order.setDateReception(simpleDateFormat.parse(properties.get("dateReception").toString()));
 			}
 			
 			if (properties.get("amount") != null) {
-				order.setAmount((Double) properties.get("amount"));
+				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			}
 			
 			if (properties.get("person") != null) {
@@ -188,10 +208,10 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				throw new IllegalPropertyException("Required parameters: name");
 			}
 			order.setName((String) properties.get("name"));
-			order.setDate((Date) properties.get("date"));
-			order.setDateApprobation((Date) properties.get("dateApprobation"));
-			order.setDateReception((Date) properties.get("dateReception"));
-			order.setAmount((Double) properties.get("amount"));
+			order.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+			order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
+			order.setDateReception(simpleDateFormat.parse(properties.get("dateReception").toString()));
+			order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			order.setPerson(person);
 			order.setSupplier(supplier);
 		}
