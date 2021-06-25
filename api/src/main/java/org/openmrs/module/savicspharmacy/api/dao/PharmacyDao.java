@@ -44,5 +44,8 @@ public interface PharmacyDao<T extends Serializable> {
 	
 	@Transactional
 	void delete(final T entity) throws APIException;
+        
+        @Transactional(readOnly = true)
+	public List<T> getFromMasterId(Class<T> t, String key, int value, Integer limit, Integer offset) throws APIException;
 	
 }

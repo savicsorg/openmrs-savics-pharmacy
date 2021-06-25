@@ -75,4 +75,9 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	public Serializable getEntityByid(Class t, String idName, Integer id) throws APIException {
 		return (T) this.dao.getEntityByid(t, idName, id);
 	}
+        
+        @Override
+	public List getByMasterId(Class t, String key, int value, Integer limit, Integer offset) {
+		return this.dao.getFromMasterId(t, key, value, limit, offset);
+	}
 }
