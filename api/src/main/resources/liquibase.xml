@@ -492,5 +492,4 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-60">
         <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_transaction" constraintName="FKpharm_tran892810" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
     </changeSet>
-    
 </databaseChangeLog>

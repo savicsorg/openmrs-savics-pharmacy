@@ -45,8 +45,8 @@ public interface PharmacyService<T extends Serializable> extends OpenmrsService 
 	
 	@Transactional
 	void delete(final T entity) throws APIException;
-        
-        @Transactional(readOnly = true)
+	
+	@Transactional(readOnly = true)
 	public List<T> getByMasterId(Class<T> t, String key, int value, Integer limit, Integer offset) throws APIException;
 	
 }

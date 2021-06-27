@@ -129,8 +129,8 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		criteria.add(Restrictions.eq(idName, id));
 		return (T) criteria.uniqueResult();
 	}
-        
-        @Override
+	
+	@Override
 	public List getFromMasterId(Class t, String key, int value, Integer limit, Integer offset) {
 		getSession().createCriteria(t).list();
 		Criteria criteria = getSession().createCriteria(t);

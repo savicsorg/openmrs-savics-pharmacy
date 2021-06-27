@@ -20,6 +20,7 @@ import java.util.List;
 import org.openmrs.Person;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.OrderDetail;
+import org.openmrs.module.savicspharmacy.api.entity.OrderDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder;
 import org.openmrs.module.savicspharmacy.api.entity.Supplier;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -185,6 +186,9 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			orderDetail.setItemSoh(Integer.valueOf(properties.get("itemSoh").toString()));
 			orderDetail.setItemAmc(Integer.valueOf(properties.get("itemAmc").toString()));
 			orderDetail.setOrderLineAmount(Double.valueOf(properties.get("orderLineAmount").toString()));
+                        OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
+                        orderDetail.setId(pk.hashCode());
+			orderDetail.setPk(pk);
 		}
 		
 		return orderDetail;
