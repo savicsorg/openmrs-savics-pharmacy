@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.APIException;
@@ -88,11 +89,14 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public List doSearch(Class t, String key, String value, Integer limit, Integer offset) {
 		getSession().createCriteria(t).list();
-		String[] keywords = value.split(",");
+		//		String[] keys = value.split(",");
 		Criteria criteria = getSession().createCriteria(t);
-		for (int i = 0; i < keywords.length; i++) {
-                    criteria.add(Restrictions.ilike(key, keywords[i], MatchMode.ANYWHERE));
-		}
+		//		Disjunction dj = Restrictions.disjunction();
+		//		for (int i = 0; i < keys.length; i++) {
+		//			dj.add(Restrictions.ilike(keys[i], value, MatchMode.ANYWHERE));
+		//		}
+		//		criteria.add(dj);
+		criteria.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
 		return criteria.list();
 	}
 	
