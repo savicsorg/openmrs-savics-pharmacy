@@ -107,7 +107,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	
 	@Override
 	public PharmacyOrder save(PharmacyOrder order) {
-		return (PharmacyOrder) Context.getService(PharmacyService.class).upsert(order);
+            return (PharmacyOrder) Context.getService(PharmacyService.class).upsert(order);
 	}
 	
 	@Override
@@ -116,7 +116,9 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			throw new ConversionException("Required properties: name");
 		}
 		try {
-			PharmacyOrder order = this.constructOrder(null, propertiesToCreate);
+			PharmacyOrder order = this.constructOrder(null, propertiesToCreate);                         
+                        order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
+                        order.setDate(new Date());
 			Context.getService(PharmacyService.class).upsert(order);
 			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
 		}
