@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Person;
+import org.openmrs.module.savicspharmacy.api.entity.OrderDetail;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder;
 import org.openmrs.module.savicspharmacy.api.entity.Supplier;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -47,6 +48,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("uuid");
 			description.addProperty("date");
 			description.addProperty("amount");
+			description.addProperty("name");
 			description.addProperty("dateApprobation");
 			description.addProperty("dateReception");
 			description.addProperty("person");
@@ -60,6 +62,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("uuid");
 			description.addProperty("date");
 			description.addProperty("amount");
+			description.addProperty("name");
 			description.addProperty("dateApprobation");
 			description.addProperty("dateReception");
 			description.addProperty("person");
@@ -74,6 +77,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("uuid");
 			description.addProperty("date");
 			description.addProperty("amount");
+			description.addProperty("name");
 			description.addProperty("dateApprobation");
 			description.addProperty("dateReception");
 			description.addProperty("person");
@@ -107,7 +111,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	
 	@Override
 	public PharmacyOrder save(PharmacyOrder order) {
-            return (PharmacyOrder) Context.getService(PharmacyService.class).upsert(order);
+		return (PharmacyOrder) Context.getService(PharmacyService.class).upsert(order);
 	}
 	
 	@Override
@@ -116,9 +120,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			throw new ConversionException("Required properties: name");
 		}
 		try {
-			PharmacyOrder order = this.constructOrder(null, propertiesToCreate);                         
-                        order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
-                        order.setDate(new Date());
+			PharmacyOrder order = this.constructOrder(null, propertiesToCreate);
 			Context.getService(PharmacyService.class).upsert(order);
 			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
 		}
@@ -146,6 +148,12 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	
 	@Override
 	protected void delete(PharmacyOrder order, String reason, RequestContext context) throws ResponseException {
+		List<OrderDetail> orderDetailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
+		    "pharmacyOrder.id", order.getId(), 1000, 0);
+		for (int i = 0; i < orderDetailList.size(); i++) {
+			OrderDetail o = orderDetailList.get(i);
+			Context.getService(PharmacyService.class).delete(o);
+		}
 		Context.getService(PharmacyService.class).delete(order);
 	}
 	
@@ -157,12 +165,6 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	private PharmacyOrder constructOrder(String uuid, SimpleObject properties) throws ParseException {
 		PharmacyOrder order;
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-		Person person = null;
-		if (properties.get("person") != null) {
-			String personId = properties.get("person");
-			person = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, personId);
-		}
 		
 		Supplier supplier = null;
 		if (properties.get("supplier") != null) {
@@ -196,25 +198,22 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			}
 			
-			if (properties.get("person") != null) {
-				order.setPerson(person);
-			}
-			
-			if (properties.get("supplierId") != null) {
-				order.setSupplier(supplier);
-			}
+			//
+			//if (properties.get("supplier") != null) {
+			//	order.setSupplier(supplier);
+			//}
 			
 		} else {
 			order = new PharmacyOrder();
-			if (properties.get("name") == null) {
-				throw new IllegalPropertyException("Required parameters: name");
-			}
-			order.setName((String) properties.get("name"));
-			order.setDate(simpleDateFormat.parse(properties.get("date").toString()));
-			order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
-			order.setDateReception(simpleDateFormat.parse(properties.get("dateReception").toString()));
-			order.setAmount(Double.valueOf(properties.get("amount").toString()));
-			order.setPerson(person);
+			order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
+			order.setDate(new Date());
+			order.setName(properties.get("name").toString());
+			//order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
+			//order.setDateReception(simpleDateFormat.parse(properties.get("dateReception").toString()));
+			if (properties.get("amount") != null)
+				order.setAmount(Double.valueOf(properties.get("amount").toString()));
+			else
+				order.setAmount(0.0);
 			order.setSupplier(supplier);
 		}
 		
