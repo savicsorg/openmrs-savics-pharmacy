@@ -189,6 +189,8 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
 			orderDetail.setId(pk.hashCode());
 			orderDetail.setPk(pk);
+			orderDetail.setItem(item);
+			orderDetail.setPharmacyOrder(order);
 		}
 		
 		return orderDetail;
