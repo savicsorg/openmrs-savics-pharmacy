@@ -187,7 +187,8 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			}
 			
 			if (properties.get("dateApprobation") != null) {
-				order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
+				//order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
+				order.setDateApprobation(new Date());
 			}
 			
 			if (properties.get("dateReception") != null) {
