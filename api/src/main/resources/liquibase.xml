@@ -496,39 +496,39 @@
       
     <changeSet author="agilbert" id="1620641683809-61">
         <sql>
-            ALTER TABLE pharm_suppliers ADD CONSTRAINT UNIQUE (UniqCode_Suppliers)
+            ALTER TABLE pharm_supplier ADD CONSTRAINT UNIQUE (code)
         </sql>
     </changeSet>
     
     <changeSet author="agilbert" id="11620641683809-62">
         <sql>
-            ALTER TABLE pharm_customers ADD CONSTRAINT UNIQUE(UniqCode_Customers)
+            ALTER TABLE pharm_customer ADD CONSTRAINT UNIQUE(code)
         </sql>
     </changeSet>
     
     <changeSet author="agilbert" id="1620641683809-63">
         <sql>
-            ALTER TABLE pharm_locations ADD CONSTRAINT UNIQUE (UniqCode_Locations)
+            ALTER TABLE pharm_pharmacy_location ADD CONSTRAINT UNIQUE (code)
         </sql>
     </changeSet>
     
     
     <changeSet author="agilbert" id="1620641683809-64">
         <sql>
-            ALTER TABLE pharm_items ADD CONSTRAINT  UNIQUE(UniqCode_Items)
+            ALTER TABLE pharm_item ADD CONSTRAINT  UNIQUE(code)
         </sql>
     </changeSet>
 
     <changeSet author="agilbert" id="1620641683809-65">
         <sql>
-            ALTER TABLE pharm_units ADD CONSTRAINT  UNIQUE (UniqCode_Units)
+            ALTER TABLE pharm_unit ADD CONSTRAINT  UNIQUE (code)
         </sql>
     </changeSet>
     
     
     <changeSet author="agilbert" id="1620641683809-66">
         <sql>
-            ALTER TABLE pharm_route ADD CONSTRAINT  UNIQUE (UniqCode_Routes)
+            ALTER TABLE pharm_route ADD CONSTRAINT  UNIQUE (code)
         </sql>
     </changeSet>
     
