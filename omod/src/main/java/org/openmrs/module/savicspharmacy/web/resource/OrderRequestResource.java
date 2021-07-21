@@ -37,7 +37,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	
 	@Override
 	public PharmacyOrder newDelegate() {
-		return new PharmacyOrder();
+            return new PharmacyOrder();
 	}
 	
 	@Override
