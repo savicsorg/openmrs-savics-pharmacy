@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openmrs.module.savicspharmacy.export;
+package org.openmrs.module.savicspharmacy.web.service;
 
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -20,7 +19,10 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @author anatoleabe
@@ -32,6 +34,9 @@ public class DrugsExcelExport {
 	private XSSFSheet sheet;
 	
 	private List<Item> listItems;
+	
+	@Autowired
+	private MessageSourceService messageSourceService;
 	
 	public DrugsExcelExport(List<Item> listItems) {
 		this.listItems = listItems;
@@ -58,13 +63,12 @@ public class DrugsExcelExport {
 		cellStyle.setFont(font);
 		
 		int index = 0;
-		createCell(row, index++, "Code", cellStyle);
+		createCell(row, index++, "Code",cellStyle);
 		createCell(row, index++, "Designation", cellStyle);
-		createCell(row, index++, "Unit", cellStyle);
+		createCell(row, index++, "Unité",cellStyle);
 		createCell(row, index++, "Route", cellStyle);
 		createCell(row, index++, "Min", cellStyle);
 		createCell(row, index++, "Max", cellStyle);
-		
 	}
 	
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
