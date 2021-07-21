@@ -39,7 +39,7 @@ public class DrugsExcelExport {
 	}
 	
 	private void writeHeaderLine() {
-		sheet = workbook.createSheet("Users");
+		sheet = workbook.createSheet("Drugs List");
 		
 		Row row = sheet.createRow(0);
 		XSSFFont font = workbook.createFont();
