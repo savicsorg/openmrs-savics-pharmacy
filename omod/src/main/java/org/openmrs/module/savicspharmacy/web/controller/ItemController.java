@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
-import org.openmrs.module.savicspharmacy.web.service.DrugsExcelExport;
+import org.openmrs.module.savicspharmacy.export.DrugsExcelExport;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.springframework.beans.factory.annotation.Autowired;

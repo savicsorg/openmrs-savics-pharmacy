@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openmrs.module.savicspharmacy.web.service;
+package org.openmrs.module.savicspharmacy.export;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,9 +63,9 @@ public class DrugsExcelExport {
 		cellStyle.setFont(font);
 		
 		int index = 0;
-		createCell(row, index++, "Code",cellStyle);
+		createCell(row, index++, "Code", cellStyle);
 		createCell(row, index++, "Designation", cellStyle);
-		createCell(row, index++, "Unité",cellStyle);
+		createCell(row, index++, "Unité", cellStyle);
 		createCell(row, index++, "Route", cellStyle);
 		createCell(row, index++, "Min", cellStyle);
 		createCell(row, index++, "Max", cellStyle);
