@@ -53,6 +53,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sell_price" type="DOUBLE"/>
+             <column name="AMC" type="DOUBLE"/>
             <column name="buy_price" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
@@ -492,4 +493,43 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-60">
         <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_transaction" constraintName="FKpharm_tran892810" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
     </changeSet>
+      
+    <changeSet author="agilbert" id="1620641683809-61">
+        <sql>
+            ALTER TABLE pharm_supplier ADD CONSTRAINT UNIQUE (code)
+        </sql>
+    </changeSet>
+    
+    <changeSet author="agilbert" id="11620641683809-62">
+        <sql>
+            ALTER TABLE pharm_customer ADD CONSTRAINT UNIQUE(code)
+        </sql>
+    </changeSet>
+    
+    <changeSet author="agilbert" id="1620641683809-63">
+        <sql>
+            ALTER TABLE pharm_pharmacy_location ADD CONSTRAINT UNIQUE (code)
+        </sql>
+    </changeSet>
+    
+    
+    <changeSet author="agilbert" id="1620641683809-64">
+        <sql>
+            ALTER TABLE pharm_item ADD CONSTRAINT  UNIQUE(code)
+        </sql>
+    </changeSet>
+
+    <changeSet author="agilbert" id="1620641683809-65">
+        <sql>
+            ALTER TABLE pharm_unit ADD CONSTRAINT  UNIQUE (code)
+        </sql>
+    </changeSet>
+    
+    
+    <changeSet author="agilbert" id="1620641683809-66">
+        <sql>
+            ALTER TABLE pharm_route ADD CONSTRAINT  UNIQUE (code)
+        </sql>
+    </changeSet>
+    
 </databaseChangeLog>

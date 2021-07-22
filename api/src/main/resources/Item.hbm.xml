@@ -43,6 +43,9 @@
     <property name="stockMax" type="java.lang.Integer">
       <column name="stock_max"/>
     </property>
+    <property name="AMC" type="java.lang.Double">
+      <column name="AMC"/>
+    </property>
     <set fetch="select" inverse="true" lazy="true" name="stocktakeDetails" table="pharm_stocktake_detail">
       <key>
         <column name="item_id" not-null="true"/>

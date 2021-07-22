@@ -48,6 +48,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("soh");
 			description.addProperty("stockMin");
 			description.addProperty("stockMax");
+			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -66,6 +67,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("soh");
 			description.addProperty("stockMin");
 			description.addProperty("stockMax");
+			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -85,6 +87,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("soh");
 			description.addProperty("stockMin");
 			description.addProperty("stockMax");
+			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
 			description.addSelfLink();
@@ -200,6 +203,10 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 				item.setStockMax((Integer) properties.get("stockMax"));
 			}
 			
+			if (properties.get("AMC") != null) {
+				item.setAMC((Double) properties.get("AMC"));
+			}
+			
 			item.setUnit(unit);
 			item.setRoute(route);
 		} else {
@@ -216,6 +223,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			item.setSoh((Integer) properties.get("soh"));
 			item.setStockMin((Integer) properties.get("stockMin"));
 			item.setStockMax((Integer) properties.get("stockMax"));
+			item.setAMC((Double) properties.get("AMC"));
 			item.setUnit(unit);
 			item.setRoute(route);
 		}
