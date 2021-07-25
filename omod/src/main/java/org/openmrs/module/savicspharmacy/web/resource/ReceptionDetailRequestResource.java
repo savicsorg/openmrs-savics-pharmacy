@@ -100,49 +100,51 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		Integer value = Integer.parseInt(context.getParameter("receptionId"));
-		List<ReceptionDetail> receptionDetailList = Context.getService(PharmacyService.class).getByMasterId(ReceptionDetail.class,
-		    "reception.id", value, context.getLimit(), context.getStartIndex());
+		List<ReceptionDetail> receptionDetailList = Context.getService(PharmacyService.class).getByMasterId(
+		    ReceptionDetail.class, "reception.id", value, context.getLimit(), context.getStartIndex());
 		return new AlreadyPaged<ReceptionDetail>(context, receptionDetailList, false);
 	}
 	
 	@Override
 	public ReceptionDetail getByUniqueId(String uuid) {
-            return (ReceptionDetail) Context.getService(PharmacyService.class).getEntityByUuid(ReceptionDetail.class, uuid);
+		return (ReceptionDetail) Context.getService(PharmacyService.class).getEntityByUuid(ReceptionDetail.class, uuid);
 	}
 	
 	@Override
 	public ReceptionDetail save(ReceptionDetail receptionDetail) {
 		return (ReceptionDetail) Context.getService(PharmacyService.class).upsert(receptionDetail);
-                
+		
 	}
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-            try {
-                if (propertiesToCreate.get("quantityReceived") == null) {
-                    throw new ConversionException("Required properties: quantityReceived");
-                }
-                
-                ReceptionDetail receptionDetail = this.constructReceptionDetail(null, propertiesToCreate);
-                Context.getService(PharmacyService.class).upsert(receptionDetail);
-                return ConversionUtil.convertToRepresentation(receptionDetail, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(ReceptionDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			if (propertiesToCreate.get("quantityReceived") == null) {
+				throw new ConversionException("Required properties: quantityReceived");
+			}
+			
+			ReceptionDetail receptionDetail = this.constructReceptionDetail(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(receptionDetail);
+			return ConversionUtil.convertToRepresentation(receptionDetail, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(ReceptionDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-            try {
-                ReceptionDetail receptionDetail = this.constructReceptionDetail(uuid, propertiesToUpdate);
-                Context.getService(PharmacyService.class).upsert(receptionDetail);
-                
-                return ConversionUtil.convertToRepresentation(receptionDetail, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(ReceptionDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			ReceptionDetail receptionDetail = this.constructReceptionDetail(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(receptionDetail);
+			
+			return ConversionUtil.convertToRepresentation(receptionDetail, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(ReceptionDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
@@ -172,47 +174,48 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		}
 		
 		if (uuid != null) {
-                    receptionDetail = (ReceptionDetail) Context.getService(PharmacyService.class).getEntityByUuid(ReceptionDetail.class, uuid);
-                    ItemsLine itemLine  = new ItemsLine();
-                    itemLine.setItem(item);
-                    itemLine.setItemBatch(properties.get("itemBatch").toString());
-                    itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-                    itemLine.setItemVirtualstock(Integer.valueOf(properties.get("itemVirtualstock").toString()));
-                    if (receptionDetail == null) {
-                            throw new IllegalPropertyException("ReceptionDetail not exist");
-                    }
-
-                    if (properties.get("orderLineQuantity") != null) {
-                            receptionDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
-                    }
-
-                    if (properties.get("quantityReceived") != null) {
-                            receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
-                    }
-
-                    if (properties.get("itemBatch") != null) {
-                            receptionDetail.setItemBatch(properties.get("itemBatch").toString());
-                    }
-
-                    if (properties.get("itemExpiryDate") != null) {
-                            receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-                    }
+			receptionDetail = (ReceptionDetail) Context.getService(PharmacyService.class).getEntityByUuid(
+			    ReceptionDetail.class, uuid);
+			ItemsLine itemLine = new ItemsLine();
+			itemLine.setItem(item);
+			itemLine.setItemBatch(properties.get("itemBatch").toString());
+			itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			itemLine.setItemVirtualstock(Integer.valueOf(properties.get("itemVirtualstock").toString()));
+			if (receptionDetail == null) {
+				throw new IllegalPropertyException("ReceptionDetail not exist");
+			}
+			
+			if (properties.get("orderLineQuantity") != null) {
+				receptionDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
+			}
+			
+			if (properties.get("quantityReceived") != null) {
+				receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
+			}
+			
+			if (properties.get("itemBatch") != null) {
+				receptionDetail.setItemBatch(properties.get("itemBatch").toString());
+			}
+			
+			if (properties.get("itemExpiryDate") != null) {
+				receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			}
 			
 		} else {
-                    receptionDetail = new ReceptionDetail();
-                    if (properties.get("orderLineQuantity") == null) {
-                            throw new IllegalPropertyException("Required parameters: orderLineQuantity");
-                    }
-                    receptionDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
-                    receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
-                    receptionDetail.setItemBatch(properties.get("itemBatch").toString());
-                    receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-                    ReceptionDetailId pk = new ReceptionDetailId(item.getId(), reception.getId());
-                    receptionDetail.setId(pk.hashCode());
-                    receptionDetail.setPk(pk);
-                    receptionDetail.setItem(item);
-                    receptionDetail.setReception(reception);
-            }
+			receptionDetail = new ReceptionDetail();
+			if (properties.get("orderLineQuantity") == null) {
+				throw new IllegalPropertyException("Required parameters: orderLineQuantity");
+			}
+			receptionDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
+			receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
+			receptionDetail.setItemBatch(properties.get("itemBatch").toString());
+			receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			ReceptionDetailId pk = new ReceptionDetailId(item.getId(), reception.getId());
+			receptionDetail.setId(pk.hashCode());
+			receptionDetail.setPk(pk);
+			receptionDetail.setItem(item);
+			receptionDetail.setReception(reception);
+		}
 		
 		return receptionDetail;
 	}

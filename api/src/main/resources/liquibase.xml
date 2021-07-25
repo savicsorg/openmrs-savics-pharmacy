@@ -65,7 +65,7 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-4">
         <createTable tableName="pharm_items_line">
             <column autoIncrement="true" name="id" type="INT">
-                <constraints nullable="false" unique="true"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="uuid" type="VARCHAR(38)">
                 <constraints nullable="false"/>
