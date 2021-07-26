@@ -11,12 +11,15 @@ public class ItemsLineId implements java.io.Serializable {
 	
 	private int locationId;
 	
+	private int id;
+	
 	public ItemsLineId() {
 	}
 	
-	public ItemsLineId(int itemId, int locationId) {
+	public ItemsLineId(int itemId, int locationId, int id) {
 		this.itemId = itemId;
 		this.locationId = locationId;
+		this.id = id;
 	}
 	
 	public int getItemId() {
@@ -25,6 +28,14 @@ public class ItemsLineId implements java.io.Serializable {
 	
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.itemId = id;
 	}
 	
 	public int getLocationId() {
@@ -52,6 +63,7 @@ public class ItemsLineId implements java.io.Serializable {
 		
 		result = 37 * result + this.getItemId();
 		result = 37 * result + this.getLocationId();
+		result = 37 * result + this.getId();
 		return result;
 	}
 	
