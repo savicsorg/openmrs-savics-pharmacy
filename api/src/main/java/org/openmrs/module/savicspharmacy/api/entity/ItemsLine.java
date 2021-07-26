@@ -24,9 +24,9 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Date itemExpiryDate;
 	
-	private Integer itemVirtualstock;
+	private Integer itemVirtualstock;// The available quantity after an operation before validation; Must be <= of itemSoh
 	
-	private Integer itemSoh;
+	private Integer itemSoh;// The available item soh
 	
 	public ItemsLineId getPk() {
 		return this.pk;

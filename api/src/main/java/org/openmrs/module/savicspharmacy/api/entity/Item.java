@@ -29,9 +29,9 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private double buyPrice;
 	
-	private Integer virtualstock;
+	private Integer virtualstock; // must be managed by triggers. Updated when ItemLine change
 	
-	private Integer soh;
+	private Integer soh;// must be managed by triggers. Updated when ItemLine change 
 	
 	private Integer stockMin;
 	
