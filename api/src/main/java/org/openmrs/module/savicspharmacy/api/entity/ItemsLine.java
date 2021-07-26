@@ -10,8 +10,6 @@ import org.openmrs.BaseOpenmrsData;
  */
 public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	
-	private ItemsLineId pk;
-	
 	private Item item;
 	
 	private PharmacyLocation pharmacyLocation;
@@ -27,14 +25,6 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	private Integer itemVirtualstock;
 	
 	private Integer itemSoh;
-	
-	public ItemsLineId getPk() {
-		return this.pk;
-	}
-	
-	public void setPk(ItemsLineId pk) {
-		this.pk = pk;
-	}
 	
 	public Item getItem() {
 		return this.item;
@@ -91,5 +81,4 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	public void setItemSoh(Integer itemSoh) {
 		this.itemSoh = itemSoh;
 	}
-	
 }

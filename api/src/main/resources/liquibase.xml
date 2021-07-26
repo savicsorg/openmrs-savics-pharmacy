@@ -72,10 +72,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="item_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="location_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="item_batch" type="VARCHAR(50)"/>
             <column name="item_expiry_date" type="date"/>
