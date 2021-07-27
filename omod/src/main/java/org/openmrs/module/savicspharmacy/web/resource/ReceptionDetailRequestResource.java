@@ -22,9 +22,13 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.openmrs.Person;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
+import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetail;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Reception;
@@ -172,15 +176,26 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			reception = (Reception) Context.getService(PharmacyService.class).getEntityByid(Reception.class, "id",
 			    receptionId);
 		}
+		if (properties.get("itemBatch") != null && item != null) {
+                    ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+                        ItemsLine.class, new String[] { "itemBatch", "item.id" },
+                        new Object[] { properties.get("itemBatch").toString(), item.getId() });
+                    if (itemLine == null)
+                            itemLine = new ItemsLine();
+                    itemLine.setItem(item);
+                    itemLine.setItemBatch(properties.get("itemBatch").toString());
+                    itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+                    itemLine.setItemVirtualstock(Integer.valueOf(properties.get("itemVirtualstock").toString()));
+                    PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
+                        PharmacyLocation.class, properties.get("location").toString());
+                    itemLine.setPharmacyLocation(location);
+                    Context.getService(PharmacyService.class).upsert(itemLine);		
+		}
 		
 		if (uuid != null) {
 			receptionDetail = (ReceptionDetail) Context.getService(PharmacyService.class).getEntityByUuid(
 			    ReceptionDetail.class, uuid);
-			ItemsLine itemLine = new ItemsLine();
-			itemLine.setItem(item);
-			itemLine.setItemBatch(properties.get("itemBatch").toString());
-			itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-			itemLine.setItemVirtualstock(Integer.valueOf(properties.get("itemVirtualstock").toString()));
+			
 			if (receptionDetail == null) {
 				throw new IllegalPropertyException("ReceptionDetail not exist");
 			}

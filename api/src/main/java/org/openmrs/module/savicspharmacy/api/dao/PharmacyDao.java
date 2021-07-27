@@ -39,6 +39,9 @@ public interface PharmacyDao<T extends Serializable> {
 	@Transactional(readOnly = true)
 	T getEntityByid(Class<T> t, String idName, Integer id) throws APIException;
 	
+	@Transactional(readOnly = true)
+	T getEntityByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException;
+	
 	@Transactional
 	T upsert(T entity) throws APIException;
 	

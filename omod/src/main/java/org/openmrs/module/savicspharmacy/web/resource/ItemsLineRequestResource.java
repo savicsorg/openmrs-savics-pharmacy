@@ -82,17 +82,17 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		List<ItemsLine> agentList = Context.getService(PharmacyService.class).getAll(ItemsLine.class, context.getLimit(),
-		    context.getStartIndex());
-		return new AlreadyPaged<ItemsLine>(context, agentList, false);
+		List<ItemsLine> itemsLineList = Context.getService(PharmacyService.class).getAll(ItemsLine.class,
+		    context.getLimit(), context.getStartIndex());
+		return new AlreadyPaged<ItemsLine>(context, itemsLineList, false);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		String value = context.getParameter("itemBatch");
-		List<ItemsLine> agentList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemBatch", value,
+		String value = context.getParameter("itemId");
+		List<ItemsLine> itemsLineList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemId", value,
 		    context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<ItemsLine>(context, agentList, false);
+		return new AlreadyPaged<ItemsLine>(context, itemsLineList, false);
 	}
 	
 	@Override
