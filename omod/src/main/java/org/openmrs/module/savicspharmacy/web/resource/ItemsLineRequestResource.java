@@ -41,12 +41,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			System.out.println("");
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -54,12 +54,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -68,12 +68,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addSelfLink();
 			return description;
 		}
@@ -143,11 +143,11 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		
-		PharmacyLocation location = null;
-		if (properties.get("location") != null) {
-			Integer locationId = properties.get("location");
-			location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(PharmacyLocation.class,
-			    "id", locationId);
+		PharmacyLocation pharmacyLocation = null;
+		if (properties.get("pharmacyLocation") != null) {
+			Integer pharmacyLocationId = properties.get("pharmacyLocation");
+			pharmacyLocation = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(
+			    PharmacyLocation.class, "id", pharmacyLocationId);
 		}
 		
 		if (uuid != null) {
@@ -164,8 +164,8 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 				itemsLine.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
 			}
 			
-			if (properties.get("item_virtualstock") != null) {
-				itemsLine.setItemVirtualstock((Integer) properties.get("item_virtualstock"));
+			if (properties.get("itemVirtualstock") != null) {
+				itemsLine.setItemVirtualstock((Integer) properties.get("itemVirtualstock"));
 			}
 			
 			if (properties.get("itemSoh") != null) {
@@ -176,8 +176,8 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 				itemsLine.setItem(item);
 			}
 			
-			if (properties.get("location") != null) {
-				itemsLine.setPharmacyLocation(location);
+			if (properties.get("pharmacyLocation") != null) {
+				itemsLine.setPharmacyLocation(pharmacyLocation);
 			}
 			
 		} else {
@@ -187,10 +187,10 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			}
 			itemsLine.setItemBatch((String) properties.get("itemBatch"));
 			itemsLine.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
-			itemsLine.setItemVirtualstock((Integer) properties.get("item_virtualstock"));
+			itemsLine.setItemVirtualstock((Integer) properties.get("itemVirtualstock"));
 			itemsLine.setItemSoh((Integer) properties.get("itemSoh"));
 			itemsLine.setItem(item);
-			itemsLine.setPharmacyLocation(location);
+			itemsLine.setPharmacyLocation(pharmacyLocation);
 		}
 		
 		return itemsLine;
