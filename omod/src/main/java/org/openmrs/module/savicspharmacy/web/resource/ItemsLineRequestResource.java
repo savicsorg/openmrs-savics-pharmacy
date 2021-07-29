@@ -1,5 +1,8 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -17,6 +20,8 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
@@ -41,12 +46,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			System.out.println("");
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -54,12 +59,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -68,12 +73,12 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("item_batch");
-			description.addProperty("item_expiry_date");
-			description.addProperty("item_virtualstock");
-			description.addProperty("item_soh");
+			description.addProperty("itemBatch");
+			description.addProperty("itemExpiryDate");
+			description.addProperty("itemVirtualstock");
+			description.addProperty("itemSoh");
 			description.addProperty("item");
-			description.addProperty("location");
+			description.addProperty("pharmacyLocation");
 			description.addSelfLink();
 			return description;
 		}
@@ -89,10 +94,18 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		String value = context.getParameter("itemId");
-		List<ItemsLine> itemsLineList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemId", value,
-		    context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<ItemsLine>(context, itemsLineList, false);
+		String value = context.getParameter("itemBatch");
+		Integer itemValue = Integer.parseInt(context.getParameter("item"));
+		List<ItemsLine> itemLinestList;
+		if (itemValue != null) {
+			itemLinestList = Context.getService(PharmacyService.class).getByMasterId(ItemsLine.class, "item.id", itemValue,
+			    context.getLimit(), context.getStartIndex());
+		} else {
+			itemLinestList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemBatch", value,
+			    context.getLimit(), context.getStartIndex());
+		}
+		
+		return new AlreadyPaged<ItemsLine>(context, itemLinestList, false);
 	}
 	
 	@Override
@@ -108,20 +121,35 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-		if (propertiesToCreate.get("name") == null) {
-			throw new ConversionException("Required properties: name");
+		if (propertiesToCreate.get("itemBatch") == null) {
+			throw new ConversionException("Required properties: itemBatch");
 		}
 		
-		ItemsLine itemsLine = this.constructAgent(null, propertiesToCreate);
-		Context.getService(PharmacyService.class).upsert(itemsLine);
-		return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+		ItemsLine itemsLine;
+		try {
+			itemsLine = this.constructAgent(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(itemsLine);
+			return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(ItemsLineRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		ItemsLine itemsLine = this.constructAgent(uuid, propertiesToUpdate);
-		Context.getService(PharmacyService.class).upsert(itemsLine);
-		return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+		ItemsLine itemsLine;
+		try {
+			itemsLine = this.constructAgent(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(itemsLine);
+			return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(ItemsLineRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+		
 	}
 	
 	@Override
@@ -134,20 +162,25 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		Context.getService(PharmacyService.class).delete(itemsLine);
 	}
 	
-	private ItemsLine constructAgent(String uuid, SimpleObject properties) {
+	private ItemsLine constructAgent(String uuid, SimpleObject properties) throws ParseException {
 		ItemsLine itemsLine;
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Item item = null;
 		if (properties.get("item") != null) {
-			Integer itemId = properties.get("item");
+			Integer itemId = (Integer) properties.get("item");
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+			System.out.println("item = " + itemId + " item object = " + item);
 		}
 		
-		PharmacyLocation location = null;
-		if (properties.get("location") != null) {
-			Integer locationId = properties.get("location");
-			location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(PharmacyLocation.class,
-			    "id", locationId);
+		PharmacyLocation pharmacyLocation = null;
+		if (properties.get("pharmacyLocation") != null) {
+			
+			Integer pharmacyLocationId = (Integer) properties.get("pharmacyLocation");
+			
+			pharmacyLocation = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(
+			    PharmacyLocation.class, "id", pharmacyLocationId);
+			System.out.println("pharmacyLocationId = " + pharmacyLocationId + " location object = " + pharmacyLocation);
 		}
 		
 		if (uuid != null) {
@@ -161,11 +194,11 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			}
 			
 			if (properties.get("itemExpiryDate") != null) {
-				itemsLine.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			}
 			
-			if (properties.get("item_virtualstock") != null) {
-				itemsLine.setItemVirtualstock((Integer) properties.get("item_virtualstock"));
+			if (properties.get("itemVirtualstock") != null) {
+				itemsLine.setItemVirtualstock((Integer) properties.get("itemVirtualstock"));
 			}
 			
 			if (properties.get("itemSoh") != null) {
@@ -176,21 +209,22 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 				itemsLine.setItem(item);
 			}
 			
-			if (properties.get("location") != null) {
-				itemsLine.setPharmacyLocation(location);
+			if (properties.get("pharmacyLocation") != null) {
+				itemsLine.setPharmacyLocation(pharmacyLocation);
 			}
 			
 		} else {
 			itemsLine = new ItemsLine();
-			if (properties.get("name") == null) {
-				throw new IllegalPropertyException("Required parameters: name");
+			
+			if (properties.get("itemBatch") == null) {
+				throw new ConversionException("Required properties: itemBatch");
 			}
 			itemsLine.setItemBatch((String) properties.get("itemBatch"));
-			itemsLine.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
-			itemsLine.setItemVirtualstock((Integer) properties.get("item_virtualstock"));
+			itemsLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			itemsLine.setItemVirtualstock((Integer) properties.get("itemVirtualstock"));
 			itemsLine.setItemSoh((Integer) properties.get("itemSoh"));
 			itemsLine.setItem(item);
-			itemsLine.setPharmacyLocation(location);
+			itemsLine.setPharmacyLocation(pharmacyLocation);
 		}
 		
 		return itemsLine;
