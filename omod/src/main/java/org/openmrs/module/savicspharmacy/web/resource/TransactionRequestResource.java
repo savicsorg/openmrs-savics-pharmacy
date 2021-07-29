@@ -188,19 +188,19 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		TransactionType transactionType = null;
 		if (properties.get("transactionType") != null) {
-			Integer transactionTypeId = properties.get("transactionType");
+			Integer transactionTypeId = (Integer) properties.get("transactionType");
 			transactionType = (TransactionType) Context.getService(PharmacyService.class).getEntityByid(
 			    TransactionType.class, "id", transactionTypeId);
 		}
 		PharmacyLocation pharmacyLocation = null;
 		if (properties.get("pharmacyLocation") != null) {
-			Integer pharmacyLocationId = properties.get("pharmacyLocation");
+			Integer pharmacyLocationId = (Integer) properties.get("pharmacyLocation");
 			pharmacyLocation = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByid(
 			    PharmacyLocation.class, "id", pharmacyLocationId);
 		}
 		Item item = null;
 		if (properties.get("item") != null) {
-			Integer itemId = properties.get("item");
+			Integer itemId = (Integer) properties.get("item");
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		if (uuid != null) {
@@ -263,7 +263,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 			}
 			
-			transaction.setDate((Date) properties.get("date"));
 			transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			
 			transaction.setQuantity((Integer) properties.get("quantity"));
