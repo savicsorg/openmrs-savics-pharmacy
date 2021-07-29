@@ -1,5 +1,8 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -16,6 +19,8 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.CustomerType;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -102,19 +107,30 @@ public class StocktakeRequestResource extends DataDelegatingCrudResource<Stockta
 		if (propertiesToCreate.get("name") == null || propertiesToCreate.get("code") == null) {
 			throw new ConversionException("Required properties: name, code");
 		}
-		System.out.println("-----------------------------");
-		System.out.println(propertiesToCreate);
-		System.out.println();
-		Stocktake stocktake = this.constructStocktake(null, propertiesToCreate);
-		Context.getService(PharmacyService.class).upsert(stocktake);
+
+		Stocktake stocktake;
+            try {
+                stocktake = this.constructStocktake(null, propertiesToCreate);
+                Context.getService(PharmacyService.class).upsert(stocktake);
 		return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
+            } catch (ParseException ex) {
+                Logger.getLogger(StocktakeRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+		
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		Stocktake stocktake = this.constructStocktake(uuid, propertiesToUpdate);
-		Context.getService(PharmacyService.class).upsert(stocktake);
+		Stocktake stocktake;
+            try {
+                stocktake = this.constructStocktake(uuid, propertiesToUpdate);
+                Context.getService(PharmacyService.class).upsert(stocktake);
 		return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
+            } catch (ParseException ex) {
+                Logger.getLogger(StocktakeRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
 	}
 	
 	@Override
@@ -127,8 +143,9 @@ public class StocktakeRequestResource extends DataDelegatingCrudResource<Stockta
 		Context.getService(PharmacyService.class).delete(stocktake);
 	}
 	
-	private Stocktake constructStocktake(String uuid, SimpleObject properties) {
+	private Stocktake constructStocktake(String uuid, SimpleObject properties) throws ParseException {
 		Stocktake stocktake;
+                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		PharmacyLocation pharmacyLocation = null;
 		if (properties.get("pharmacyLocation") != null) {
@@ -148,7 +165,7 @@ public class StocktakeRequestResource extends DataDelegatingCrudResource<Stockta
 			}
 			
 			if (properties.get("date") != null) {
-				stocktake.setDate((Date) properties.get("date"));
+                                stocktake.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
 			
 			if (properties.get("pharmacyLocation") != null) {
@@ -161,7 +178,7 @@ public class StocktakeRequestResource extends DataDelegatingCrudResource<Stockta
 				throw new IllegalPropertyException("Required parameters: name, date");
 			}
 			stocktake.setName((String) properties.get("name"));
-			stocktake.setDate((Date) properties.get("date"));
+                        stocktake.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			stocktake.setPharmacyLocation(pharmacyLocation);
 		}
 		

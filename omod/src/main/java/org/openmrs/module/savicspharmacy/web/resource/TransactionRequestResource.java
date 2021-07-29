@@ -1,5 +1,8 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -16,6 +19,8 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
@@ -141,16 +146,29 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 		        || propertiesToCreate.get("TransactionType") == null) {
 			throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 		}
-		Transaction transaction = this.constructTransaction(null, propertiesToCreate);
-		Context.getService(PharmacyService.class).upsert(transaction);
+		Transaction transaction;
+            try {
+                transaction = this.constructTransaction(null, propertiesToCreate);
+                Context.getService(PharmacyService.class).upsert(transaction);
 		return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+            } catch (ParseException ex) {
+                Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+		
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		Transaction transaction = this.constructTransaction(uuid, propertiesToUpdate);
-		Context.getService(PharmacyService.class).upsert(transaction);
+		Transaction transaction;
+            try {
+                transaction = this.constructTransaction(uuid, propertiesToUpdate);
+                Context.getService(PharmacyService.class).upsert(transaction);
 		return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+            } catch (ParseException ex) {
+                Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
 	}
 	
 	@Override
@@ -163,8 +181,9 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 		Context.getService(PharmacyService.class).delete(transaction);
 	}
 	
-	private Transaction constructTransaction(String uuid, SimpleObject properties) {
+	private Transaction constructTransaction(String uuid, SimpleObject properties) throws ParseException {
 		Transaction transaction;
+                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		TransactionType transactionType = null;
 		if (properties.get("transactionType") != null) {
 			Integer transactionTypeId = properties.get("transactionType");
@@ -189,7 +208,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("date") != null) {
-				transaction.setDate((Date) properties.get("date"));
+                                transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
 			
 			if (properties.get("quantity") != null) {
@@ -201,7 +220,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("itemExpiryDate") != null) {
-				transaction.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
+                                transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			}
 			
 			if (properties.get("personId") != null) {
@@ -229,7 +248,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("adjustmentDate") != null) {
-				transaction.setAdjustmentDate((Date) properties.get("adjustmentDate"));
+                                transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			}
 			
 			transaction.setTransactionType(transactionType);
@@ -242,12 +261,13 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			transaction.setDate((Date) properties.get("date"));
+                        transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			
 			transaction.setQuantity((Integer) properties.get("quantity"));
 			
 			transaction.setItemBatch((String) properties.get("itemBatch"));
 			
-			transaction.setItemExpiryDate((Date) properties.get("itemExpiryDate"));
+                        transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			
 			transaction.setPersonId((Integer) properties.get("personId"));
 			
@@ -261,7 +281,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			
 			transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
 			
-			transaction.setAdjustmentDate((Date) properties.get("adjustmentDate"));
+                        transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			transaction.setTransactionType(transactionType);
 			transaction.setItem(item);
 			transaction.setPharmacyLocation(pharmacyLocation);
