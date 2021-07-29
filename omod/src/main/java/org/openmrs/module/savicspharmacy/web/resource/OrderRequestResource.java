@@ -199,18 +199,11 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			}
 			
-			//
-			//if (properties.get("supplier") != null) {
-			//	order.setSupplier(supplier);
-			//}
-			
 		} else {
 			order = new PharmacyOrder();
 			order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
 			order.setDate(new Date());
 			order.setName(properties.get("name").toString());
-			//order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
-			//order.setDateReception(simpleDateFormat.parse(properties.get("dateReception").toString()));
 			if (properties.get("amount") != null)
 				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			else

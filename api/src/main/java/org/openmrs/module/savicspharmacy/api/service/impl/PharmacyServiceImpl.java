@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.savicspharmacy.api.dao.PharmacyDao;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -36,6 +37,11 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	public List getAll(Class t) {
 		List entityList = this.dao.getAll(t);
 		return entityList;
+	}
+	
+	@Override
+	public DbSession getSession() {
+		return this.dao.getSession();
 	}
 	
 	@Override

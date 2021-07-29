@@ -25,9 +25,11 @@ import java.util.logging.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Person;
+import org.openmrs.api.APIException;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
+import org.openmrs.module.savicspharmacy.api.entity.OrderDetail;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetail;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetailId;
@@ -162,12 +164,14 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 	}
 	
 	private ReceptionDetail constructReceptionDetail(String uuid, SimpleObject properties) throws ParseException {
-		ReceptionDetail receptionDetail;
+		ReceptionDetail receptionDetail = null;
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Item item = null;
 		if (properties.get("item") != null) {
-			Integer itemId = properties.get("item");
+			Integer itemId = Integer.valueOf(properties.get("item").toString());
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+			if (item == null)
+				throw new IllegalPropertyException("Item does not exist");
 		}
 		
 		Reception reception = null;
@@ -177,19 +181,20 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			    receptionId);
 		}
 		if (properties.get("itemBatch") != null && item != null) {
-                    ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                        ItemsLine.class, new String[] { "itemBatch", "item.id" },
-                        new Object[] { properties.get("itemBatch").toString(), item.getId() });
-                    if (itemLine == null)
-                            itemLine = new ItemsLine();
-                    itemLine.setItem(item);
-                    itemLine.setItemBatch(properties.get("itemBatch").toString());
-                    itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-                    itemLine.setItemVirtualstock(Integer.valueOf(properties.get("itemVirtualstock").toString()));
-                    PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
-                        PharmacyLocation.class, properties.get("location").toString());
-                    itemLine.setPharmacyLocation(location);
-                    Context.getService(PharmacyService.class).upsert(itemLine);		
+			ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+			    ItemsLine.class, new String[] { "itemBatch", "item.id" },
+			    new Object[] { properties.get("itemBatch").toString(), item.getId() });
+			if (itemLine == null)
+				itemLine = new ItemsLine();
+			itemLine.setItem(item);
+			itemLine.setItemBatch(properties.get("itemBatch").toString());
+			itemLine.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			itemLine.setItemVirtualstock(Integer.valueOf(properties.get("quantityReceived").toString()));
+			itemLine.setItemSoh(Integer.valueOf(properties.get("quantityReceived").toString()));
+			PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
+			    PharmacyLocation.class, properties.get("location").toString());
+			itemLine.setPharmacyLocation(location);
+			Context.getService(PharmacyService.class).upsert(itemLine);
 		}
 		
 		if (uuid != null) {
@@ -215,7 +220,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			if (properties.get("itemExpiryDate") != null) {
 				receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			}
-			
 		} else {
 			receptionDetail = new ReceptionDetail();
 			if (properties.get("orderLineQuantity") == null) {
@@ -230,6 +234,13 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			receptionDetail.setPk(pk);
 			receptionDetail.setItem(item);
 			receptionDetail.setReception(reception);
+			
+			if (reception.getPharmacyOrder() != null) {
+				OrderDetail orderDetail = (OrderDetail) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ReceptionDetail.class, new String[] { "order.id", "item.id" },
+				    new Object[] { reception.getPharmacyOrder().getId(), item.getId() });
+				receptionDetail.setOrderLineQuantity(orderDetail != null ? orderDetail.getOrderLineQuantity() : 0);
+			}
 		}
 		
 		return receptionDetail;

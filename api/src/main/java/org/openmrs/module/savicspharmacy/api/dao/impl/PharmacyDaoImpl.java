@@ -34,7 +34,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	 * 
 	 * @return the current hibernate session.
 	 */
-	private DbSession getSession() {
+	public DbSession getSession() {
 		try {
 			System.out.println(">>>>>> getSession = sessionFactory = " + dbSessionFactory);
 			System.out.println(">>>>>> getSession = sessionFactory.getCurrentSession() = "

@@ -16,6 +16,7 @@ package org.openmrs.module.savicspharmacy.api.dao;
 import java.io.Serializable;
 import java.util.List;
 import org.openmrs.api.APIException;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -23,6 +24,9 @@ public interface PharmacyDao<T extends Serializable> {
 	
 	@Transactional(readOnly = true)
 	public List<T> getAll(Class<T> t) throws APIException;
+	
+	@Transactional(readOnly = true)
+	public DbSession getSession() throws APIException;
 	
 	@Transactional(readOnly = true)
 	public List<T> getAll(Class<T> t, Integer limit, Integer offset) throws APIException;
