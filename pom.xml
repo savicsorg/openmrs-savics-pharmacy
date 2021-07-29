@@ -133,7 +133,7 @@
         <version>${legacyuiVersion}</version>
         <scope>provided</scope>
       </dependency>
-
+      
     </dependencies>
   </dependencyManagement>
     

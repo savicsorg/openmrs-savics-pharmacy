@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * The main controller.
+ * @author anatoleabe The main controller.
  */
 @Controller
 public class RouteController {
