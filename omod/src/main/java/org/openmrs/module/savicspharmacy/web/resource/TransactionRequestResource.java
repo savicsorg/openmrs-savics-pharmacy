@@ -51,7 +51,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("itemBatch");
 			description.addProperty("date");
 			description.addProperty("itemExpiryDate");
-			description.addProperty("patientId");
+			description.addProperty("personId");
 			description.addProperty("amount");
 			description.addProperty("status");
 			description.addProperty("sendingId");
@@ -73,7 +73,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("itemBatch");
 			description.addProperty("date");
 			description.addProperty("itemExpiryDate");
-			description.addProperty("patientId");
+			description.addProperty("personId");
 			description.addProperty("amount");
 			description.addProperty("status");
 			description.addProperty("sendingId");
@@ -96,7 +96,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("itemBatch");
 			description.addProperty("date");
 			description.addProperty("itemExpiryDate");
-			description.addProperty("patientId");
+			description.addProperty("personId");
 			description.addProperty("amount");
 			description.addProperty("status");
 			description.addProperty("sendingId");
@@ -142,33 +142,35 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-		if (propertiesToCreate.get("Item") == null || propertiesToCreate.get("PharmacyLocation") == null
-		        || propertiesToCreate.get("TransactionType") == null) {
+		if (propertiesToCreate.get("item") == null || propertiesToCreate.get("pharmacyLocation") == null
+		        || propertiesToCreate.get("transactionType") == null) {
 			throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 		}
 		Transaction transaction;
-            try {
-                transaction = this.constructTransaction(null, propertiesToCreate);
-                Context.getService(PharmacyService.class).upsert(transaction);
-		return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			transaction = this.constructTransaction(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(transaction);
+			return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 		
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
 		Transaction transaction;
-            try {
-                transaction = this.constructTransaction(uuid, propertiesToUpdate);
-                Context.getService(PharmacyService.class).upsert(transaction);
-		return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			transaction = this.constructTransaction(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(transaction);
+			return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
@@ -183,7 +185,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	
 	private Transaction constructTransaction(String uuid, SimpleObject properties) throws ParseException {
 		Transaction transaction;
-                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		TransactionType transactionType = null;
 		if (properties.get("transactionType") != null) {
 			Integer transactionTypeId = properties.get("transactionType");
@@ -208,7 +210,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("date") != null) {
-                                transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+				transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
 			
 			if (properties.get("quantity") != null) {
@@ -220,7 +222,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("itemExpiryDate") != null) {
-                                transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+				transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			}
 			
 			if (properties.get("personId") != null) {
@@ -248,7 +250,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			}
 			
 			if (properties.get("adjustmentDate") != null) {
-                                transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
+				transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			}
 			
 			transaction.setTransactionType(transactionType);
@@ -256,18 +258,19 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			transaction.setPharmacyLocation(pharmacyLocation);
 		} else {
 			transaction = new Transaction();
-			if (properties.get("name") == null || properties.get("code") == null) {
-				throw new IllegalPropertyException("Required parameters: name, code");
+			if (properties.get("item") == null || properties.get("pharmacyLocation") == null
+			        || properties.get("transactionType") == null) {
+				throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 			}
 			
 			transaction.setDate((Date) properties.get("date"));
-                        transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+			transaction.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			
 			transaction.setQuantity((Integer) properties.get("quantity"));
 			
 			transaction.setItemBatch((String) properties.get("itemBatch"));
 			
-                        transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
+			transaction.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
 			
 			transaction.setPersonId((Integer) properties.get("personId"));
 			
@@ -281,7 +284,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			
 			transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
 			
-                        transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
+			transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			transaction.setTransactionType(transactionType);
 			transaction.setItem(item);
 			transaction.setPharmacyLocation(pharmacyLocation);
