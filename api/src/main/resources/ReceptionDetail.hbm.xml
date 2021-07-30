@@ -11,10 +11,10 @@
         <column name="item_id"/>
       </key-property>
     </composite-id>
-    <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Item" fetch="select" name="item">
+    <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Item" fetch="select" insert="false" name="item" update="false">
       <column name="item_id" not-null="true"/>
     </many-to-one>
-    <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Reception" fetch="select" name="reception">
+    <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Reception" fetch="select" insert="false" name="reception" update="false">
       <column name="reception_id" not-null="true"/>
     </many-to-one>
     <property name="id" type="int">
