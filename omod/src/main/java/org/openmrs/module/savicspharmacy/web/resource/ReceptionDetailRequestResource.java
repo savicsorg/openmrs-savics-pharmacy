@@ -170,8 +170,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		if (properties.get("item") != null) {
 			Integer itemId = Integer.valueOf(properties.get("item").toString());
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
-			if (item == null)
-				throw new IllegalPropertyException("Item does not exist");
 		}
 		
 		Reception reception = null;
@@ -222,10 +220,9 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			}
 		} else {
 			receptionDetail = new ReceptionDetail();
-			if (properties.get("orderLineQuantity") == null) {
-				throw new IllegalPropertyException("Required parameters: orderLineQuantity");
+			if (properties.get("quantityReceived") == null) {
+				throw new IllegalPropertyException("Required parameters: quantityReceived");
 			}
-			receptionDetail.setOrderLineQuantity(Integer.valueOf(properties.get("orderLineQuantity").toString()));
 			receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
 			receptionDetail.setItemBatch(properties.get("itemBatch").toString());
 			receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
@@ -234,13 +231,13 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			receptionDetail.setPk(pk);
 			receptionDetail.setItem(item);
 			receptionDetail.setReception(reception);
-			
-			if (reception.getPharmacyOrder() != null) {
-				OrderDetail orderDetail = (OrderDetail) Context.getService(PharmacyService.class).getEntityByAttributes(
-				    ReceptionDetail.class, new String[] { "order.id", "item.id" },
-				    new Object[] { reception.getPharmacyOrder().getId(), item.getId() });
-				receptionDetail.setOrderLineQuantity(orderDetail != null ? orderDetail.getOrderLineQuantity() : 0);
-			}
+		}
+		
+		if (reception.getPharmacyOrder() != null) {
+			OrderDetail orderDetail = (OrderDetail) Context.getService(PharmacyService.class).getEntityByAttributes(
+			    OrderDetail.class, new String[] { "pharmacyOrder.id", "item.id" },
+			    new Object[] { reception.getPharmacyOrder().getId(), item.getId() });
+			receptionDetail.setOrderLineQuantity(orderDetail != null ? orderDetail.getOrderLineQuantity() : 0);
 		}
 		
 		return receptionDetail;
