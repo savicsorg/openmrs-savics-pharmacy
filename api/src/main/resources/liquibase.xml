@@ -531,5 +531,7 @@
             ALTER TABLE pharm_route ADD CONSTRAINT  UNIQUE (code)
         </sql>
     </changeSet>
-    
+    <changeSet  author="enokby"  id="enokby-1">  
+        <dropNotNullConstraint  columnDataType="int" columnName="order_id" tableName="pharm_reception"/>  
+    </changeSet>
 </databaseChangeLog>

@@ -34,7 +34,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	 * 
 	 * @return the current hibernate session.
 	 */
-	private DbSession getSession() {
+	public DbSession getSession() {
 		try {
 			System.out.println(">>>>>> getSession = sessionFactory = " + dbSessionFactory);
 			System.out.println(">>>>>> getSession = sessionFactory.getCurrentSession() = "
@@ -135,6 +135,16 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		DbSession session = dbSessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(t);
 		criteria.add(Restrictions.eq(idName, id));
+		return (T) criteria.uniqueResult();
+	}
+	
+	@Override
+	public T getEntityByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException {
+		DbSession session = dbSessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(t);
+		for (int i = 0; i < ids.length; i++) {
+			criteria.add(Restrictions.eq(ids[i], values[i]));
+		}
 		return (T) criteria.uniqueResult();
 	}
 	
