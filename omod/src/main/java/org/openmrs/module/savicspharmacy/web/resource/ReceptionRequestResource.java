@@ -145,7 +145,8 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 		PharmacyOrder order = null;
 		if (properties.get("pharmacyOrder") != null) {
 			Integer orderId = properties.get("pharmacyOrder");
-			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id", orderId);			
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
+			    orderId);
 		}
 		
 		if (uuid != null) {
@@ -163,9 +164,9 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			reception.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
 			reception.setDate(new Date());
 			if (order != null) {
-                            reception.setPharmacyOrder(order);
-                            order.setDateReception(reception.getDate());
-                            Context.getService(PharmacyService.class).upsert(order);
+				reception.setPharmacyOrder(order);
+				order.setDateReception(reception.getDate());
+				Context.getService(PharmacyService.class).upsert(order);
 			}
 		}
 		return reception;
