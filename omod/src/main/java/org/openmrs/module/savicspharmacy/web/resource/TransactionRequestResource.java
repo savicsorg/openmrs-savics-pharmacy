@@ -3,7 +3,6 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
 import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
@@ -147,9 +147,34 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 		}
 		Transaction transaction;
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			transaction = this.constructTransaction(null, propertiesToCreate);
 			Context.getService(PharmacyService.class).upsert(transaction);
+			
+			/** Starting updating itemsline virtual quantity */
+			String itemsLineUuid = propertiesToCreate.get("selectedBatchUuid");
+			
+			ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByUuid(ItemsLine.class,
+			    itemsLineUuid);
+			itemsLine.setItemExpiryDate(simpleDateFormat.parse(propertiesToCreate.get("itemExpiryDate").toString()));
+			
+			Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+			    itemsLine.getItem().getUuid());
+			
+			if ("padj".equals(propertiesToCreate.get("transactionTypeCode").toString())) {
+				itemsLine
+				        .setItemVirtualstock(itemsLine.getItemVirtualstock() + (Integer) propertiesToCreate.get("quantity"));
+				item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToCreate.get("quantity"));
+			} else {
+				itemsLine
+				        .setItemVirtualstock(itemsLine.getItemVirtualstock() - (Integer) propertiesToCreate.get("quantity"));
+				item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToCreate.get("quantity"));
+			}
+			Context.getService(PharmacyService.class).upsert(itemsLine);
+			Context.getService(PharmacyService.class).upsert(item);
+			//End of itemsline virtual quantity update
+			
 			return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
 		}
 		catch (ParseException ex) {
