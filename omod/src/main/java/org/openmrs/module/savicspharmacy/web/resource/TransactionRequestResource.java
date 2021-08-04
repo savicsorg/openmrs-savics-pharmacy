@@ -123,9 +123,11 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		String value = context.getParameter("name");
-		List<Transaction> transactionList = Context.getService(PharmacyService.class).doSearch(Transaction.class, "name",
-		    value, context.getLimit(), context.getStartIndex());
+		String value = context.getParameter("item");
+		Integer itemValue = Integer.parseInt(context.getParameter("item"));
+		List<Transaction> transactionList;
+		transactionList = Context.getService(PharmacyService.class).getByMasterId(Transaction.class, "item.id", itemValue,
+		    context.getLimit(), context.getStartIndex());
 		return new AlreadyPaged<Transaction>(context, transactionList, false);
 	}
 	
