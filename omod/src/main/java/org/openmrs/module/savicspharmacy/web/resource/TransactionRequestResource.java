@@ -216,6 +216,73 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 				//End of item and itemline real  quantity update
+			} else if ("REJECT".equals(transaction.getStatus())) {//If a cancelation
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+				    transaction.getItem().getUuid());
+				
+				String[] ids = { "itemBatch" };
+				String[] values = { transaction.getItemBatch() };
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, ids, values);
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				
+				if ("padj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+					item.setVirtualstock(item.getVirtualstock() - transaction.getQuantity());
+					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - transaction.getQuantity());
+				} else if ("nadj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
+					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
+				}
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
+				//End of item and itemline real  quantity update
+			} else if (propertiesToUpdate.get("selectedBatchUuid") != null) {
+				/**
+				 * Starting updating itemsline virtual quantity
+				 */
+				String itemsLineUuid = propertiesToUpdate.get("selectedBatchUuid");
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByUuid(ItemsLine.class,
+				    itemsLineUuid);
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(propertiesToUpdate.get("itemExpiryDate").toString()));
+				
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+				    itemsLine.getItem().getUuid());
+				
+				if ("padj".equals(propertiesToUpdate.get("transactionTypeCode").toString())) {
+					if ("padj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+						        - (Integer) propertiesToUpdate.get("oldQuantity"));
+						item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToUpdate.get("oldQuantity"));
+						
+					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+						        + (Integer) propertiesToUpdate.get("oldQuantity"));
+						item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("oldQuantity"));
+					}
+					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+					        + (Integer) propertiesToUpdate.get("quantity"));
+					item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("quantity"));
+					
+				} else if ("nadj".equals(propertiesToUpdate.get("transactionTypeCode").toString())) {
+					if ("padj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+						        - (Integer) propertiesToUpdate.get("oldQuantity"));
+						item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToUpdate.get("oldQuantity"));
+						
+					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+						        + (Integer) propertiesToUpdate.get("oldQuantity"));
+						item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("oldQuantity"));
+					}
+					
+					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+					        - (Integer) propertiesToUpdate.get("quantity"));
+					item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToUpdate.get("quantity"));
+					
+				}
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
 			}
 			
 			return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
