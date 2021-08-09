@@ -2,6 +2,7 @@ package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
 
+import java.beans.Transient;
 import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 
@@ -27,6 +28,8 @@ public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializ
 	private Date itemExpiryDate;
 	
 	private String uuid;
+	
+	private String itemLineLocation;
 	
 	public ReceptionDetailId getPk() {
 		return this.pk;
@@ -92,4 +95,12 @@ public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializ
 		this.itemExpiryDate = itemExpiryDate;
 	}
 	
+	@Transient
+	public String getItemLineLocation() {
+		return this.itemLineLocation;
+	}
+	
+	public void setItemLineLocation(String itemLineLocation) {
+		this.itemLineLocation = itemLineLocation;
+	}
 }

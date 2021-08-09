@@ -162,11 +162,11 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 		} else {
 			reception = new Reception();
 			reception.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
-			reception.setDate(new Date());
+			reception.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			if (order != null) {
-				reception.setPharmacyOrder(order);
-				order.setDateReception(reception.getDate());
-				Context.getService(PharmacyService.class).upsert(order);
+                            reception.setPharmacyOrder(order);
+                            //order.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
+                            //Context.getService(PharmacyService.class).upsert(order);
 			}
 		}
 		return reception;

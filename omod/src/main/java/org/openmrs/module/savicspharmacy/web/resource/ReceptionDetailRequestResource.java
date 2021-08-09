@@ -61,6 +61,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			description.addProperty("itemBatch");
 			description.addProperty("quantityReceived");
 			description.addProperty("uuid");
+			description.addProperty("itemLineLocation");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -75,6 +76,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			description.addProperty("itemBatch");
 			description.addProperty("quantityReceived");
 			description.addProperty("uuid");
+			description.addProperty("itemLineLocation");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -90,6 +92,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			description.addProperty("itemBatch");
 			description.addProperty("quantityReceived");
 			description.addProperty("uuid");
+			description.addProperty("itemLineLocation");
 			description.addSelfLink();
 			return description;
 		}
@@ -108,6 +111,12 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		Integer value = Integer.parseInt(context.getParameter("receptionId"));
 		List<ReceptionDetail> receptionDetailList = Context.getService(PharmacyService.class).getByMasterId(
 		    ReceptionDetail.class, "reception.id", value, context.getLimit(), context.getStartIndex());
+		for (int i = 0; i < receptionDetailList.size(); i++) {
+			String location = ((ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
+			    new String[] { "itemBatch" }, new Object[] { receptionDetailList.get(i).getItemBatch() }))
+			        .getPharmacyLocation().getUuid();
+			receptionDetailList.get(i).setItemLineLocation(location);
+		}
 		return new AlreadyPaged<ReceptionDetail>(context, receptionDetailList, false);
 	}
 	
@@ -190,7 +199,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			itemLine.setItemVirtualstock(Integer.valueOf(properties.get("quantityReceived").toString()));
 			itemLine.setItemSoh(Integer.valueOf(properties.get("quantityReceived").toString()));
 			PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
-			    PharmacyLocation.class, properties.get("location").toString());
+			    PharmacyLocation.class, properties.get("itemLineLocation").toString());
 			itemLine.setPharmacyLocation(location);
 			Context.getService(PharmacyService.class).upsert(itemLine);
 		}
