@@ -116,21 +116,20 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-		if (propertiesToCreate.get("adjustQuantity") == null) {
-			throw new ConversionException("Required properties: adjustQuantity");
-		}
-		
-		StocktakeDetail stocktake;
-		try {
-			stocktake = this.constructStocktake(null, propertiesToCreate);
-			Context.getService(PharmacyService.class).upsert(stocktake);
-			return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
-		}
-		catch (ParseException ex) {
-			Logger.getLogger(StocktakeDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-			return null;
-		}
-		
+            if (propertiesToCreate.get("adjustQuantity") == null) {
+                    throw new ConversionException("Required properties: adjustQuantity");
+            }
+
+            StocktakeDetail stocktake;
+            try {
+                    stocktake = this.constructStocktake(null, propertiesToCreate);
+                    Context.getService(PharmacyService.class).upsert(stocktake);
+                    return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
+            }
+            catch (ParseException ex) {
+                    Logger.getLogger(StocktakeDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+                    return null;
+            }		
 	}
 	
 	@Override
@@ -198,35 +197,35 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
                     }
 			
 		} else {
-			detail = new StocktakeDetail();
-			if (properties.get("name") == null || properties.get("date") == null) {
-                            throw new IllegalPropertyException("Required parameters: name, date");
-			}
-			 if (properties.get("itemStock") != null) {
-                            detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
-                        }
+                    detail = new StocktakeDetail();
+                    if (properties.get("name") == null || properties.get("date") == null) {
+                        throw new IllegalPropertyException("Required parameters: name, date");
+                    }
+                     if (properties.get("itemStock") != null) {
+                        detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
+                    }
 
-                        if (properties.get("itemPhysicalStock") != null) {
-                                detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
-                        }
+                    if (properties.get("itemPhysicalStock") != null) {
+                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
+                    }
 
-                        if (properties.get("stocktakeLineComments") != null) {
-                                detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
-                        }
+                    if (properties.get("stocktakeLineComments") != null) {
+                            detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
+                    }
 
-                        if (properties.get("adjustQuantity") != null) {
-                                detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
-                        }
-                        if (properties.get("stocktake") != null) {
-                                detail.setStocktake(stocktake);
-                        }
+                    if (properties.get("adjustQuantity") != null) {
+                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
+                    }
+                    if (properties.get("stocktake") != null) {
+                            detail.setStocktake(stocktake);
+                    }
 
-                        if (properties.get("item") != null) {
-                                detail.setItem(item);
-                        }
-                        StocktakeDetailId pk = new StocktakeDetailId(item.getId(), stocktake.getId());
-			detail.setId(pk.hashCode());
-			detail.setPk(pk);
+                    if (properties.get("item") != null) {
+                            detail.setItem(item);
+                    }
+                    StocktakeDetailId pk = new StocktakeDetailId(item.getId(), stocktake.getId());
+                    detail.setId(pk.hashCode());
+                    detail.setPk(pk);
                 }
                 return detail;
 	}
