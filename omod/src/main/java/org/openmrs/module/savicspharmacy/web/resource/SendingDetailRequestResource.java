@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
@@ -114,30 +115,32 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-            try {
-                if (propertiesToCreate.get("sendingLineQuantity") == null) {
-                    throw new ConversionException("Required properties: sendingLineQuantity");
-                }
-                
-                SendingDetail sendingDetail = this.constructSendingDetail(null, propertiesToCreate);
-                Context.getService(PharmacyService.class).upsert(sendingDetail);
-                return ConversionUtil.convertToRepresentation(sendingDetail, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(SendingDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			if (propertiesToCreate.get("sendingLineQuantity") == null) {
+				throw new ConversionException("Required properties: sendingLineQuantity");
+			}
+			
+			SendingDetail sendingDetail = this.constructSendingDetail(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(sendingDetail);
+			return ConversionUtil.convertToRepresentation(sendingDetail, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(SendingDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-            try {
-                SendingDetail sendingDetail = this.constructSendingDetail(uuid, propertiesToUpdate);
-                Context.getService(PharmacyService.class).upsert(sendingDetail);
-                return ConversionUtil.convertToRepresentation(sendingDetail, context.getRepresentation());
-            } catch (ParseException ex) {
-                Logger.getLogger(SendingDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
+		try {
+			SendingDetail sendingDetail = this.constructSendingDetail(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(sendingDetail);
+			return ConversionUtil.convertToRepresentation(sendingDetail, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(SendingDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
@@ -151,72 +154,85 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 	}
 	
 	private SendingDetail constructSendingDetail(String uuid, SimpleObject properties) throws ParseException {
-            DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            SendingDetail sendingDetail;
-
-            Item item = null;
-            if (properties.get("item") != null) {
-                    Integer itemId = properties.get("item");
-                    item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
-            }
-
-            Sending sending = null;
-            if (properties.get("sending") != null) {
-                    Integer sendingId = properties.get("sending");
-                    sending = (Sending) Context.getService(PharmacyService.class).getEntityByid(Sending.class, "id",
-                        sendingId);
-            }
-
-            if (uuid != null) {
-                sendingDetail = (SendingDetail) Context.getService(PharmacyService.class).getEntityByUuid(SendingDetail.class, uuid);
-                if (sendingDetail == null) {
-                    throw new IllegalPropertyException("SendingDetail not exist");
-                }
-
-                if (properties.get("sendingDetailsQuantity") != null) {
-                    sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
-                }
-
-                if (properties.get("sendingDetailsValue") != null) {
-                    sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
-                }
-
-                if (properties.get("sendingItemBatch") != null) {
-                    sendingDetail.setSendingItemBatch(properties.get("sendingItemBatch").toString());
-                }
-
-                if (properties.get("sendingItemExpiryDate") != null) {
-                    sendingDetail.setSendingItemExpiryDate(simpleDateFormat.parse(properties.get("sendingLineAmount").toString()));
-                }
-
-            } else {
-                    sendingDetail = new SendingDetail();
-                    if (properties.get("sendingDetailsQuantity") == null) {
-                            throw new IllegalPropertyException("Required parameters: sendingDetailsQuantity");
-                    }
-                    if (properties.get("sendingDetailsQuantity") != null) {
-                        sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
-                    }
-
-                    if (properties.get("sendingDetailsValue") != null) {
-                        sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
-                    }
-
-                    if (properties.get("sendingItemBatch") != null) {
-                        sendingDetail.setSendingItemBatch(properties.get("sendingItemBatch").toString());
-                    }
-
-                    if (properties.get("sendingItemExpiryDate") != null) {
-                        sendingDetail.setSendingItemExpiryDate(simpleDateFormat.parse(properties.get("sendingLineAmount").toString()));
-                    }
-                    SendingDetailId pk = new SendingDetailId(item.getId(), sending.getId());
-                    sendingDetail.setId(pk.hashCode());
-                    sendingDetail.setPk(pk);
-                    sendingDetail.setItem(item);
-                    sendingDetail.setSending(sending);
-            }
-
-            return sendingDetail;
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SendingDetail sendingDetail;
+		
+		Item item = null;
+		if (properties.get("item") != null) {
+			Integer itemId = properties.get("item");
+			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+		}
+		
+		if (properties.get("sendingItemBatch") != null && uuid == null && properties.get("sendingDetailsQuantity") != null) {
+			ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
+			    new String[] { "itemBatch" }, new Object[] { properties.get("sendingItemBatch").toString() });
+			line.setItemVirtualstock(line.getItemVirtualstock()
+			        + Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
+			Context.getService(PharmacyService.class).upsert(line);
+		}
+		
+		Sending sending = null;
+		if (properties.get("sending") != null) {
+			Integer sendingId = properties.get("sending");
+			sending = (Sending) Context.getService(PharmacyService.class).getEntityByid(Sending.class, "id", sendingId);
+		}
+		
+		if (uuid != null) {
+			sendingDetail = (SendingDetail) Context.getService(PharmacyService.class).getEntityByUuid(SendingDetail.class,
+			    uuid);
+			if (sendingDetail == null) {
+				throw new IllegalPropertyException("SendingDetail not exist");
+			}
+			
+			if (properties.get("sendingDetailsQuantity") != null) {
+				sendingDetail
+				        .setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
+			}
+			
+			if (properties.get("sendingDetailsValue") != null) {
+				sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
+			}
+			
+			if (properties.get("sendingItemBatch") != null) {
+				sendingDetail.setSendingItemBatch(properties.get("sendingItemBatch").toString());
+			}
+			
+			if (properties.get("sendingItemExpiryDate") != null) {
+				sendingDetail.setSendingItemExpiryDate(simpleDateFormat
+				        .parse(properties.get("sendingLineAmount").toString()));
+			}
+			
+		} else {
+			sendingDetail = new SendingDetail();
+			if (properties.get("sendingDetailsQuantity") == null) {
+				throw new IllegalPropertyException("Required parameters: sendingDetailsQuantity");
+			}
+			if (properties.get("sendingDetailsQuantity") != null) {
+				sendingDetail
+				        .setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
+			}
+			
+			if (properties.get("sendingDetailsValue") != null) {
+				sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
+			}
+			
+			if (properties.get("sendingItemBatch") != null) {
+				sendingDetail.setSendingItemBatch(properties.get("sendingItemBatch").toString());
+			}
+			
+			if (properties.get("sendingItemExpiryDate") != null) {
+				sendingDetail.setSendingItemExpiryDate(simpleDateFormat
+				        .parse(properties.get("sendingLineAmount").toString()));
+			}
+			
+			SendingDetailId pk = new SendingDetailId(item.getId(), sending.getId());
+			sendingDetail.setId(pk.hashCode());
+			sendingDetail.setPk(pk);
+			sendingDetail.setItem(item);
+			sendingDetail.setSending(sending);
+		}
+		
+		return sendingDetail;
 	}
 	
 	@Override

@@ -51,9 +51,9 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 			description.addProperty("stocktake");
 			description.addProperty("itemStock");
 			description.addProperty("item");
-                        description.addProperty("itemPhysicalStock");
-                        description.addProperty("stocktakeLineComments");
-                        description.addProperty("adjustQuantity");
+			description.addProperty("itemPhysicalStock");
+			description.addProperty("stocktakeLineComments");
+			description.addProperty("adjustQuantity");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -64,9 +64,9 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 			description.addProperty("stocktake");
 			description.addProperty("itemStock");
 			description.addProperty("item");
-                        description.addProperty("itemPhysicalStock");
-                        description.addProperty("stocktakeLineComments");
-                        description.addProperty("adjustQuantity");
+			description.addProperty("itemPhysicalStock");
+			description.addProperty("stocktakeLineComments");
+			description.addProperty("adjustQuantity");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -78,9 +78,9 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 			description.addProperty("stocktake");
 			description.addProperty("itemStock");
 			description.addProperty("item");
-                        description.addProperty("itemPhysicalStock");
-                        description.addProperty("stocktakeLineComments");
-                        description.addProperty("adjustQuantity");
+			description.addProperty("itemPhysicalStock");
+			description.addProperty("stocktakeLineComments");
+			description.addProperty("adjustQuantity");
 			description.addSelfLink();
 			return description;
 		}
@@ -98,8 +98,8 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		int value = Integer.valueOf(context.getParameter("stocktakeId"));
-		List<StocktakeDetail> stocktakeList = Context.getService(PharmacyService.class).getByMasterId(StocktakeDetail.class, "stocktake.id", value,
-		    context.getLimit(), context.getStartIndex());
+		List<StocktakeDetail> stocktakeList = Context.getService(PharmacyService.class).getByMasterId(StocktakeDetail.class,
+		    "stocktake.id", value, context.getLimit(), context.getStartIndex());
 		return new AlreadyPaged<StocktakeDetail>(context, stocktakeList, false);
 	}
 	
@@ -116,20 +116,20 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-            if (propertiesToCreate.get("adjustQuantity") == null) {
-                    throw new ConversionException("Required properties: adjustQuantity");
-            }
-
-            StocktakeDetail stocktake;
-            try {
-                    stocktake = this.constructStocktake(null, propertiesToCreate);
-                    Context.getService(PharmacyService.class).upsert(stocktake);
-                    return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
-            }
-            catch (ParseException ex) {
-                    Logger.getLogger(StocktakeDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                    return null;
-            }		
+		if (propertiesToCreate.get("adjustQuantity") == null) {
+			throw new ConversionException("Required properties: adjustQuantity");
+		}
+		
+		StocktakeDetail stocktake;
+		try {
+			stocktake = this.constructStocktake(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(stocktake);
+			return ConversionUtil.convertToRepresentation(stocktake, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(StocktakeDetailRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
@@ -163,71 +163,71 @@ public class StocktakeDetailRequestResource extends DataDelegatingCrudResource<S
 		Stocktake stocktake = null;
 		if (properties.get("stocktake") != null) {
 			Integer stocktakeId = properties.get("stocktake");
-			stocktake = (Stocktake) Context.getService(PharmacyService.class).getEntityByid(
-			    Stocktake.class, "id", stocktakeId);
+			stocktake = (Stocktake) Context.getService(PharmacyService.class).getEntityByid(Stocktake.class, "id",
+			    stocktakeId);
 		}
-                
-                Item item = null;
+		
+		Item item = null;
 		if (properties.get("item") != null) {
 			Integer itemId = properties.get("item");
-			item = (Item) Context.getService(PharmacyService.class).getEntityByid(
-			    Stocktake.class, "id", itemId);
+			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Stocktake.class, "id", itemId);
 		}
 		
 		if (uuid != null) {
-                    detail = (StocktakeDetail) Context.getService(PharmacyService.class).getEntityByUuid(StocktakeDetail.class, uuid);
-                    if (detail == null) {
-                            throw new IllegalPropertyException("detail not exist");
-                    }
-
-                    if (properties.get("itemStock") != null) {
-                            detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
-                    }
-
-                    if (properties.get("itemPhysicalStock") != null) {
-                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
-                    }
-
-                    if (properties.get("stocktakeLineComments") != null) {
-                            detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
-                    }
-                    
-                    if (properties.get("adjustQuantity") != null) {
-                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
-                    }
+			detail = (StocktakeDetail) Context.getService(PharmacyService.class)
+			        .getEntityByUuid(StocktakeDetail.class, uuid);
+			if (detail == null) {
+				throw new IllegalPropertyException("detail not exist");
+			}
+			
+			if (properties.get("itemStock") != null) {
+				detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
+			}
+			
+			if (properties.get("itemPhysicalStock") != null) {
+				detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
+			}
+			
+			if (properties.get("stocktakeLineComments") != null) {
+				detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
+			}
+			
+			if (properties.get("adjustQuantity") != null) {
+				detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
+			}
 			
 		} else {
-                    detail = new StocktakeDetail();
-                    if (properties.get("name") == null || properties.get("date") == null) {
-                        throw new IllegalPropertyException("Required parameters: name, date");
-                    }
-                     if (properties.get("itemStock") != null) {
-                        detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
-                    }
-
-                    if (properties.get("itemPhysicalStock") != null) {
-                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
-                    }
-
-                    if (properties.get("stocktakeLineComments") != null) {
-                            detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
-                    }
-
-                    if (properties.get("adjustQuantity") != null) {
-                            detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
-                    }
-                    if (properties.get("stocktake") != null) {
-                            detail.setStocktake(stocktake);
-                    }
-
-                    if (properties.get("item") != null) {
-                            detail.setItem(item);
-                    }
-                    StocktakeDetailId pk = new StocktakeDetailId(item.getId(), stocktake.getId());
-                    detail.setId(pk.hashCode());
-                    detail.setPk(pk);
-                }
-                return detail;
+			detail = new StocktakeDetail();
+			if (properties.get("name") == null || properties.get("date") == null) {
+				throw new IllegalPropertyException("Required parameters: name, date");
+			}
+			if (properties.get("itemStock") != null) {
+				detail.setItemStock(Integer.valueOf(properties.get("itemStock").toString()));
+			}
+			
+			if (properties.get("itemPhysicalStock") != null) {
+				detail.setItemPhysicalStock(Integer.valueOf(properties.get("itemPhysicalStock").toString()));
+			}
+			
+			if (properties.get("stocktakeLineComments") != null) {
+				detail.setStocktakeLineComments(properties.get("stocktakeLineComments").toString());
+			}
+			
+			if (properties.get("adjustQuantity") != null) {
+				detail.setItemPhysicalStock(Integer.valueOf(properties.get("adjustQuantity").toString()));
+			}
+			if (properties.get("stocktake") != null) {
+				detail.setStocktake(stocktake);
+			}
+			
+			if (properties.get("item") != null) {
+				detail.setItem(item);
+			}
+			StocktakeDetailId pk = new StocktakeDetailId(item.getId(), stocktake.getId());
+			detail.setId(pk.hashCode());
+			detail.setPk(pk);
+		}
+		return detail;
 	}
 	
 	@Override
