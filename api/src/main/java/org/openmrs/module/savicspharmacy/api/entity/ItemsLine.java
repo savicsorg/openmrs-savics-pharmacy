@@ -1,7 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
-
 import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 
@@ -25,6 +24,8 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	private Integer itemVirtualstock;// The available quantity after an operation before validation; Must be <= of itemSoh
 	
 	private Integer itemSoh;// The available item soh
+	
+	private boolean expired;
 	
 	public Item getItem() {
 		return this.item;
@@ -81,4 +82,14 @@ public class ItemsLine extends BaseOpenmrsData implements java.io.Serializable {
 	public void setItemSoh(Integer itemSoh) {
 		this.itemSoh = itemSoh;
 	}
+	
+	public boolean isExpired() {
+		expired = (new Date()).after(itemExpiryDate);
+		return expired;
+	}
+	
+	public void setExpired(boolean expired) {
+		this.expired = expired;
+	}
+	
 }

@@ -54,6 +54,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -67,6 +68,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -81,6 +83,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addSelfLink();
 			return description;
 		}

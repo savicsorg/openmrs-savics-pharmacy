@@ -1,8 +1,9 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
-
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import org.openmrs.BaseOpenmrsData;
 
@@ -50,6 +51,9 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	private Set transactions = new HashSet(0);
 	
 	private Set receptionDetails = new HashSet(0);
+	
+	//Non persistant field
+	private int numberOfExpiredLots; // Computed value
 	
 	public Integer getId() {
 		return this.id;
@@ -201,6 +205,25 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setAMC(Double AMC) {
 		this.AMC = AMC;
+	}
+	
+	public int getNumberOfExpiredLots() {
+		int number = 0;
+		System.out.println("itemsLines size = " + itemsLines.size());
+		Iterator<ItemsLine> itr = itemsLines.iterator();
+		while (itr.hasNext()) {
+			ItemsLine myItemsLine = itr.next();
+			
+			if ((new Date()).after(myItemsLine.getItemExpiryDate())) {
+				number++;
+			}
+		}
+		
+		return number;
+	}
+	
+	public void setNumberOfExpiredLots(int numberOfExpiredLots) {
+		this.numberOfExpiredLots = numberOfExpiredLots;
 	}
 	
 }

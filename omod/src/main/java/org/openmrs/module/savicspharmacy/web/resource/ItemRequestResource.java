@@ -51,6 +51,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("numberOfExpiredLots");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -70,6 +71,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("numberOfExpiredLots");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -90,6 +92,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("numberOfExpiredLots");
 			description.addSelfLink();
 			return description;
 		}
