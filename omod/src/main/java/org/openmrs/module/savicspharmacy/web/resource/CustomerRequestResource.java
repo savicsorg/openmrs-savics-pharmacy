@@ -82,7 +82,6 @@ public class CustomerRequestResource extends DataDelegatingCrudResource<Customer
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		System.out.println("---- doGetAll ");
 		List<Customer> customerList = Context.getService(PharmacyService.class).getAll(Customer.class, context.getLimit(),
 		    context.getStartIndex());
 		System.out.println(customerList.toString());
@@ -113,9 +112,6 @@ public class CustomerRequestResource extends DataDelegatingCrudResource<Customer
 		if (propertiesToCreate.get("name") == null || propertiesToCreate.get("code") == null) {
 			throw new ConversionException("Required properties: name, code");
 		}
-		System.out.println("-----------------------------");
-		System.out.println(propertiesToCreate);
-		System.out.println();
 		Customer customer = this.constructCustomer(null, propertiesToCreate);
 		Context.getService(PharmacyService.class).upsert(customer);
 		return ConversionUtil.convertToRepresentation(customer, context.getRepresentation());

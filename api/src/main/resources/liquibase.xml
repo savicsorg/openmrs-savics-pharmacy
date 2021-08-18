@@ -534,4 +534,18 @@
     <changeSet  author="enokby"  id="enokby-1">  
         <dropNotNullConstraint  columnDataType="int" columnName="order_id" tableName="pharm_reception"/>  
     </changeSet>
+    <changeSet  author="enokby"  id="enokby-2">  
+        <dropNotNullConstraint  columnDataType="int" columnName="customer_id" tableName="pharm_sending"/>  
+    </changeSet>
+    <changeSet  author="enokby"  id="enokby-3">  
+        <dropNotNullConstraint  columnDataType="int" columnName="person_id" tableName="pharm_sending"/>  
+    </changeSet>
+    <changeSet  author="enokby"  id="enokby-4">  
+        <modifyDataType  columnName="person_id"  newDataType="varchar(255)"  tableName="pharm_sending"/>  
+    </changeSet>
+    <changeSet author="enokby" id="enokby-5"> 
+        <addColumn tableName="pharm_sending" >
+            <column  name="validation_date" type="date"/> 
+        </addColumn>  
+    </changeSet>
 </databaseChangeLog>

@@ -22,6 +22,9 @@
     <property name="uuid" type="string">
       <column length="38" name="uuid" not-null="true"/>
     </property>
+    <property name="validationDate" type="date">
+      <column length="10" name="date"/>
+    </property>
     <set fetch="select" inverse="true" lazy="true" name="sendingDetails" table="pharm_sending_detail">
       <key>
         <column name="sending_id" not-null="true"/>

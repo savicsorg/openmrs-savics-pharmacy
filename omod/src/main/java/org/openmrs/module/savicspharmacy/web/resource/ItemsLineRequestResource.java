@@ -22,6 +22,9 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
@@ -98,8 +101,16 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		Integer itemValue = Integer.parseInt(context.getParameter("item"));
 		List<ItemsLine> itemLinestList;
 		if (itemValue != null) {
-			itemLinestList = Context.getService(PharmacyService.class).getByMasterId(ItemsLine.class, "item.id", itemValue,
-			    context.getLimit(), context.getStartIndex());
+			if (context.getParameter("q") != null) {
+				DbSession session = Context.getService(PharmacyService.class).getSession();
+				Criteria criteria = session.createCriteria(ItemsLine.class);
+				criteria.add(Restrictions.eq("item.id", itemValue));
+				criteria.add(Restrictions.like("itemBatch", value));
+				itemLinestList = (List<ItemsLine>) criteria.list();
+			} else {
+				itemLinestList = Context.getService(PharmacyService.class).getByMasterId(ItemsLine.class, "item.id",
+				    itemValue, context.getLimit(), context.getStartIndex());
+			}
 		} else {
 			itemLinestList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemBatch", value,
 			    context.getLimit(), context.getStartIndex());
