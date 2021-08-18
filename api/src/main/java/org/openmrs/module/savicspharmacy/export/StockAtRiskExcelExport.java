@@ -116,8 +116,8 @@ public class StockAtRiskExcelExport {
 				createCell(row, columnCount++, item.getVirtualstock(), style);
 				createCell(row, columnCount++, item.getSoh(), style);
 				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = item.getSoh() > item.getStockMax() ? "Over max qtity"
-				        : item.getSoh() < item.getStockMin() ? "Under min qtity" : "";
+				String status = item.getSoh() > item.getStockMax() ? "Over max quatity"
+				        : item.getSoh() < item.getStockMin() ? "Under min quatity" : "";
 				createCell(row, columnCount++, status, style);
 			}
 		}
