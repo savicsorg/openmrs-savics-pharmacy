@@ -55,6 +55,8 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	//Non persistant field
 	private int numberOfExpiredLots; // Computed value
 	
+	private int expiredQuantity; // Computed value
+	
 	public Integer getId() {
 		return this.id;
 	}
@@ -224,6 +226,24 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setNumberOfExpiredLots(int numberOfExpiredLots) {
 		this.numberOfExpiredLots = numberOfExpiredLots;
+	}
+	
+	public int getExpiredQuantity() {
+		int number = 0;
+		Iterator<ItemsLine> itr = itemsLines.iterator();
+		while (itr.hasNext()) {
+			ItemsLine myItemsLine = itr.next();
+			
+			if ((new Date()).after(myItemsLine.getItemExpiryDate())) {
+				number = number + myItemsLine.getItemSoh();
+			}
+		}
+		
+		return number;
+	}
+	
+	public void setExpiredQuantity(int expiredQuantity) {
+		this.expiredQuantity = expiredQuantity;
 	}
 	
 }
