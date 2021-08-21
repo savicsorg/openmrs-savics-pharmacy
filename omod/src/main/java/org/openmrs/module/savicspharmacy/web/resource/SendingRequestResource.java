@@ -3,12 +3,15 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
+import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -20,6 +23,8 @@ import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
+import org.openmrs.module.savicspharmacy.api.entity.Transaction;
+import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -49,6 +54,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("sendingDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -60,6 +66,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("sendingDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -72,6 +79,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("sendingDetails");
 			description.addSelfLink();
 			return description;
 		}
@@ -112,6 +120,15 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		try {
 			Sending sending = this.constructOrder(null, propertiesToCreate);
 			Context.getService(PharmacyService.class).upsert(sending);
+			for (int i = 0; i < sending.getSendingDetails().size(); i++) {
+				SendingDetail o = (SendingDetail) sending.getSendingDetails().toArray()[i];
+				Item item = null;
+				Integer itemId = o.getItem().getId();
+				item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				o.setItem(item);
+				o.setSending(sending);
+				Context.getService(PharmacyService.class).upsert(o);
+			}
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException e) {
@@ -127,6 +144,21 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		try {
 			sending = this.constructOrder(uuid, propertiesToUpdate);
 			Context.getService(PharmacyService.class).upsert(sending);
+			List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(
+			    SendingDetail.class, "sending.id", sending.getId(), 1000, 0);
+			for (int i = 0; i < sendingDetailList.size(); i++) {
+				SendingDetail o = sendingDetailList.get(i);
+				Context.getService(PharmacyService.class).delete(o);
+			}
+			for (int i = 0; i < sending.getSendingDetails().size(); i++) {
+				SendingDetail o = (SendingDetail) sending.getSendingDetails().toArray()[i];
+				Item item = null;
+				Integer itemId = o.getItem().getId();
+				item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				o.setItem(item);
+				o.setSending(sending);
+				Context.getService(PharmacyService.class).upsert(o);
+			}
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException ex) {
@@ -163,14 +195,14 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		}
 		Person patient = null;
 		if (properties.get("person") != null) {
-			Integer patientId = properties.get("person");
-			patient = (Person) Context.getService(PharmacyService.class).getEntityByid(Person.class, "uuid", patientId);
+			String patientId = properties.get("person");
+			patient = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, patientId);
 		}
 		
 		if (uuid != null) {
 			sending = (Sending) Context.getService(PharmacyService.class).getEntityByUuid(Sending.class, uuid);
 			if (sending == null) {
-				throw new IllegalPropertyException("Orders not exist");
+				throw new IllegalPropertyException("Sending not exist");
 			}
 			
 			if (properties.get("date") != null) {
@@ -179,6 +211,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
+			}
+                        
+                        if (properties.get("sendingDetails") != null) {
+				sending.setSendingDetails((Set<SendingDetail>)properties.get("sendingDetails"));
 			}
 			
 		} else {
@@ -193,6 +229,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
+			}
+                        if (properties.get("sendingDetails") != null) {
+				sending.setSendingDetails((Set<SendingDetail>)properties.get("sendingDetails"));
 			}
 		}
 		

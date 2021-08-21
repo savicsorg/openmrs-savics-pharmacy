@@ -24,7 +24,8 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	private Double sendingAmount;
 	
 	private String uuid;
-        private Date validationDate;
+	
+	private Date validationDate;
 	
 	private Set sendingDetails = new HashSet(0);
 	
@@ -59,8 +60,8 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-        
-        public Date getValidationDate() {
+	
+	public Date getValidationDate() {
 		return this.validationDate;
 	}
 	

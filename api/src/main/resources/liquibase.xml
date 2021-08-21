@@ -540,12 +540,16 @@
     <changeSet  author="enokby"  id="enokby-3">  
         <dropNotNullConstraint  columnDataType="int" columnName="person_id" tableName="pharm_sending"/>  
     </changeSet>
-    <changeSet  author="enokby"  id="enokby-4">  
-        <modifyDataType  columnName="person_id"  newDataType="varchar(255)"  tableName="pharm_sending"/>  
-    </changeSet>
     <changeSet author="enokby" id="enokby-5"> 
         <addColumn tableName="pharm_sending" >
             <column  name="validation_date" type="date"/> 
         </addColumn>  
+    </changeSet>
+    <changeSet author="enokby" id="enokby-6"> 
+        <sql>
+            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 's',"Sending");
+            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 'r',"Reception");
+            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 't',"Stock take"); 
+        </sql>  
     </changeSet>
 </databaseChangeLog>
