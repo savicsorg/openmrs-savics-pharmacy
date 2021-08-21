@@ -28,6 +28,8 @@ import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
+import org.openmrs.module.savicspharmacy.api.entity.Transaction;
+import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -55,6 +57,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -68,6 +71,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -82,6 +86,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			description.addProperty("itemSoh");
 			description.addProperty("item");
 			description.addProperty("pharmacyLocation");
+			description.addProperty("expired");
 			description.addSelfLink();
 			return description;
 		}
@@ -139,7 +144,36 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		ItemsLine itemsLine;
 		try {
 			itemsLine = this.constructAgent(null, propertiesToCreate);
+			//1. Insert new itemsline
 			Context.getService(PharmacyService.class).upsert(itemsLine);
+			
+			//Get the corresponding item
+			Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+			    itemsLine.getItem().getUuid());
+			item.setVirtualstock(item.getVirtualstock() + itemsLine.getItemVirtualstock());
+			//2. Update the item
+			Context.getService(PharmacyService.class).upsert(item);
+			
+			//Create a transaction
+			Transaction transaction = new Transaction();
+			transaction.setDate(new Date());
+			transaction.setQuantity(itemsLine.getItemVirtualstock());
+			transaction.setItemBatch(itemsLine.getItemBatch());
+			transaction.setItemExpiryDate(itemsLine.getItemExpiryDate());
+			
+			//TODO
+			//			transaction.setPersonId((Integer) properties.get("personId"));
+			transaction.setStatus("INIT");
+			transaction.setAdjustmentDate(new Date());
+			TransactionType transactionType = (TransactionType) Context.getService(PharmacyService.class).getEntityByid(
+			    TransactionType.class, "id", 2);//padj
+			transaction.setTransactionTypeId(2);//padj
+			transaction.setTransactionType(transactionType);//padj
+			transaction.setItem(item);
+			transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
+			//3. Update the transaction
+			Context.getService(PharmacyService.class).upsert(transaction);
+			
 			return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
 		}
 		catch (ParseException ex) {

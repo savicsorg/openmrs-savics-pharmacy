@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.export.DrugsExcelExport;
+import org.openmrs.module.savicspharmacy.export.StockAtRiskExcelExport;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,23 @@ public class ItemController {
 		DrugsExcelExport excelExporter = new DrugsExcelExport(itemList);
 		
 		excelExporter.export(response);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE
+	        + "/items/stockatrisk")
+	public void stockAtRiskToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=Drugs_List_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+		
+		List<Item> itemList = pharmacyService.getAll(Item.class);
+		
+		StockAtRiskExcelExport stockAtRiskExcelExport = new StockAtRiskExcelExport(itemList);
+		
+		stockAtRiskExcelExport.export(response);
 	}
 }
