@@ -3,7 +3,9 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -120,11 +122,18 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		try {
 			Sending sending = this.constructOrder(null, propertiesToCreate);
 			Context.getService(PharmacyService.class).upsert(sending);
-			for (int i = 0; i < sending.getSendingDetails().size(); i++) {
-				SendingDetail o = (SendingDetail) sending.getSendingDetails().toArray()[i];
-				Item item = null;
-				Integer itemId = o.getItem().getId();
-				item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+			ArrayList<SendingDetail> list = new ArrayList<SendingDetail>();
+			list.addAll(sending.getSendingDetails());
+			for (int i = 0; i < list.size(); i++) {
+				SendingDetail o = new SendingDetail();
+				o.setSendingDetailsQuantity(list.get(i).getSendingDetailsQuantity());
+				o.setSendingDetailsValue(list.get(i).getSendingDetailsValue());
+				o.setSendingItemBatch(list.get(i).getSendingItemBatch());
+				o.setSendingItemExpiryDate(list.get(i).getSendingItemExpiryDate());
+				o.setDateCreated(new Date());
+				o.setCreator(Context.getUserContext().getAuthenticatedUser());
+				Integer itemId = list.get(i).getItem().getId();
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
 				o.setSending(sending);
 				Context.getService(PharmacyService.class).upsert(o);
@@ -150,11 +159,18 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				SendingDetail o = sendingDetailList.get(i);
 				Context.getService(PharmacyService.class).delete(o);
 			}
+			List<SendingDetail> list = new ArrayList<SendingDetail>();
+			list.addAll(sending.getSendingDetails());
 			for (int i = 0; i < sending.getSendingDetails().size(); i++) {
-				SendingDetail o = (SendingDetail) sending.getSendingDetails().toArray()[i];
-				Item item = null;
-				Integer itemId = o.getItem().getId();
-				item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				SendingDetail o = new SendingDetail();
+				o.setSendingDetailsQuantity(list.get(i).getSendingDetailsQuantity());
+				o.setSendingDetailsValue(list.get(i).getSendingDetailsValue());
+				o.setSendingItemBatch(list.get(i).getSendingItemBatch());
+				o.setSendingItemExpiryDate(list.get(i).getSendingItemExpiryDate());
+				o.setDateCreated(new Date());
+				o.setCreator(Context.getUserContext().getAuthenticatedUser());
+				Integer itemId = list.get(i).getItem().getId();
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
 				o.setSending(sending);
 				Context.getService(PharmacyService.class).upsert(o);
@@ -212,9 +228,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
 			}
-                        
-                        if (properties.get("sendingDetails") != null) {
-				sending.setSendingDetails((Set<SendingDetail>)properties.get("sendingDetails"));
+			
+			if (properties.get("sendingDetails") != null) {
+				ArrayList<SendingDetail> list = (ArrayList<SendingDetail>) properties.get("sendingDetails");
+				sending.setSendingDetails(new HashSet<SendingDetail>(list));
 			}
 			
 		} else {
@@ -230,8 +247,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
 			}
-                        if (properties.get("sendingDetails") != null) {
-				sending.setSendingDetails((Set<SendingDetail>)properties.get("sendingDetails"));
+			if (properties.get("sendingDetails") != null) {
+				ArrayList<SendingDetail> list = (ArrayList<SendingDetail>) properties.get("sendingDetails");
+				sending.setSendingDetails(new HashSet<SendingDetail>(list));
 			}
 		}
 		
