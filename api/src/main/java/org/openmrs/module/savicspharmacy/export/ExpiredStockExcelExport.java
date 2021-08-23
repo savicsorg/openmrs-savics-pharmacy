@@ -6,6 +6,7 @@
 package org.openmrs.module.savicspharmacy.export;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -21,33 +22,34 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @author anatoleabe
  */
-public class StockAtRiskExcelExport {
+public class ExpiredStockExcelExport {
 	
 	private XSSFWorkbook workbook;
 	
 	private XSSFSheet sheet;
 	
-	private List<Item> listItems;
+	private List<ItemsLine> listItemsLines;
 	
-	private Boolean atriskOnly;
+	private boolean expiredOnly;
 	
 	@Autowired
 	private MessageSourceService messageSourceService;
 	
-	public StockAtRiskExcelExport(List<Item> listItems, Boolean atriskOnly) {
-		this.listItems = listItems;
-		this.atriskOnly = atriskOnly;
+	public ExpiredStockExcelExport(List<ItemsLine> listItemsLines, boolean expiredOnly) {
+		this.listItemsLines = listItemsLines;
+		this.expiredOnly = expiredOnly;
 		workbook = new XSSFWorkbook();
 	}
 	
 	private void writeHeaderLine() {
-		sheet = workbook.createSheet("Stock à risque");
+		sheet = workbook.createSheet("Stock expiré");
 		
 		Row row = sheet.createRow(0);
 		XSSFFont font = workbook.createFont();
@@ -67,15 +69,13 @@ public class StockAtRiskExcelExport {
 		
 		int index = 0;
 		createCell(row, index++, "Code", cellStyle);
-		createCell(row, index++, "Designation", cellStyle);
+		createCell(row, index++, "Désignation", cellStyle);
+		createCell(row, index++, "Lot", cellStyle);
 		createCell(row, index++, "Unité", cellStyle);
 		createCell(row, index++, "Route", cellStyle);
-		createCell(row, index++, "Min", cellStyle);
-		createCell(row, index++, "Max", cellStyle);
-		createCell(row, index++, "Quantité Virtuelle", cellStyle);
-		createCell(row, index++, "Quantité en stock", cellStyle);
-		createCell(row, index++, "Quantité expirée", cellStyle);
-		createCell(row, index++, "Statut quantité", cellStyle);
+		createCell(row, index++, "Quantité", cellStyle);
+		createCell(row, index++, "Date expiration", cellStyle);
+		createCell(row, index++, "Statut", cellStyle);
 	}
 	
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -103,41 +103,35 @@ public class StockAtRiskExcelExport {
 		style.setBorderRight(BorderStyle.THIN);
 		style.setBorderLeft(BorderStyle.THIN);
 		
-		for (Item item : listItems) {
-			if (atriskOnly
-			        && (item.getNumberOfExpiredLots() > 0 || item.getSoh() > item.getStockMax() || item.getSoh() < item
-			                .getStockMin())) {
-				
-				Row row = sheet.createRow(rowCount++);
+		for (ItemsLine itemline : listItemsLines) {
+			Row row = sheet.createRow(rowCount++);
+			if (expiredOnly && (new Date()).after(itemline.getItemExpiryDate())) {
 				int columnCount = 0;
-				
-				createCell(row, columnCount++, item.getId(), style);
-				createCell(row, columnCount++, item.getName(), style);
-				createCell(row, columnCount++, item.getUnit().getName(), style);
-				createCell(row, columnCount++, item.getRoute().getName(), style);
-				createCell(row, columnCount++, item.getStockMin(), style);
-				createCell(row, columnCount++, item.getStockMax(), style);
-				createCell(row, columnCount++, item.getVirtualstock(), style);
-				createCell(row, columnCount++, item.getSoh(), style);
-				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = item.getSoh() > item.getStockMax() ? "Over max quatity"
-				        : item.getSoh() < item.getStockMin() ? "Under min quatity" : "";
+				createCell(row, columnCount++, itemline.getId(), style);
+				createCell(row, columnCount++, itemline.getItem().getName(), style);
+				createCell(row, columnCount++, itemline.getItemBatch(), style);
+				createCell(row, columnCount++, itemline.getItem().getUnit().getName(), style);
+				createCell(row, columnCount++, itemline.getItem().getRoute().getName(), style);
+				createCell(row, columnCount++, itemline.getItemSoh(), style);
+				createCell(row, columnCount++, itemline.getItemExpiryDate().toString(), style);
+				String status = "";
+				if ((new Date()).after(itemline.getItemExpiryDate())) {
+					status = "Expiré";
+				}
 				createCell(row, columnCount++, status, style);
-			} else if (!atriskOnly) {
-				Row row = sheet.createRow(rowCount++);
+			} else if (!expiredOnly) {
 				int columnCount = 0;
-				
-				createCell(row, columnCount++, item.getId(), style);
-				createCell(row, columnCount++, item.getName(), style);
-				createCell(row, columnCount++, item.getUnit().getName(), style);
-				createCell(row, columnCount++, item.getRoute().getName(), style);
-				createCell(row, columnCount++, item.getStockMin(), style);
-				createCell(row, columnCount++, item.getStockMax(), style);
-				createCell(row, columnCount++, item.getVirtualstock(), style);
-				createCell(row, columnCount++, item.getSoh(), style);
-				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = item.getSoh() > item.getStockMax() ? "Over max quatity"
-				        : item.getSoh() < item.getStockMin() ? "Under min quatity" : "";
+				createCell(row, columnCount++, itemline.getId(), style);
+				createCell(row, columnCount++, itemline.getItem().getName(), style);
+				createCell(row, columnCount++, itemline.getItemBatch(), style);
+				createCell(row, columnCount++, itemline.getItem().getUnit().getName(), style);
+				createCell(row, columnCount++, itemline.getItem().getRoute().getName(), style);
+				createCell(row, columnCount++, itemline.getItemSoh(), style);
+				createCell(row, columnCount++, itemline.getItemExpiryDate().toString(), style);
+				String status = "";
+				if ((new Date()).after(itemline.getItemExpiryDate())) {
+					status = "Expiré";
+				}
 				createCell(row, columnCount++, status, style);
 			}
 		}

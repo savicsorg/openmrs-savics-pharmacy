@@ -155,4 +155,12 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		criteria.add(Restrictions.eq(key, value));
 		return criteria.list();
 	}
+	
+	@Override
+	public List<T> getFromMasterId(Class<T> t, String key, int value) throws APIException {
+		getSession().createCriteria(t).list();
+		Criteria criteria = getSession().createCriteria(t);
+		criteria.add(Restrictions.eq(key, value));
+		return criteria.list();
+	}
 }
