@@ -69,7 +69,6 @@
             StocktakeDetail.hbm.xml
             Supplier.hbm.xml
             Transaction.hbm.xml
-            TransactionType.hbm.xml
             Unit.hbm.xml
         </mappingFiles>
 	

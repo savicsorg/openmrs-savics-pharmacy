@@ -50,7 +50,6 @@ Contributor(s):
     <mapping resource="org/openmrs/module/savicspharmacy/Sending.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Transaction.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/PharmacyLocation.hbm.xml"/>
-    <mapping resource="org/openmrs/module/savicspharmacy/TransactionType.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Person.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Stocktake.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Unit.hbm.xml"/>

@@ -284,7 +284,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date" type="date"/>
-            <column name="transaction_type_id" type="INT">
+            <column name="transaction_type" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="quantity" type="INT"/>
@@ -299,27 +299,10 @@
             <column name="person_id" type="INT"/>
             <column name="amount" type="DOUBLE"/>
             <column name="status" type="VARCHAR(10)"/>
-            <column name="transaction_type_code" type="VARCHAR(10)">
-                <constraints nullable="false"/>
-            </column>
             <column name="sending_id" type="INT"/>
             <column name="reception_id" type="INT"/>
             <column name="stocktake_id" type="INT"/>
             <column name="adjustment_date" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-18">
-        <createTable tableName="pharm_transaction_type">
-            <column autoIncrement="true" name="id" type="INT">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="uuid" type="VARCHAR(38)">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValue="" name="code" type="VARCHAR(10)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-19">
@@ -409,11 +392,6 @@
             <column name="location_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-35">
-        <createIndex indexName="FKpharm_tran28186" tableName="pharm_transaction">
-            <column name="transaction_type_code"/>
-        </createIndex>
-    </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-36">
         <createIndex indexName="FKpharm_tran828906" tableName="pharm_transaction">
             <column name="location_id"/>
@@ -483,9 +461,6 @@
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-57">
         <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="pharm_stocktake" constraintName="FKpharm_stoc941420" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_pharmacy_location" />
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-58">
-        <addForeignKeyConstraint baseColumnNames="transaction_type_code" baseTableName="pharm_transaction" constraintName="FKpharm_tran28186" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="code" referencedTableName="pharm_transaction_type" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-59">
         <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="pharm_transaction" constraintName="FKpharm_tran828906" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_pharmacy_location" />

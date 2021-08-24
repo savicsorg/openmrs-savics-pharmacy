@@ -1,0 +1,32 @@
+[
+    
+    {
+        "id": 1,
+        "code": "nadj",
+        "name": "Negative adjustement",
+        "type": "Negative"
+    },{
+        "id": 2,
+        "code": "padj",
+        "name": "Positive adjustement",
+        "type": "Positive"
+    },
+    {
+        "id": 3,
+        "code": "bcreate",
+        "name": "Batch creation",
+        "type": "Positve"
+    },
+    {
+        "id": 4,
+        "code": "bremove",
+        "name": "Batch removal",
+        "type": "Negative"
+    },
+    {
+        "id": 5,
+        "code": "disp",
+        "name": "Drug dispense",
+        "type": "Negative"
+    }
+]

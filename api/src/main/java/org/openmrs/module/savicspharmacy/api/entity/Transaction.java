@@ -1,7 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
-
 import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 
@@ -16,13 +15,11 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	private PharmacyLocation pharmacyLocation;
 	
-	private TransactionType transactionType;
-	
 	private String uuid;
 	
 	private Date date;
 	
-	private int transactionTypeId;
+	private int transactionType;//From transactionType json
 	
 	private Integer quantity;
 	
@@ -68,11 +65,11 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 		this.pharmacyLocation = pharmacyLocation;
 	}
 	
-	public TransactionType getTransactionType() {
-		return this.transactionType;
+	public int getTransactionType() {
+		return transactionType;
 	}
 	
-	public void setTransactionType(TransactionType transactionType) {
+	public void setTransactionType(int transactionType) {
 		this.transactionType = transactionType;
 	}
 	
@@ -82,14 +79,6 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	public void setDate(Date date) {
 		this.date = date;
-	}
-	
-	public int getTransactionTypeId() {
-		return this.transactionTypeId;
-	}
-	
-	public void setTransactionTypeId(int transactionTypeId) {
-		this.transactionTypeId = transactionTypeId;
 	}
 	
 	public Integer getQuantity() {
