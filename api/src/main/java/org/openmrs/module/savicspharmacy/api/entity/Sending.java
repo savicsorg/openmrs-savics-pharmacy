@@ -1,9 +1,9 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
-
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Person;
@@ -28,6 +28,11 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	private Date validationDate;
 	
 	private Set sendingDetails = new HashSet(0);
+	
+	//Not persistance fields
+	private Integer numberOfBatches;
+	
+	private Integer quantity;
 	
 	public Integer getId() {
 		return this.id;
@@ -83,6 +88,28 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setSendingDetails(Set sendingDetails) {
 		this.sendingDetails = sendingDetails;
+	}
+	
+	public Integer getNumberOfBatches() {
+		return sendingDetails.size();
+	}
+	
+	public void setNumberOfBatches(Integer numberOfBatches) {
+		this.numberOfBatches = numberOfBatches;
+	}
+	
+	public Integer getQuantity() {
+		int number = 0;
+		Iterator<SendingDetail> itr = sendingDetails.iterator();
+		while (itr.hasNext()) {
+			SendingDetail sendingDetail = itr.next();
+			number = number + sendingDetail.getSendingDetailsQuantity();
+		}
+		return number;
+	}
+	
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 	
 }
