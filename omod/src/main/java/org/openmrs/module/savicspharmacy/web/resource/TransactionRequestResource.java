@@ -45,7 +45,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
@@ -67,7 +66,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
@@ -90,7 +88,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
