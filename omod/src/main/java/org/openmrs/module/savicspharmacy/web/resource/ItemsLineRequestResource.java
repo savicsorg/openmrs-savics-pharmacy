@@ -154,9 +154,9 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			transaction.setStatus("INIT");
 			transaction.setAdjustmentDate(new Date());
 			
-			int transactionType = 2; //padj
+			int transactionType = 3; //bcreate
 			
-			transaction.setTransactionType(transactionType);//padj
+			transaction.setTransactionType(transactionType);//bcreate
 			transaction.setItem(item);
 			transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
 			//3. Update the transaction
