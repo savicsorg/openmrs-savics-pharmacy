@@ -303,6 +303,7 @@
             <column name="reception_id" type="INT"/>
             <column name="stocktake_id" type="INT"/>
             <column name="adjustment_date" type="date"/>
+            <column name="reason" type="VARCHAR(128)"/>
         </createTable>
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-19">
