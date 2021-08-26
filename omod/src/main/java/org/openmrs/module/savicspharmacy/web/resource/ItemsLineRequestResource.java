@@ -29,7 +29,6 @@ import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
-import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -165,9 +164,9 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			//			transaction.setPersonId((Integer) properties.get("personId"));
 			transaction.setStatus("INIT");
 			transaction.setAdjustmentDate(new Date());
-			TransactionType transactionType = (TransactionType) Context.getService(PharmacyService.class).getEntityByid(
-			    TransactionType.class, "id", 2);//padj
-			transaction.setTransactionTypeId(2);//padj
+			
+			int transactionType = 2; //padj
+			
 			transaction.setTransactionType(transactionType);//padj
 			transaction.setItem(item);
 			transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());

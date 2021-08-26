@@ -24,7 +24,6 @@ import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
-import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -46,7 +45,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
@@ -68,7 +66,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
@@ -91,7 +88,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("id");
 			description.addProperty("uuid");
-			description.addProperty("transactionTypeId");
 			description.addProperty("quantity");
 			description.addProperty("itemBatch");
 			description.addProperty("date");
@@ -206,10 +202,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if ("padj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+				if (2 == transaction.getTransactionType()) {//padj
 					item.setSoh(item.getSoh() + transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() + transaction.getQuantity());
-				} else if ("nadj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+				} else if (1 == transaction.getTransactionType()) {//nadj
 					item.setSoh(item.getSoh() - transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() - transaction.getQuantity());
 				}
@@ -226,10 +222,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if ("padj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+				if (2 == transaction.getTransactionType()) {//padj
 					item.setVirtualstock(item.getVirtualstock() - transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - transaction.getQuantity());
-				} else if ("nadj".equalsIgnoreCase(transaction.getTransactionType().getCode())) {
+				} else if (1 == transaction.getTransactionType()) {//nadj
 					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
 				}
@@ -306,11 +302,9 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	private Transaction constructTransaction(String uuid, SimpleObject properties) throws ParseException {
 		Transaction transaction;
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		TransactionType transactionType = null;
+		int transactionType = 2;
 		if (properties.get("transactionType") != null) {
-			Integer transactionTypeId = (Integer) properties.get("transactionType");
-			transactionType = (TransactionType) Context.getService(PharmacyService.class).getEntityByid(
-			    TransactionType.class, "id", transactionTypeId);
+			transactionType = (Integer) properties.get("transactionType");
 		}
 		PharmacyLocation pharmacyLocation = null;
 		if (properties.get("pharmacyLocation") != null) {

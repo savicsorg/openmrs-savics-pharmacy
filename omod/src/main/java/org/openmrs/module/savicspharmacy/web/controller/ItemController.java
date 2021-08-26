@@ -9,18 +9,24 @@
  */
 package org.openmrs.module.savicspharmacy.web.controller;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.springframework.stereotype.Controller;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.export.DrugsExcelExport;
+import org.openmrs.module.savicspharmacy.export.ExpiredStockExcelExport;
 import org.openmrs.module.savicspharmacy.export.StockAtRiskExcelExport;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.webservices.rest.web.RestConstants;
@@ -59,7 +65,7 @@ public class ItemController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE
 	        + "/items/stockatrisk")
-	public void stockAtRiskToExcel(HttpServletResponse response) throws IOException {
+	public void stockAtRiskToExcel(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -68,10 +74,43 @@ public class ItemController {
 		String headerValue = "attachment; filename=Drugs_List_" + currentDateTime + ".xlsx";
 		response.setHeader(headerKey, headerValue);
 		
+		Boolean atriskOnly = false;
+		if (request.getParameter("atriskOnly") != null) {
+			atriskOnly = Boolean.valueOf(request.getParameter("expired"));
+		}
+		
 		List<Item> itemList = pharmacyService.getAll(Item.class);
 		
-		StockAtRiskExcelExport stockAtRiskExcelExport = new StockAtRiskExcelExport(itemList);
+		StockAtRiskExcelExport stockAtRiskExcelExport = new StockAtRiskExcelExport(itemList, atriskOnly);
 		
 		stockAtRiskExcelExport.export(response);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE
+	        + "/items/expiredstock")
+	public void expiredStockToExcel(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		Integer itemValue = Integer.parseInt(request.getParameter("item"));
+		Boolean expiredOnly = false;
+		
+		if (request.getParameter("expired") != null) {
+			expiredOnly = Boolean.valueOf(request.getParameter("expired"));
+		}
+		
+		List<ItemsLine> itemLinestList = new ArrayList<ItemsLine>();
+		if (request.getParameter("item") != null) {
+			itemLinestList = Context.getService(PharmacyService.class).getByMasterId(ItemsLine.class, "item.id", itemValue);
+		}
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=Drugs_List_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+		
+		ExpiredStockExcelExport expiredStockExcelExport = new ExpiredStockExcelExport(itemLinestList, expiredOnly);
+		
+		expiredStockExcelExport.export(response);
 	}
 }
