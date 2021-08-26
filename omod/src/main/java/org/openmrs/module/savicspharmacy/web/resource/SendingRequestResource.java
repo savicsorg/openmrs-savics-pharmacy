@@ -26,8 +26,6 @@ import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
-import org.openmrs.module.savicspharmacy.api.entity.Transaction;
-import org.openmrs.module.savicspharmacy.api.entity.TransactionType;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;

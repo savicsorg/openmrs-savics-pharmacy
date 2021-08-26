@@ -36,10 +36,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	 */
 	public DbSession getSession() {
 		try {
-			System.out.println(">>>>>> getSession = sessionFactory = " + dbSessionFactory);
-			System.out.println(">>>>>> getSession = sessionFactory.getCurrentSession() = "
-			        + dbSessionFactory.getCurrentSession());
-			
 			return dbSessionFactory.getCurrentSession();
 		}
 		catch (NoSuchMethodError ex) {
@@ -64,9 +60,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	
 	@Override
 	public List getAll(Class t) {
-		System.out.println(">>>>> Dao get all, class = " + t);
 		List entityList = getSession().createCriteria(t).list();
-		System.out.println(">>>>> List= " + entityList);
 		return entityList;
 	}
 	
@@ -82,7 +76,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 			}
 		}
 		List entityList = criteria.list();
-		System.out.println(">>>>> List 2= " + entityList);
 		return criteria.list();
 	}
 	
