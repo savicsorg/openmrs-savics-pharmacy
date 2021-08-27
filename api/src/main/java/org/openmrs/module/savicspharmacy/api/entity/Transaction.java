@@ -41,6 +41,8 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	private Date adjustmentDate;
 	
+	private String reason;
+	
 	public Integer getId() {
 		return this.id;
 	}
@@ -159,6 +161,14 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	public void setAdjustmentDate(Date adjustmentDate) {
 		this.adjustmentDate = adjustmentDate;
+	}
+	
+	public String getReason() {
+		return reason;
+	}
+	
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 	
 }

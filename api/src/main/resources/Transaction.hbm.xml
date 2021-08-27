@@ -52,5 +52,8 @@
         <property name="adjustmentDate" type="date">
             <column length="10" name="adjustment_date"/>
         </property>
+        <property name="reason" type="string">
+            <column length="128" name="reason"/>
+        </property>
     </class>
 </hibernate-mapping>

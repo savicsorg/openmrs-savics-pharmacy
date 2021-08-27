@@ -58,6 +58,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
+			description.addProperty("reason");
 			description.addProperty("item");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -79,6 +80,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
+			description.addProperty("reason");
 			description.addProperty("item");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -101,6 +103,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
+			description.addProperty("reason");
 			description.addProperty("item");
 			description.addSelfLink();
 			return description;
@@ -110,7 +113,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		System.out.println("---- doGetAll ");
 		List<Transaction> transactionList = Context.getService(PharmacyService.class).getAll(Transaction.class,
 		    context.getLimit(), context.getStartIndex());
 		System.out.println(transactionList.toString());
@@ -367,6 +369,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			}
 			
+			if (properties.get("reason") != null) {
+				transaction.setReason(properties.get("reason").toString());
+			}
+			
 			transaction.setTransactionType(transactionType);
 			transaction.setItem(item);
 			transaction.setPharmacyLocation(pharmacyLocation);
@@ -390,6 +396,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			transaction.setAmount((Double) properties.get("amount"));
 			
 			transaction.setStatus((String) properties.get("status"));
+			transaction.setReason((String) properties.get("reason"));
 			
 			transaction.setSendingId((Integer) properties.get("sendingId"));
 			
