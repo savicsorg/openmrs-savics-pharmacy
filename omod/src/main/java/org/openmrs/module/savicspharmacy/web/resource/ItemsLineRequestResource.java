@@ -3,6 +3,7 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -101,25 +102,22 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		String value = context.getParameter("itemBatch");
-		Integer itemValue = Integer.parseInt(context.getParameter("item"));
-		List<ItemsLine> itemLinestList;
-		if (itemValue != null) {
-			if (context.getParameter("q") != null) {
-				DbSession session = Context.getService(PharmacyService.class).getSession();
-				Criteria criteria = session.createCriteria(ItemsLine.class);
-				criteria.add(Restrictions.eq("item.id", itemValue));
-				criteria.add(Restrictions.like("itemBatch", value));
-				itemLinestList = (List<ItemsLine>) criteria.list();
-			} else {
-				itemLinestList = Context.getService(PharmacyService.class).getByMasterId(ItemsLine.class, "item.id",
-				    itemValue, context.getLimit(), context.getStartIndex());
+		String itemBatch = context.getParameter("itemBatch");
+		Integer itemid = Integer.parseInt(context.getParameter("item"));
+		List<ItemsLine> itemLinestList = new ArrayList<ItemsLine>();
+		
+		if (itemid != null) {
+			DbSession session = Context.getService(PharmacyService.class).getSession();
+			Criteria criteria = session.createCriteria(ItemsLine.class);
+			criteria.add(Restrictions.eq("item.id", itemid));
+			if (itemBatch != null) {
+				criteria.add(Restrictions.like("itemBatch", itemBatch));
 			}
-		} else {
-			itemLinestList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemBatch", value,
+			itemLinestList = (List<ItemsLine>) criteria.list();
+		} else if (itemBatch != null) {
+			itemLinestList = Context.getService(PharmacyService.class).doSearch(ItemsLine.class, "itemBatch", itemBatch,
 			    context.getLimit(), context.getStartIndex());
 		}
-		
 		return new AlreadyPaged<ItemsLine>(context, itemLinestList, false);
 	}
 	
