@@ -201,7 +201,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
 			    PharmacyLocation.class, properties.get("itemLineLocation").toString());
 			itemLine.setPharmacyLocation(location);
-                        receptionDetail.setItem(item);
 			Context.getService(PharmacyService.class).upsert(itemLine);
 		}
 		

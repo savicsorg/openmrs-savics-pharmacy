@@ -3,7 +3,6 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
-import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
@@ -116,8 +114,8 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
 		try {
-			if (propertiesToCreate.get("sendingLineQuantity") == null) {
-				throw new ConversionException("Required properties: sendingLineQuantity");
+			if (propertiesToCreate.get("sendingDetailsQuantity") == null) {
+				throw new ConversionException("Required properties: sendingDetailsQuantity");
 			}
 			
 			SendingDetail sendingDetail = this.constructSendingDetail(null, propertiesToCreate);
@@ -163,13 +161,13 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
 		
-		if (properties.get("sendingItemBatch") != null && uuid == null && properties.get("sendingDetailsQuantity") != null) {
-			ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
-			    new String[] { "itemBatch" }, new Object[] { properties.get("sendingItemBatch").toString() });
-			line.setItemVirtualstock(line.getItemVirtualstock()
-			        + Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
-			Context.getService(PharmacyService.class).upsert(line);
-		}
+		//		if (properties.get("sendingItemBatch") != null && uuid == null && properties.get("sendingDetailsQuantity") != null) {
+		//			ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
+		//			    new String[] { "itemBatch" }, new Object[] { properties.get("sendingItemBatch").toString() });
+		//			line.setItemVirtualstock(line.getItemVirtualstock()
+		//			        + Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
+		//			Context.getService(PharmacyService.class).upsert(line);
+		//		}
 		
 		Sending sending = null;
 		if (properties.get("sending") != null) {
@@ -190,7 +188,7 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			}
 			
 			if (properties.get("sendingDetailsValue") != null) {
-				sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
+				sendingDetail.setSendingDetailsValue(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
 			}
 			
 			if (properties.get("sendingItemBatch") != null) {
@@ -198,8 +196,8 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			}
 			
 			if (properties.get("sendingItemExpiryDate") != null) {
-				sendingDetail.setSendingItemExpiryDate(simpleDateFormat
-				        .parse(properties.get("sendingLineAmount").toString()));
+				sendingDetail.setSendingItemExpiryDate(simpleDateFormat.parse(properties.get("sendingItemExpiryDate")
+				        .toString()));
 			}
 			
 		} else {
@@ -213,7 +211,7 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			}
 			
 			if (properties.get("sendingDetailsValue") != null) {
-				sendingDetail.setSendingDetailsQuantity(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
+				sendingDetail.setSendingDetailsValue(Integer.valueOf(properties.get("sendingDetailsValue").toString()));
 			}
 			
 			if (properties.get("sendingItemBatch") != null) {
@@ -221,8 +219,8 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			}
 			
 			if (properties.get("sendingItemExpiryDate") != null) {
-				sendingDetail.setSendingItemExpiryDate(simpleDateFormat
-				        .parse(properties.get("sendingLineAmount").toString()));
+				sendingDetail.setSendingItemExpiryDate(simpleDateFormat.parse(properties.get("sendingItemExpiryDate")
+				        .toString()));
 			}
 			
 			SendingDetailId pk = new SendingDetailId(item.getId(), sending.getId());

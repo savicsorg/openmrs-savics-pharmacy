@@ -106,7 +106,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		Integer itemValue = Integer.parseInt(context.getParameter("item"));
 		List<ItemsLine> itemLinestList;
 		if (itemValue != null) {
-			if (context.getParameter("q") != null) {
+			if (value != null) {
 				DbSession session = Context.getService(PharmacyService.class).getSession();
 				Criteria criteria = session.createCriteria(ItemsLine.class);
 				criteria.add(Restrictions.eq("item.id", itemValue));
@@ -194,7 +194,6 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			Logger.getLogger(ItemsLineRequestResource.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
 		}
-		
 	}
 	
 	@Override

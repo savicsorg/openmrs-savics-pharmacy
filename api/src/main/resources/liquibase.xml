@@ -545,11 +545,4 @@
             <column  name="validation_date" type="date"/> 
         </addColumn>  
     </changeSet>
-    <changeSet author="enokby" id="enokby-6"> 
-        <sql>
-            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 's',"Sending");
-            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 'r',"Reception");
-            insert into pharm_transaction_type(uuid,code,name) values((select uuid()), 't',"Stock take"); 
-        </sql>  
-    </changeSet>
 </databaseChangeLog>
