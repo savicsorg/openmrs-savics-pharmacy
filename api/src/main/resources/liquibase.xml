@@ -158,13 +158,13 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-10">
         <createTable tableName="pharm_reception_detail">
             <column autoIncrement="true" name="id" type="INT">
-                <constraints nullable="false" unique="true"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="reception_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="item_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="order_line_quantity" type="INT"/>
             <column name="quantity_received" type="INT"/>
@@ -173,7 +173,7 @@
             <column defaultValue="" name="uuid" type="VARCHAR(38)">
                 <constraints nullable="false"/>
             </column>
-        </createTable>
+        </createTable>   
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-11">
         <createTable tableName="pharm_route">
@@ -369,11 +369,6 @@
             <column name="supplier_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-27">
-        <createIndex indexName="FKpharm_rece13494" tableName="pharm_reception_detail">
-            <column name="item_id"/>
-        </createIndex>
-    </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-28">
         <createIndex indexName="FKpharm_rece377506" tableName="pharm_reception">
             <column name="person_id"/>
@@ -452,16 +447,16 @@
         <addForeignKeyConstraint baseColumnNames="supplier_id" baseTableName="pharm_pharmacy_order" constraintName="FKpharm_orde883098" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_supplier" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-47">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_reception_detail" constraintName="FKpharm_rece13494" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
-    </changeSet>
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_reception_detail" constraintName="fk_reception_detail_item" deferrable="false" 
+                             initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
+        <addForeignKeyConstraint baseColumnNames="reception_id" baseTableName="pharm_reception_detail" constraintName="fk_reception_detail_reception"  deferrable="false" 
+                             initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_reception" />
+    </changeSet>   
     <changeSet author="anatoleabe (generated)" id="1620641683809-48">
         <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="pharm_reception" constraintName="FKpharm_rece377506" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="person" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-49">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="pharm_reception" constraintName="FKpharm_rece738543" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_pharmacy_order" />
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-50">
-        <addForeignKeyConstraint baseColumnNames="reception_id" baseTableName="pharm_reception_detail" constraintName="FKpharm_rece853587" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_reception" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-51">
         <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="pharm_sending" constraintName="FKpharm_send193203" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="person_id" referencedTableName="person" />
@@ -523,9 +518,7 @@
         <sql>
             ALTER TABLE pharm_unit ADD CONSTRAINT  UNIQUE (code)
         </sql>
-    </changeSet>
-    
-    
+    </changeSet>       
     <changeSet author="agilbert" id="1620641683809-66">
         <sql>
             ALTER TABLE pharm_route ADD CONSTRAINT  UNIQUE (code)
@@ -540,7 +533,7 @@
     <changeSet  author="enokby"  id="enokby-3">  
         <dropNotNullConstraint  columnDataType="int" columnName="person_id" tableName="pharm_sending"/>  
     </changeSet>
-    <changeSet author="enokby" id="enokby-5"> 
+    <changeSet author="enokby" id="enokby-4"> 
         <addColumn tableName="pharm_sending" >
             <column  name="validation_date" type="date"/> 
         </addColumn>  

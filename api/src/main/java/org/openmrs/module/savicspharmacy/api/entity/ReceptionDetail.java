@@ -11,8 +11,6 @@ import org.openmrs.BaseOpenmrsData;
  */
 public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializable {
 	
-	private ReceptionDetailId pk;
-	
 	private Item item;
 	
 	private Reception reception;
@@ -31,14 +29,6 @@ public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializ
 	
 	private String itemLineLocation;
 	
-	public ReceptionDetailId getPk() {
-		return this.pk;
-	}
-	
-	public void setPk(ReceptionDetailId pk) {
-		this.pk = pk;
-	}
-	
 	public Item getItem() {
 		return this.item;
 	}
@@ -55,10 +45,12 @@ public class ReceptionDetail extends BaseOpenmrsData implements java.io.Serializ
 		this.reception = reception;
 	}
 	
+	@Override
 	public Integer getId() {
 		return this.id;
 	}
 	
+	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}

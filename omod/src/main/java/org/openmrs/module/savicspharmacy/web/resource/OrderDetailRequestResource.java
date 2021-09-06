@@ -176,6 +176,8 @@ public class OrderDetailRequestResource extends DelegatingCrudResource<OrderDeta
 			if (properties.get("orderLineAmount") != null) {
 				orderDetail.setOrderLineAmount(Double.valueOf(properties.get("orderLineAmount").toString()));
 			}
+			orderDetail.setItem(item);
+			orderDetail.setPharmacyOrder(order);
 			
 		} else {
 			orderDetail = new OrderDetail();

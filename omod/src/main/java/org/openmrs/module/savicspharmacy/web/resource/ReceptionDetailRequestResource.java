@@ -22,17 +22,11 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.openmrs.Person;
-import org.openmrs.api.APIException;
-import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.OrderDetail;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetail;
-import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Reception;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
@@ -52,7 +46,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		if (rep instanceof DefaultRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
@@ -67,7 +60,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			return description;
 		} else if (rep instanceof FullRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
@@ -83,7 +75,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			return description;
 		} else if (rep instanceof RefRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
@@ -235,9 +226,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
 			receptionDetail.setItemBatch(properties.get("itemBatch").toString());
 			receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-			ReceptionDetailId pk = new ReceptionDetailId(item.getId(), reception.getId());
-			receptionDetail.setId(pk.hashCode());
-			receptionDetail.setPk(pk);
 			receptionDetail.setItem(item);
 			receptionDetail.setReception(reception);
 		}

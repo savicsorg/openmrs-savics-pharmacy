@@ -54,7 +54,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			//description.addProperty("sendingDetails");
+			description.addProperty("sendingDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -66,7 +66,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			//description.addProperty("sendingDetails");
+			description.addProperty("sendingDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -79,7 +79,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			//description.addProperty("sendingDetails");
+			description.addProperty("sendingDetails");
 			description.addSelfLink();
 			return description;
 		}
@@ -121,14 +121,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Sending sending = this.constructOrder(null, propertiesToCreate);
 			Context.getService(PharmacyService.class).upsert(sending);
-			List<SendingDetail> list = new ArrayList<SendingDetail>(sending.getSendingDetails());
+			List<SendingDetail> list = sending.getSendingDetailsList();
 			for (int i = 0; i < list.size(); i++) {
-				SendingDetail o = new SendingDetail();
-				List<Entry> value = (List<Entry>) list.get(i);
-				o.setSendingDetailsQuantity(Integer.valueOf(value.get(0).getValue().toString()));
-				o.setSendingDetailsValue(Integer.valueOf(value.get(1).getValue().toString()));
-				o.setSendingItemBatch(value.get(2).getValue().toString());
-				o.setSendingItemExpiryDate(simpleDateFormat.parse(value.get(3).getValue().toString()));
+				SendingDetail o = list.get(i);
 				Integer itemId = list.get(i).getItem().getId();
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
@@ -156,13 +151,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				SendingDetail o = sendingDetailList.get(i);
 				Context.getService(PharmacyService.class).delete(o);
 			}
-			List<SendingDetail> list = new ArrayList<SendingDetail>(sending.getSendingDetails());
+			List<SendingDetail> list = sending.getSendingDetailsList();
 			for (int i = 0; i < list.size(); i++) {
-				SendingDetail o = new SendingDetail();
-				o.setSendingDetailsQuantity(list.get(i).getSendingDetailsQuantity());
-				o.setSendingDetailsValue(list.get(i).getSendingDetailsValue());
-				o.setSendingItemBatch(list.get(i).getSendingItemBatch());
-				o.setSendingItemExpiryDate(list.get(i).getSendingItemExpiryDate());
+				SendingDetail o = list.get(i);
 				Integer itemId = list.get(i).getItem().getId();
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
@@ -243,8 +234,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			}
 			if (properties.get("sendingDetails") != null) {
 				List<SendingDetail> list = (ArrayList<SendingDetail>) properties.get("sendingDetails");
-				Set<SendingDetail> set = new HashSet<SendingDetail>(list);
-				sending.setSendingDetails(set);
+				sending.setSendingDetailsList(list);
 			}
 		}
 		
