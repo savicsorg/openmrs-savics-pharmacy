@@ -18,6 +18,7 @@ import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -130,46 +131,46 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		try {
 			Sending sending = this.constructOrder(null, propertiesToCreate);
 			sending = (Sending) Context.getService(PharmacyService.class).upsert(sending);
+			sending = (Sending) Context.getService(PharmacyService.class)
+			        .getEntityByid(Sending.class, "id", sending.getId());
 			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(sending.getSendingDetails());
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			int transactionQty = 0;
-			Double transactionAmount = 0.0;
+			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				SendingDetail o = new SendingDetail();
 				
 				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
-				transactionAmount += o.getSendingDetailsValue();
 				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
 				o.setSendingItemExpiryDate(simpleDateFormat.parse(list.get(i).get("sendingItemExpiryDate").toString()));
 				Integer itemId = new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
 				o.setSending(sending);
-				transactionQty += o.getSendingDetailsQuantity();
 				
 				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
 				o.setId(0);
 				o.setPk(sendingDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
+				
+				//Create a transaction for this operation
+				transaction = new Transaction();
+				transaction.setDate(new Date());
+				transaction.setQuantity(o.getSendingDetailsQuantity());
+				transaction.setSendingId(sending.getId());
+				transaction.setItem(item);
+				transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
+				//TODO
+				//transaction.setPersonId((Integer) properties.get("personId"));
+				transaction.setStatus("INIT");
+				int transactionType = 5; //disp
+				transaction.setTransactionType(transactionType);//disp
+				//Upsert the transaction
+				Context.getService(PharmacyService.class).upsert(transaction);
 			}
-			System.out.println("---------ID------ >" + sending.toString());
-			sending = (Sending) Context.getService(PharmacyService.class)
-			        .getEntityByid(Sending.class, "id", sending.getId());
-			
-			//Create a transaction for this operation
-			Transaction transaction = new Transaction();
-			transaction.setDate(new Date());
-			transaction.setQuantity(transactionQty);
-			transaction.setSendingId(sending.getId());
-			transaction.setAmount(transactionAmount);
-			//TODO
-			//transaction.setPersonId((Integer) properties.get("personId"));
-			transaction.setStatus("INIT");
-			int transactionType = 5; //disp
-			transaction.setTransactionType(transactionType);//disp
-			//3. Update the transaction
-			Context.getService(PharmacyService.class).upsert(transaction);
 			
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
