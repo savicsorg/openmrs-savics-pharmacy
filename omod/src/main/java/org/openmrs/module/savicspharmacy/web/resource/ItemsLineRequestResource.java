@@ -48,7 +48,6 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		if (rep instanceof DefaultRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			System.out.println("");
 			description.addProperty("id");
 			description.addProperty("uuid");
 			description.addProperty("itemBatch");
@@ -111,7 +110,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			Criteria criteria = session.createCriteria(ItemsLine.class);
 			criteria.add(Restrictions.eq("item.id", itemid));
 			if (itemBatch != null) {
-				criteria.add(Restrictions.like("itemBatch", itemBatch));
+				criteria.add(Restrictions.like("itemBatch", itemBatch + "%").ignoreCase());
 			}
 			itemLinestList = (List<ItemsLine>) criteria.list();
 		} else if (itemBatch != null) {

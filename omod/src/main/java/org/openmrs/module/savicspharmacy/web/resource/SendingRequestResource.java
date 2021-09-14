@@ -1,16 +1,19 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.CollectionType;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
@@ -26,6 +29,8 @@ import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
 import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
+import org.openmrs.module.savicspharmacy.api.entity.SendingDetailId;
+import org.openmrs.module.savicspharmacy.api.entity.Transaction;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -36,6 +41,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
+import static org.terracotta.modules.ehcache.store.TerracottaClusteredInstanceFactory.LOGGER;
 
 @Resource(name = RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE + "/sending", supportedClass = Sending.class, supportedOpenmrsVersions = { "2.*.*" })
 public class SendingRequestResource extends DataDelegatingCrudResource<Sending> {
@@ -55,7 +61,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			description.addProperty("sendingDetails");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -69,7 +74,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			description.addProperty("sendingDetails");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -84,7 +88,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
-			description.addProperty("sendingDetails");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addSelfLink();
@@ -126,24 +129,52 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		}
 		try {
 			Sending sending = this.constructOrder(null, propertiesToCreate);
-			Context.getService(PharmacyService.class).upsert(sending);
-			List<SendingDetail> list = new ArrayList<SendingDetail>(sending.getSendingDetails());
+			sending = (Sending) Context.getService(PharmacyService.class).upsert(sending);
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(sending.getSendingDetails());
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			int transactionQty = 0;
+			Double transactionAmount = 0.0;
 			for (int i = 0; i < list.size(); i++) {
 				SendingDetail o = new SendingDetail();
-				o.setSendingDetailsQuantity(list.get(i).getSendingDetailsQuantity());
-				o.setSendingDetailsValue(list.get(i).getSendingDetailsValue());
-				o.setSendingItemBatch(list.get(i).getSendingItemBatch());
-				o.setSendingItemExpiryDate(list.get(i).getSendingItemExpiryDate());
-				Integer itemId = list.get(i).getItem().getId();
+				
+				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
+				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
+				transactionAmount += o.getSendingDetailsValue();
+				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
+				o.setSendingItemExpiryDate(simpleDateFormat.parse(list.get(i).get("sendingItemExpiryDate").toString()));
+				Integer itemId = new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
 				o.setSending(sending);
+				transactionQty += o.getSendingDetailsQuantity();
+				
+				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
+				o.setId(0);
+				o.setPk(sendingDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
 			}
+			System.out.println("---------ID------ >" + sending.toString());
+			sending = (Sending) Context.getService(PharmacyService.class)
+			        .getEntityByid(Sending.class, "id", sending.getId());
+			
+			//Create a transaction for this operation
+			Transaction transaction = new Transaction();
+			transaction.setDate(new Date());
+			transaction.setQuantity(transactionQty);
+			transaction.setSendingId(sending.getId());
+			transaction.setAmount(transactionAmount);
+			//TODO
+			//transaction.setPersonId((Integer) properties.get("personId"));
+			transaction.setStatus("INIT");
+			int transactionType = 5; //disp
+			transaction.setTransactionType(transactionType);//disp
+			//3. Update the transaction
+			Context.getService(PharmacyService.class).upsert(transaction);
+			
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException e) {
-			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(SendingRequestResource.class.getName()).log(Level.SEVERE, null, e);
 			return null;
 		}
 		
@@ -177,7 +208,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException ex) {
-			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(SendingRequestResource.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
 		}
 		
@@ -236,10 +267,11 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 		} else {
 			sending = new Sending();
-			if (properties.get("person") != null)
+			if (properties.get("person") != null) {
 				sending.setPerson(patient);
-			else
+			} else {
 				sending.setCustomer(customer);
+			}
 			if (properties.get("date") != null) {
 				sending.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
@@ -247,13 +279,21 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
 			}
 			if (properties.get("sendingDetails") != null) {
-				List<SendingDetail> list = (ArrayList<SendingDetail>) properties.get("sendingDetails");
-				Set<SendingDetail> set = new HashSet<SendingDetail>(list);
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
 				sending.setSendingDetails(set);
 			}
 		}
 		
 		return sending;
+	}
+	
+	public <T> List<T> jsonArrayToObjectList(String json, Class<T> tClass) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass);
+		List<T> ts = mapper.readValue(json, listType);
+		LOGGER.debug("class name: {}", ts.get(0).getClass().getName());
+		return ts;
 	}
 	
 	@Override

@@ -99,13 +99,19 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	}
 	
 	public Integer getQuantity() {
-		int number = 0;
-		Iterator<SendingDetail> itr = sendingDetails.iterator();
-		while (itr.hasNext()) {
-			SendingDetail sendingDetail = itr.next();
-			number = number + sendingDetail.getSendingDetailsQuantity();
+		try {
+			int number = 0;
+			Iterator<SendingDetail> itr = sendingDetails.iterator();
+			while (itr.hasNext()) {
+				SendingDetail sendingDetail = (SendingDetail) itr.next();
+				number = number + sendingDetail.getSendingDetailsQuantity();
+			}
+			return number;
 		}
-		return number;
+		catch (Exception e) {
+			return 0;
+		}
+		
 	}
 	
 	public void setQuantity(Integer quantity) {
