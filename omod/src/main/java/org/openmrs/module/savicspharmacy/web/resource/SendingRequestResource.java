@@ -163,6 +163,8 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setSendingId(sending.getId());
 				transaction.setItem(item);
 				transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
+				transaction.setItemBatch(itemsLine.getItemBatch());
+				transaction.setItemExpiryDate(itemsLine.getItemExpiryDate());
 				//TODO
 				//transaction.setPersonId((Integer) properties.get("personId"));
 				transaction.setStatus("INIT");
