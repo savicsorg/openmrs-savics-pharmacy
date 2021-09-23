@@ -294,12 +294,12 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Customer customer = null;
-		if (properties.get("customer") != null && !properties.get("customer").equals("null")) {
+		if (properties.get("customer") != null) {
 			Integer customerId = properties.get("customer");
 			customer = (Customer) Context.getService(PharmacyService.class).getEntityByid(Customer.class, "id", customerId);
 		}
 		Person patient = null;
-		if (properties.get("person") != null && !properties.get("customer").equals("null")) {
+		if (properties.get("person") != null) {
 			String patientId = properties.get("person");
 			patient = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, patientId);
 		}
@@ -324,9 +324,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setSendingDetails(set);
 			}
 			
-			if (properties.get("person") != null && !properties.get("person").equals("null")) {
+			if (properties.get("person") != null) {
 				sending.setPerson(patient);
-			} else if (properties.get("customer") != null && !properties.get("customer").equals("null")) {
+			} else if (properties.get("customer") != null) {
 				sending.setCustomer(customer);
 			}
 			
