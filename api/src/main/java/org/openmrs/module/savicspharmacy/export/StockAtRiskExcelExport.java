@@ -120,8 +120,8 @@ public class StockAtRiskExcelExport {
 				createCell(row, columnCount++, item.getVirtualstock(), style);
 				createCell(row, columnCount++, item.getSoh(), style);
 				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = item.getSoh() > item.getStockMax() ? "Over max quatity"
-				        : item.getSoh() < item.getStockMin() ? "Under min quatity" : "";
+				String status = (item.getSoh()!= null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Over max quatity"
+				        : (item.getSoh()!= null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "Under min quatity" : "";
 				createCell(row, columnCount++, status, style);
 			} else if (!atriskOnly) {
 				Row row = sheet.createRow(rowCount++);
@@ -136,8 +136,8 @@ public class StockAtRiskExcelExport {
 				createCell(row, columnCount++, item.getVirtualstock(), style);
 				createCell(row, columnCount++, item.getSoh(), style);
 				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = item.getSoh() > item.getStockMax() ? "Over max quatity"
-				        : item.getSoh() < item.getStockMin() ? "Under min quatity" : "";
+				String status = (item.getSoh()!= null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Over max quatity"
+				        : (item.getSoh()!= null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "Under min quatity" : "";
 				createCell(row, columnCount++, status, style);
 			}
 		}
