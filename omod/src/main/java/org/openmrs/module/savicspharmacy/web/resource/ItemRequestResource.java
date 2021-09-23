@@ -217,15 +217,16 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			if (properties.get("name") == null || properties.get("code") == null) {
 				throw new IllegalPropertyException("Required parameters: name, code");
 			}
+			System.out.println("------ > " + properties.toString());
 			item.setName((String) properties.get("name"));
 			item.setCode((String) properties.get("code"));
 			item.setDescription((String) properties.get("description"));
-			item.setBuyPrice((Double) properties.get("buyPrice"));
-			item.setSellPrice((Double) properties.get("sellPrice"));
+			item.setBuyPrice(new Double(properties.get("buyPrice").toString()));
+			item.setSellPrice(new Double(properties.get("sellPrice").toString()));
 			item.setVirtualstock((Integer) properties.get("virtualstock"));
-			item.setSoh((Integer) properties.get("soh"));
-			item.setStockMin((Integer) properties.get("stockMin"));
-			item.setStockMax((Integer) properties.get("stockMax"));
+			item.setSoh(new Integer(properties.get("soh").toString()));
+			item.setStockMin(new Integer(properties.get("stockMin").toString()));
+			item.setStockMax(new Integer(properties.get("stockMax").toString()));
 			item.setAMC((Double) properties.get("AMC"));
 			item.setUnit(unit);
 			item.setRoute(route);

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -142,7 +145,11 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
 				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
-				o.setSendingItemExpiryDate(simpleDateFormat.parse(list.get(i).get("sendingItemExpiryDate").toString()));
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
+				
+				o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				Integer itemId = new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
@@ -153,9 +160,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				o.setPk(sendingDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
 				
-				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-				    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
-				
 				//Create a transaction for this operation
 				transaction = new Transaction();
 				transaction.setDate(new Date());
@@ -164,7 +168,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setItem(item);
 				transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
 				transaction.setItemBatch(itemsLine.getItemBatch());
-				transaction.setItemExpiryDate(itemsLine.getItemExpiryDate());
+				transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				//TODO
 				//transaction.setPersonId((Integer) properties.get("personId"));
 				transaction.setStatus("INIT");
@@ -188,25 +192,77 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		Sending sending;
 		try {
 			sending = this.constructOrder(uuid, propertiesToUpdate);
+			
 			Context.getService(PharmacyService.class).upsert(sending);
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			//1. delete all SendingDetail
 			List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(
 			    SendingDetail.class, "sending.id", sending.getId(), 1000, 0);
 			for (int i = 0; i < sendingDetailList.size(); i++) {
 				SendingDetail o = sendingDetailList.get(i);
 				Context.getService(PharmacyService.class).delete(o);
 			}
-			List<SendingDetail> list = new ArrayList<SendingDetail>(sending.getSendingDetails());
+			
+			//2. update all old transactions as canceled
+			List<Transaction> transactionlList = Context.getService(PharmacyService.class).getByMasterId(Transaction.class,
+			    "sendingId", sending.getId(), 1000, 0);
+			for (int i = 0; i < transactionlList.size(); i++) {
+				Transaction t = transactionlList.get(i);
+				//				t.setStatus("CANCELED");
+				//				System.out.println("----- Date = " + t.getDate().toString() + " - - parsed = "
+				//				        + simpleDateFormat.parse(t.getDate().toString()));
+				//				
+				//				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				//				Date myDate = formatter.parse(t.getDate().toString());
+				//				java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
+				//				
+				//				t.setDate(sqlDate);
+				
+				Context.getService(PharmacyService.class).delete(t);
+			}
+			
+			//3. Update  SendingDetail
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(sending.getSendingDetails());
+			
+			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				SendingDetail o = new SendingDetail();
-				o.setSendingDetailsQuantity(list.get(i).getSendingDetailsQuantity());
-				o.setSendingDetailsValue(list.get(i).getSendingDetailsValue());
-				o.setSendingItemBatch(list.get(i).getSendingItemBatch());
-				o.setSendingItemExpiryDate(list.get(i).getSendingItemExpiryDate());
-				Integer itemId = list.get(i).getItem().getId();
+				
+				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
+				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
+				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
+				
+				o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				Integer itemId = new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				o.setItem(item);
 				o.setSending(sending);
+				
+				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
+				o.setId(0);
+				o.setPk(sendingDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
+				
+				//Create a transaction for this operation
+				transaction = new Transaction();
+				transaction.setDate(new Date());
+				transaction.setQuantity(o.getSendingDetailsQuantity());
+				transaction.setSendingId(sending.getId());
+				transaction.setItem(item);
+				transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
+				transaction.setItemBatch(itemsLine.getItemBatch());
+				transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				//TODO
+				//transaction.setPersonId((Integer) properties.get("personId"));
+				transaction.setStatus("INIT");
+				int transactionType = 5; //disp
+				transaction.setTransactionType(transactionType);//disp
+				//Upsert the transaction
+				Context.getService(PharmacyService.class).upsert(transaction);
 			}
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
@@ -238,12 +294,12 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Customer customer = null;
-		if (properties.get("customer") != null) {
+		if (properties.get("customer") != null && !properties.get("customer").equals("null")) {
 			Integer customerId = properties.get("customer");
 			customer = (Customer) Context.getService(PharmacyService.class).getEntityByid(Customer.class, "id", customerId);
 		}
 		Person patient = null;
-		if (properties.get("person") != null) {
+		if (properties.get("person") != null && !properties.get("customer").equals("null")) {
 			String patientId = properties.get("person");
 			patient = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, patientId);
 		}
@@ -263,9 +319,15 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			}
 			
 			if (properties.get("sendingDetails") != null) {
-				List<SendingDetail> list = (ArrayList<SendingDetail>) properties.get("sendingDetails");
-				Set<SendingDetail> set = new HashSet<SendingDetail>(list);
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
 				sending.setSendingDetails(set);
+			}
+			
+			if (properties.get("person") != null && !properties.get("person").equals("null")) {
+				sending.setPerson(patient);
+			} else if (properties.get("customer") != null && !properties.get("customer").equals("null")) {
+				sending.setCustomer(customer);
 			}
 			
 		} else {
