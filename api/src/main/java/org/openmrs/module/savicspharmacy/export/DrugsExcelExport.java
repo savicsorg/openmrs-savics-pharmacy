@@ -69,6 +69,8 @@ public class DrugsExcelExport {
 		createCell(row, index++, "Route", cellStyle);
 		createCell(row, index++, "Min", cellStyle);
 		createCell(row, index++, "Max", cellStyle);
+		createCell(row, index++, "Prix d'achat (XOF)", cellStyle);
+		createCell(row, index++, "Prix de vente (XOF)", cellStyle);
 	}
 	
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -76,6 +78,8 @@ public class DrugsExcelExport {
 		Cell cell = row.createCell(columnCount);
 		if (value instanceof Integer) {
 			cell.setCellValue((Integer) value);
+		} else if (value instanceof Double) {
+			cell.setCellValue((Double) value);
 		} else if (value instanceof Boolean) {
 			cell.setCellValue((Boolean) value);
 		} else {
@@ -106,6 +110,8 @@ public class DrugsExcelExport {
 			createCell(row, columnCount++, item.getRoute().getName(), style);
 			createCell(row, columnCount++, item.getStockMin(), style);
 			createCell(row, columnCount++, item.getStockMax(), style);
+			createCell(row, columnCount++, item.getBuyPrice() + "", style);
+			createCell(row, columnCount++, item.getSellPrice(), style);
 			
 		}
 	}
