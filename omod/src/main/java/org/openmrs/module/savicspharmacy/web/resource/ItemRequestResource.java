@@ -1,5 +1,6 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
+import java.util.ArrayList;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -15,7 +16,11 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.Route;
 import org.openmrs.module.savicspharmacy.api.entity.Unit;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -109,8 +114,19 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		String value = context.getParameter("name");
-		List<Item> itemList = Context.getService(PharmacyService.class).doSearch(Item.class, "name", value,
-		    context.getLimit(), context.getStartIndex());
+		String code = context.getParameter("code");
+		List<Item> itemList = new ArrayList<Item>();
+		
+		if (code != null) {
+			DbSession session = Context.getService(PharmacyService.class).getSession();
+			Criteria criteria = session.createCriteria(Item.class);
+			criteria.add(Restrictions.eq("code", code));
+			itemList = (List<Item>) criteria.list();
+		} else {
+			itemList = Context.getService(PharmacyService.class).doSearch(Item.class, "name", value, context.getLimit(),
+			    context.getStartIndex());
+		}
+		
 		return new AlreadyPaged<Item>(context, itemList, false);
 	}
 	
