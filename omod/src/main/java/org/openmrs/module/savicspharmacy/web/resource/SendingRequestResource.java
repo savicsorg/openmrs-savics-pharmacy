@@ -350,21 +350,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
 			}
 			if (properties.get("sendingDetails") != null) {
-				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
-				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
-				sending.setSendingDetails(set);
+                            List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
+                            Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+                            sending.setSendingDetails(set);
 			}
 		}
 		
 		return sending;
-	}
-	
-	public <T> List<T> jsonArrayToObjectList(String json, Class<T> tClass) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass);
-		List<T> ts = mapper.readValue(json, listType);
-		LOGGER.debug("class name: {}", ts.get(0).getClass().getName());
-		return ts;
 	}
 	
 	@Override

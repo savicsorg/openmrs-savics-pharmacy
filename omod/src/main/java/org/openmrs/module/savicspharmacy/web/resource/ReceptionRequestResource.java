@@ -3,7 +3,10 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -17,6 +20,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder;
@@ -47,6 +51,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
+                        description.addProperty("receptionDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -57,6 +62,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
+                        description.addProperty("receptionDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -68,6 +74,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
+                        description.addProperty("receptionDetails");
 			description.addSelfLink();
 			return description;
 		}
@@ -124,8 +131,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 		catch (ParseException ex) {
 			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
-		}
-		
+		}		
 	}
 	
 	@Override
@@ -144,7 +150,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 		
 		PharmacyOrder order = null;
 		if (properties.get("pharmacyOrder") != null) {
-			Integer orderId = properties.get("pharmacyOrder");
+			Integer orderId = Integer.valueOf(properties.get("pharmacyOrder").toString());
 			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
 			    orderId);
 		}
@@ -157,6 +163,13 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			if (properties.get("date") != null) {
 				reception.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
+                        
+                        if (properties.get("receptionDetails") != null) {
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("receptionDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+				reception.setReceptionDetails(set);
+			}
+                        
 			if (order != null)
 				reception.setPharmacyOrder(order);
 		} else {

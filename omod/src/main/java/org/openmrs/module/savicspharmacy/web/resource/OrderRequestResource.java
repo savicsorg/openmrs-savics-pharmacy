@@ -53,6 +53,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("dateReception");
 			description.addProperty("person");
 			description.addProperty("supplier");
+                        description.addProperty("orderDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -67,6 +68,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("dateReception");
 			description.addProperty("person");
 			description.addProperty("supplier");
+                        description.addProperty("orderDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -82,6 +84,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("dateReception");
 			description.addProperty("person");
 			description.addProperty("supplier");
+                        description.addProperty("orderDetails");
 			description.addSelfLink();
 			return description;
 		}
