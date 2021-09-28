@@ -280,13 +280,45 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	
 	@Override
 	protected void delete(Sending sending, String reason, RequestContext context) throws ResponseException {
-		List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(SendingDetail.class,
-		    "sending.id", sending.getId(), 1000, 0);
-		for (int i = 0; i < sendingDetailList.size(); i++) {
-			SendingDetail o = sendingDetailList.get(i);
-			Context.getService(PharmacyService.class).delete(o);
+		try {
+			List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(
+			    SendingDetail.class, "sending.id", sending.getId(), 1000, 0);
+			for (int i = 0; i < sendingDetailList.size(); i++) {
+				SendingDetail o = sendingDetailList.get(i);
+				Context.getService(PharmacyService.class).delete(o);
+			}
+			Context.getService(PharmacyService.class).delete(sending);
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			//2. update all old transactions as canceled
+			List<Transaction> transactionlList = Context.getService(PharmacyService.class).getByMasterId(Transaction.class,
+			    "sendingId", sending.getId(), 1000, 0);
+			for (int i = 0; i < transactionlList.size(); i++) {
+				Transaction t = transactionlList.get(i);
+				
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+				    t.getItem().getUuid());
+				
+				String[] ids = { "itemBatch" };
+				String[] values = { t.getItemBatch() };
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, ids, values);
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - t.getQuantity());
+				
+				item.setVirtualstock(item.getVirtualstock() - t.getQuantity());
+				
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
+				
+				Context.getService(PharmacyService.class).delete(t);
+			}
+			
 		}
-		Context.getService(PharmacyService.class).delete(sending);
+		catch (ParseException ex) {
+			Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 	
 	@Override
