@@ -59,7 +59,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-                        description.addProperty("receptionDetails");
+			description.addProperty("receptionDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -70,7 +70,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-                        description.addProperty("receptionDetails");
+			description.addProperty("receptionDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -82,7 +82,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-                        description.addProperty("receptionDetails");
+			description.addProperty("receptionDetails");
 			description.addSelfLink();
 			return description;
 		}
@@ -117,197 +117,202 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-            try {
-                Reception reception = this.constructOrder(null, propertiesToCreate);
-                Context.getService(PharmacyService.class).upsert(reception);
-
-                reception = (Reception) Context.getService(PharmacyService.class)
-                    .getEntityByid(Reception.class, "id", reception.getId());
-                List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(reception.getReceptionDetails());
-                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Transaction transaction;
-                for (int i = 0; i < list.size(); i++) {
-                    ReceptionDetail o = new ReceptionDetail();
-                    if(o.getOrderLineQuantity() != null)
-                        o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
-                    o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
-                    o.setItemBatch(list.get(i).get("itemBatch").toString());
-                    o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
-
-                    Integer itemId = new Integer(list.get(i).get("item").toString());
-                    Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
-
-                    ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                        ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), item.getId()});
-                    o.setItem(item);
-                    o.setReception(reception);
-                    // creation of a new item line
-                    if (itemLine == null){ 
-                        itemLine = new ItemsLine();
-                        itemLine.setItem(item);
-                        itemLine.setItemBatch(list.get(i).get("itemBatch").toString());
-                        itemLine.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
-                        itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
-                        item.setSoh(item.getSoh() + o.getQuantityReceived());
-                    } else {
-                        itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
-                        item.setSoh(item.getSoh() + o.getQuantityReceived());
-                    }
-                    
-                    PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
-                        PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
-                    itemLine.setPharmacyLocation(location);
-                    Context.getService(PharmacyService.class).upsert(itemLine);
-
-                    ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
-                    o.setId(0);
-                    o.setPk(receptionDetailId);
-                    Context.getService(PharmacyService.class).upsert(o);
-
-                    //Create a transaction for this operation
-                    transaction = new Transaction();
-                    transaction.setDate(new Date());
-                    transaction.setQuantity(o.getQuantityReceived());
-                    transaction.setReceptionId(reception.getId());
-                    transaction.setItem(item);
-                    transaction.setPharmacyLocation(itemLine.getPharmacyLocation());
-                    transaction.setItemBatch(itemLine.getItemBatch());
-                    transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
-                    //TODO
-                    transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
-                    transaction.setStatus("VALIDATED");
-                    int transactionType = 6; //rece
-                    transaction.setTransactionType(transactionType);//disp
-                    //Upsert the transaction
-                    Context.getService(PharmacyService.class).upsert(transaction);
-                }
-
-                return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
-            }
-            catch (ParseException e) {
-                    Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
-                    return null;
-            }
+		try {
+			Reception reception = this.constructOrder(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(reception);
+			
+			reception = (Reception) Context.getService(PharmacyService.class).getEntityByid(Reception.class, "id",
+			    reception.getId());
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(reception.getReceptionDetails());
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Transaction transaction;
+			for (int i = 0; i < list.size(); i++) {
+				ReceptionDetail o = new ReceptionDetail();
+				if (o.getOrderLineQuantity() != null)
+					o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
+				o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
+				o.setItemBatch(list.get(i).get("itemBatch").toString());
+				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
+				
+				Integer itemId = new Integer(list.get(i).get("item").toString());
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				
+				ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch", "item.id" },
+				    new Object[] { o.getItemBatch(), item.getId() });
+				o.setItem(item);
+				o.setReception(reception);
+				// creation of a new item line
+				if (itemLine == null) {
+					itemLine = new ItemsLine();
+					itemLine.setItem(item);
+					itemLine.setItemBatch(list.get(i).get("itemBatch").toString());
+					itemLine.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
+					itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
+					item.setSoh(item.getSoh() + o.getQuantityReceived());
+				} else {
+					itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
+					item.setSoh(item.getSoh() + o.getQuantityReceived());
+				}
+				
+				PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
+				    PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
+				itemLine.setPharmacyLocation(location);
+				Context.getService(PharmacyService.class).upsert(itemLine);
+				
+				ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
+				o.setId(0);
+				o.setPk(receptionDetailId);
+				Context.getService(PharmacyService.class).upsert(o);
+				
+				//Create a transaction for this operation
+				transaction = new Transaction();
+				transaction.setDate(new Date());
+				transaction.setQuantity(o.getQuantityReceived());
+				transaction.setReceptionId(reception.getId());
+				transaction.setItem(item);
+				transaction.setPharmacyLocation(itemLine.getPharmacyLocation());
+				transaction.setItemBatch(itemLine.getItemBatch());
+				transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
+				//TODO
+				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
+				transaction.setStatus("VALIDATED");
+				int transactionType = 6; //rece
+				transaction.setTransactionType(transactionType);//disp
+				//Upsert the transaction
+				Context.getService(PharmacyService.class).upsert(transaction);
+			}
+			
+			return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+		}
+		catch (ParseException e) {
+			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		}
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-            Reception reception;
-            try {
-                reception = this.constructOrder(uuid, propertiesToUpdate);
-                Context.getService(PharmacyService.class).upsert(reception);
-
-                reception = (Reception) Context.getService(PharmacyService.class)
-                        .getEntityByid(Reception.class, "id", reception.getId());
-                
-                //1. delete all ReceptionDetail
-                List<ReceptionDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(
-                    ReceptionDetail.class, "reception.id", reception.getId(), 1000, 0);
-                for (int i = 0; i < detailList.size(); i++) {
-                    ReceptionDetail o = detailList.get(i);
-                    Item it = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", o.getItem().getId());
-                    ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                        ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId()});
-                    line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
-                    line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
-                    it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
-                    it.setSoh(it.getSoh() - o.getQuantityReceived());
-                    Context.getService(PharmacyService.class).upsert(line);
-                    Context.getService(PharmacyService.class).delete(o);
-                }
-                
-                List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(reception.getReceptionDetails());
-                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Transaction transaction;
-                for (int i = 0; i < list.size(); i++) {
-                    ReceptionDetail o = new ReceptionDetail();
-                    if(o.getOrderLineQuantity() != null)
-                        o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
-                    o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
-                    o.setItemBatch(list.get(i).get("itemBatch").toString());
-                    o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
-
-                    Integer itemId = new Integer(list.get(i).get("item").toString());
-                    Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
-
-                    ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                        ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), item.getId()});
-                    o.setItem(item);
-                    o.setReception(reception);
-                    // creation of a new item line
-                    if (itemLine == null){ 
-                        itemLine = new ItemsLine();
-                        itemLine.setItem(item);
-                        itemLine.setItemBatch(list.get(i).get("itemBatch").toString());
-                        itemLine.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
-                        itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
-                        item.setSoh(item.getSoh() + o.getQuantityReceived());
-                        
-                    } else {
-                        itemLine.setItemVirtualstock(itemLine.getItemVirtualstock() + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        itemLine.setItemSoh(itemLine.getItemSoh() + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-                        item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
-                        item.setSoh(item.getSoh() + o.getQuantityReceived());
-                    }
-                    PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
-                        PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
-                    itemLine.setPharmacyLocation(location);
-                    Context.getService(PharmacyService.class).upsert(itemLine);
-
-                    ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
-                    o.setId(0);
-                    o.setPk(receptionDetailId);
-                    Context.getService(PharmacyService.class).upsert(o);
-
-                    //Create a transaction for this operation
-                    transaction = new Transaction();
-                    transaction.setDate(new Date());
-                    transaction.setQuantity(o.getQuantityReceived());
-                    transaction.setReceptionId(reception.getId());
-                    transaction.setItem(item);
-                    transaction.setPharmacyLocation(itemLine.getPharmacyLocation());
-                    transaction.setItemBatch(itemLine.getItemBatch());
-                    transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
-                    //TODO
-                    transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
-                    transaction.setStatus("VALIDATED");
-                    int transactionType = 6; //rece
-                    transaction.setTransactionType(transactionType);//disp
-                    //Upsert the transaction
-                    Context.getService(PharmacyService.class).upsert(transaction);
-                }
-
-                return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
-            }
-            catch (ParseException ex) {
-                Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-        }		
+		Reception reception;
+		try {
+			reception = this.constructOrder(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(reception);
+			
+			reception = (Reception) Context.getService(PharmacyService.class).getEntityByid(Reception.class, "id",
+			    reception.getId());
+			
+			//1. delete all ReceptionDetail
+			List<ReceptionDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(
+			    ReceptionDetail.class, "reception.id", reception.getId(), 1000, 0);
+			for (int i = 0; i < detailList.size(); i++) {
+				ReceptionDetail o = detailList.get(i);
+				Item it = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
+				    o.getItem().getId());
+				ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId() });
+				line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
+				line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
+				it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
+				it.setSoh(it.getSoh() - o.getQuantityReceived());
+				Context.getService(PharmacyService.class).upsert(line);
+				Context.getService(PharmacyService.class).delete(o);
+			}
+			
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(reception.getReceptionDetails());
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Transaction transaction;
+			for (int i = 0; i < list.size(); i++) {
+				ReceptionDetail o = new ReceptionDetail();
+				if (o.getOrderLineQuantity() != null)
+					o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
+				o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
+				o.setItemBatch(list.get(i).get("itemBatch").toString());
+				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
+				
+				Integer itemId = new Integer(list.get(i).get("item").toString());
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				
+				ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch", "item.id" },
+				    new Object[] { o.getItemBatch(), item.getId() });
+				o.setItem(item);
+				o.setReception(reception);
+				// creation of a new item line
+				if (itemLine == null) {
+					itemLine = new ItemsLine();
+					itemLine.setItem(item);
+					itemLine.setItemBatch(list.get(i).get("itemBatch").toString());
+					itemLine.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
+					itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
+					item.setSoh(item.getSoh() + o.getQuantityReceived());
+					
+				} else {
+					itemLine.setItemVirtualstock(itemLine.getItemVirtualstock()
+					        + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemSoh(itemLine.getItemSoh()
+					        + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
+					item.setSoh(item.getSoh() + o.getQuantityReceived());
+				}
+				PharmacyLocation location = (PharmacyLocation) Context.getService(PharmacyService.class).getEntityByUuid(
+				    PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
+				itemLine.setPharmacyLocation(location);
+				Context.getService(PharmacyService.class).upsert(itemLine);
+				
+				ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
+				o.setId(0);
+				o.setPk(receptionDetailId);
+				Context.getService(PharmacyService.class).upsert(o);
+				
+				//Create a transaction for this operation
+				transaction = new Transaction();
+				transaction.setDate(new Date());
+				transaction.setQuantity(o.getQuantityReceived());
+				transaction.setReceptionId(reception.getId());
+				transaction.setItem(item);
+				transaction.setPharmacyLocation(itemLine.getPharmacyLocation());
+				transaction.setItemBatch(itemLine.getItemBatch());
+				transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
+				//TODO
+				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
+				transaction.setStatus("VALIDATED");
+				int transactionType = 6; //rece
+				transaction.setTransactionType(transactionType);//disp
+				//Upsert the transaction
+				Context.getService(PharmacyService.class).upsert(transaction);
+			}
+			
+			return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 	
 	@Override
 	protected void delete(Reception reception, String reason, RequestContext context) throws ResponseException {
-            List<ReceptionDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(
-                ReceptionDetail.class, "reception.id", reception.getId(), 1000, 0);
-            for (int i = 0; i < detailList.size(); i++) {
-                ReceptionDetail o = detailList.get(i);
-                Item it = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", o.getItem().getId());
-                ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId()});
-                line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
-                line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
-                it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
-                it.setSoh(it.getSoh() - o.getQuantityReceived());
-                Context.getService(PharmacyService.class).upsert(line);
-                Context.getService(PharmacyService.class).delete(o);
-            }
-            Context.getService(PharmacyService.class).delete(reception);
+		List<ReceptionDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(ReceptionDetail.class,
+		    "reception.id", reception.getId(), 1000, 0);
+		for (int i = 0; i < detailList.size(); i++) {
+			ReceptionDetail o = detailList.get(i);
+			Item it = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", o.getItem().getId());
+			ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
+			    new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId() });
+			line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
+			line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
+			it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
+			it.setSoh(it.getSoh() - o.getQuantityReceived());
+			Context.getService(PharmacyService.class).upsert(line);
+			Context.getService(PharmacyService.class).delete(o);
+		}
+		Context.getService(PharmacyService.class).delete(reception);
 	}
 	
 	@Override
@@ -334,20 +339,20 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			if (properties.get("date") != null) {
 				reception.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			}
-                        
-                        if (properties.get("receptionDetails") != null) {
+			
+			if (properties.get("receptionDetails") != null) {
 				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("receptionDetails");
 				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
 				reception.setReceptionDetails(set);
 			}
-                        
+			
 			if (order != null)
 				reception.setPharmacyOrder(order);
 		} else {
 			reception = new Reception();
 			reception.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
 			reception.setDate(simpleDateFormat.parse(properties.get("date").toString()));
-                        if (properties.get("receptionDetails") != null) {
+			if (properties.get("receptionDetails") != null) {
 				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("receptionDetails");
 				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
 				reception.setReceptionDetails(set);

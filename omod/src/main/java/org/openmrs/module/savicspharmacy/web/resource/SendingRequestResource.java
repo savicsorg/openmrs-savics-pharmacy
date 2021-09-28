@@ -218,43 +218,43 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
-                            SendingDetail o = new SendingDetail();
-
-                            o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
-                            o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
-                            o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
-
-                            ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-                                ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
-
-                            o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
-                            Integer itemId = new Integer(list.get(i).get("item").toString());
-                            Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
-                            o.setItem(item);
-                            o.setSending(sending);
-
-                            SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
-                            o.setId(0);
-                            o.setPk(sendingDetailId);
-                            Context.getService(PharmacyService.class).upsert(o);
-
-                            //Create a transaction for this operation
-                            transaction = new Transaction();
-                            transaction.setDate(new Date());
-                            transaction.setQuantity(o.getSendingDetailsQuantity());
-                            transaction.setSendingId(sending.getId());
-                            transaction.setItem(item);
-                            transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
-                            transaction.setItemBatch(itemsLine.getItemBatch());
-                            transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
-                            //TODO
-                            //transaction.setPersonId((Integer) properties.get("personId"));
-                            transaction.setStatus("INIT");
-                            int transactionType = 5; //disp
-                            transaction.setTransactionType(transactionType);//disp
-                            //Upsert the transaction
-                            Context.getService(PharmacyService.class).upsert(transaction);
-                    }
+				SendingDetail o = new SendingDetail();
+				
+				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
+				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
+				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
+				
+				o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				Integer itemId = new Integer(list.get(i).get("item").toString());
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
+				o.setItem(item);
+				o.setSending(sending);
+				
+				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
+				o.setId(0);
+				o.setPk(sendingDetailId);
+				Context.getService(PharmacyService.class).upsert(o);
+				
+				//Create a transaction for this operation
+				transaction = new Transaction();
+				transaction.setDate(new Date());
+				transaction.setQuantity(o.getSendingDetailsQuantity());
+				transaction.setSendingId(sending.getId());
+				transaction.setItem(item);
+				transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
+				transaction.setItemBatch(itemsLine.getItemBatch());
+				transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				//TODO
+				//transaction.setPersonId((Integer) properties.get("personId"));
+				transaction.setStatus("INIT");
+				int transactionType = 5; //disp
+				transaction.setTransactionType(transactionType);//disp
+				//Upsert the transaction
+				Context.getService(PharmacyService.class).upsert(transaction);
+			}
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException ex) {
@@ -340,9 +340,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
 			}
 			if (properties.get("sendingDetails") != null) {
-                            List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
-                            Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
-                            sending.setSendingDetails(set);
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("sendingDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+				sending.setSendingDetails(set);
 			}
 		}
 		
