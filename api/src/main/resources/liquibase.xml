@@ -53,7 +53,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sell_price" type="DOUBLE"/>
-             <column name="AMC" type="DOUBLE"/>
+            <column name="AMC" type="DOUBLE"/>
             <column name="buy_price" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
@@ -203,6 +203,9 @@
             <column defaultValue="" name="uuid" type="VARCHAR(38)">
                 <constraints nullable="false"/>
             </column>
+            <column name="customer_type_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-13">
@@ -323,6 +326,11 @@
             <column name="customer_type_id"/>
         </createIndex>
     </changeSet>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-20-1">
+        <createIndex indexName="FKpharm_send349636" tableName="pharm_sending">
+            <column name="customer_type_id"/>
+        </createIndex>
+    </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-21">
         <createIndex indexName="FKpharm_item577093" tableName="pharm_item">
             <column name="unit_id"/>
@@ -405,6 +413,9 @@
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-38">
         <addForeignKeyConstraint baseColumnNames="customer_type_id" baseTableName="pharm_customer" constraintName="FKpharm_cust449636" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_customer_type" />
+    </changeSet>
+    <changeSet author="anatoleabe (generated)" id="1620641683809-38-1">
+        <addForeignKeyConstraint baseColumnNames="customer_type_id" baseTableName="pharm_sending" constraintName="FKpharm_send349636" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_customer_type" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-39">
         <addForeignKeyConstraint baseColumnNames="unit_id" baseTableName="pharm_item" constraintName="FKpharm_item577093" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_unit" />
@@ -520,5 +531,25 @@
         <addColumn tableName="pharm_sending" >
             <column  name="validation_date" type="date"/> 
         </addColumn>  
+    </changeSet>
+    
+    <changeSet id="2720641683809-1" author="anatoleabe">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM pharm_customer_type;
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="pharm_customer_type">
+            <column name="name" value="Patient"/>
+            <column name="uuid" value="b54a1ddd-d25b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_customer_type">
+            <column name="name" value="Service interne"/>
+            <column name="uuid" value="37688e92-f19c-4f19-b369-cdd31c8e7fba"/>
+        </insert>
+        <insert tableName="pharm_customer_type">
+            <column name="name" value="Service externe"/>
+            <column name="uuid" value="a6284bc5-f3b0-4687-abce-16ff8423470b"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

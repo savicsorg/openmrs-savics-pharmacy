@@ -20,6 +20,7 @@ import org.codehaus.jackson.map.type.CollectionType;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
+import org.openmrs.module.savicspharmacy.api.entity.CustomerType;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -65,6 +66,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -78,6 +80,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -92,6 +95,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("sendingAmount");
 			description.addProperty("customer");
 			description.addProperty("person");
+			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
 			description.addSelfLink();
@@ -304,6 +308,12 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			String patientId = properties.get("person");
 			patient = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, patientId);
 		}
+		CustomerType customerType = null;
+		if (properties.get("customerType") != null) {
+			Integer customerTypeId = properties.get("customerType");
+			customerType = (CustomerType) Context.getService(PharmacyService.class).getEntityByid(CustomerType.class, "id",
+			    customerTypeId);
+		}
 		
 		if (uuid != null) {
 			sending = (Sending) Context.getService(PharmacyService.class).getEntityByUuid(Sending.class, uuid);
@@ -327,14 +337,19 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setSendingDetails(set);
 			}
 			
+			sending.setCustomerType(customerType);
+			
 			if (properties.get("person") != null) {
 				sending.setPerson(patient);
+				
+				sending.setCustomerType(new CustomerType());
 			} else if (properties.get("customer") != null) {
 				sending.setCustomer(customer);
 			}
 			
 		} else {
 			sending = new Sending();
+			sending.setCustomerType(customerType);
 			if (properties.get("person") != null) {
 				sending.setPerson(patient);
 			} else {

@@ -1,0 +1,17 @@
+[
+    
+    {
+        "id": 1,
+        "en": "Patient",
+        "fr": "Patient"
+    },{
+        "id": 2,
+        "en": "Internal service",
+        "fr": "Service Interne"
+    },
+    {
+        "id": 3,
+        "en": "External service",
+        "fr": "Service externe"
+    }
+]

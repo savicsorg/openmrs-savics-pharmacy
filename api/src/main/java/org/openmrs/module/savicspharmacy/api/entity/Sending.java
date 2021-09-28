@@ -17,6 +17,8 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Customer customer;
 	
+	private CustomerType customerType;
+	
 	private Person person;
 	
 	private Date date;
@@ -96,6 +98,14 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setNumberOfBatches(Integer numberOfBatches) {
 		this.numberOfBatches = numberOfBatches;
+	}
+	
+	public CustomerType getCustomerType() {
+		return customerType;
+	}
+	
+	public void setCustomerType(CustomerType customerType) {
+		this.customerType = customerType;
 	}
 	
 	public Integer getQuantity() {
