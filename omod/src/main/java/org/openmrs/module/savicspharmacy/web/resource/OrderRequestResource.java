@@ -3,7 +3,10 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -20,6 +23,7 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Person;
@@ -190,7 +194,6 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			}
 			
 			if (properties.get("dateApprobation") != null) {
-				//order.setDateApprobation(simpleDateFormat.parse(properties.get("dateApprobation").toString()));
 				order.setDateApprobation(new Date());
 			}
 			
@@ -201,12 +204,23 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			if (properties.get("amount") != null) {
 				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			}
+                        
+                        if (properties.get("orderDetails") != null) {
+                            List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
+                            Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+                            order.setOrderDetails(set);
+			}
 			
 		} else {
 			order = new PharmacyOrder();
 			order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
 			order.setDate(new Date());
 			order.setName(properties.get("name").toString());
+                        if (properties.get("orderDetails") != null) {
+                            List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
+                            Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+                            order.setOrderDetails(set);
+			}
 			if (properties.get("amount") != null)
 				order.setAmount(Double.valueOf(properties.get("amount").toString()));
 			else
