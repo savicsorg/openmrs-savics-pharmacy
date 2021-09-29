@@ -552,4 +552,187 @@
             <column name="uuid" value="a6284bc5-f3b0-4687-abce-16ff8423470b"/>
         </insert>
     </changeSet>
+    
+    <changeSet id="2720641683809-2" author="anatoleabe">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM pharm_route;
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="pharm_route">
+            <column name="code" value="VO"/>
+            <column name="name" value="Voie orale"/>
+            <column name="uuid" value="b54a3ddd-d25b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VPI"/>
+            <column name="name" value="Voie parentérale intraveineuse"/>
+            <column name="uuid" value="b54a4ddd-d25b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VPaI"/>
+            <column name="name" value="Voie parentéral intramusculaire"/>
+            <column name="uuid" value="b54a4ddd-d25b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VPsc"/>
+            <column name="name" value="Voie parentérale sous-cutanée"/>
+            <column name="uuid" value="b54a5ddd-d25b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VPaId"/>
+            <column name="name" value="Voie parentérale intradermique"/>
+            <column name="uuid" value="b54a5ddd-d25b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VR"/>
+            <column name="name" value="Voie rectale"/>
+            <column name="uuid" value="b54a6ddd-d35b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VV"/>
+            <column name="name" value="voie vaginale"/>
+            <column name="uuid" value="b54a9ddd-d35b-493e-98e8-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VOph"/>
+            <column name="name" value="Voie ohptalmique"/>
+            <column name="uuid" value="b64a9ddd-d35b-493e-98e8-5f1de0520e3a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VOnba"/>
+            <column name="name" value="Voie ORL (nasale, buccopharyngée, auriculaire)"/>
+            <column name="uuid" value="b31a9ddd-d35b-493e-98e8-5f1de0520e2a"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VResp"/>
+            <column name="name" value="Voie respiratoire"/>
+            <column name="uuid" value="b91a0ddd-d35b-493e-98e8-5f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VC"/>
+            <column name="name" value="Voie cutanée"/>
+            <column name="uuid" value="b93a0ddd-d35b-493e-98e8-4f1de0620e2b"/>
+        </insert>
+        <insert tableName="pharm_route">
+            <column name="code" value="VTran"/>
+            <column name="name" value="Voie transdermique"/>
+            <column name="uuid" value="b31a0ddd-d35b-493e-98e9-6f1de0520e2b"/>
+        </insert>
+    </changeSet>
+    
+    <changeSet id="2720641683809-3" author="anatoleabe">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM pharm_unit;
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="pharm_unit">
+            <column name="code" value="001"/>
+            <column name="name" value="Comprimé"/>
+            <column name="uuid" value="b54a3ddd-dà1b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="002"/>
+            <column name="name" value="Gélule"/>
+            <column name="uuid" value="b54a4ddd-d02b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="003"/>
+            <column name="name" value="Capsule"/>
+            <column name="uuid" value="b54a4ddd-d03b-492e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="004"/>
+            <column name="name" value="Granule"/>
+            <column name="uuid" value="b54a5ddd-d04b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="005"/>
+            <column name="name" value="Solution buvable"/>
+            <column name="uuid" value="b54a5ddd-d05b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="006"/>
+            <column name="name" value="Suspension buvable"/>
+            <column name="uuid" value="b54a6ddd-d06b-493e-98e9-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="007"/>
+            <column name="name" value="Solution nasale"/>
+            <column name="uuid" value="b54a9ddd-d07b-493e-98e8-5f1de0520e1a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="008"/>
+            <column name="name" value="Solution auriculaire"/>
+            <column name="uuid" value="b64a9ddd-d08b-493e-98e8-5f1de0520e3a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="009"/>
+            <column name="name" value="Solution ophtalmologique"/>
+            <column name="uuid" value="b31a9ddd-d09b-493e-98e8-5f1de0520e2a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="010"/>
+            <column name="name" value="Solution en ampoule"/>
+            <column name="uuid" value="b91a0ddd-d10b-493e-98e8-5f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="011"/>
+            <column name="name" value="Patch transdermique"/>
+            <column name="uuid" value="b93a0ddd-d11b-493e-98e8-4f1de0620e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="012"/>
+            <column name="name" value="Pommade"/>
+            <column name="uuid" value="b31a0ddd-d12b-493e-98e9-6f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="013"/>
+            <column name="name" value="Crème"/>
+            <column name="uuid" value="b64a9ddd-d13b-493e-98e8-5f1de0520e3a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="014"/>
+            <column name="name" value="Gel"/>
+            <column name="uuid" value="b31a9ddd-d14b-493e-98e8-5f1de0520e2a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="015"/>
+            <column name="name" value="Poudre (lyophilisat)"/>
+            <column name="uuid" value="b91a0ddd-d15b-493e-98e8-5f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="016"/>
+            <column name="name" value="Solution pour perfusion lente"/>
+            <column name="uuid" value="b93a0ddd-d16b-493e-98e8-4f1de0620e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="017"/>
+            <column name="name" value="Aérosol"/>
+            <column name="uuid" value="b31a0ddd-d17b-493e-98e9-6f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="018"/>
+            <column name="name" value="Suppositoire"/>
+            <column name="uuid" value="b64a9ddd-d18b-493e-98e8-5f1de0520e3a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="019"/>
+            <column name="name" value="Lavement"/>
+            <column name="uuid" value="b31a9ddd-d19b-493e-98e8-5f1de0520e2a"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="020"/>
+            <column name="name" value="Huile"/>
+            <column name="uuid" value="b91a0ddd-d20b-493e-98e8-5f1de0520e2b"/>
+        </insert>
+        <insert tableName="pharm_unit">
+            <column name="code" value="021"/>
+            <column name="name" value="Préparation"/>
+            <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0620e2b"/>
+        </insert>
+        
+    </changeSet>
 </databaseChangeLog>
+
