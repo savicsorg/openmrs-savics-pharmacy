@@ -73,7 +73,6 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
-			description.addProperty("orderDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -128,29 +127,29 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			throw new ConversionException("Required properties: name");
 		}
 		try {
-                    PharmacyOrder order = this.constructOrder(null, propertiesToCreate);
-                    Context.getService(PharmacyService.class).upsert(order);
-
-                    order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
-                        order.getId());
-                    List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(order.getOrderDetails());
-                    for (int i = 0; i < list.size(); i++) {
-                        OrderDetail o = new OrderDetail();
-                        Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
-                            Integer.valueOf(list.get(i).get("item").toString()));
-                        o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
-                        o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
-                        o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
-                        o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
-                        OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
-                        o.setId(pk.hashCode());
-                        o.setPk(pk);
-                        o.setItem(item);
-                        o.setPharmacyOrder(order);
-                        Context.getService(PharmacyService.class).upsert(o);
-                    }
-
-                    return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+			PharmacyOrder order = this.constructOrder(null, propertiesToCreate);
+			Context.getService(PharmacyService.class).upsert(order);
+			
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
+			    order.getId());
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(order.getOrderDetails());
+			for (int i = 0; i < list.size(); i++) {
+				OrderDetail o = new OrderDetail();
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
+				    Integer.valueOf(list.get(i).get("item").toString()));
+				o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
+				o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
+				o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
+				o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
+				OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
+				o.setId(pk.hashCode());
+				o.setPk(pk);
+				o.setItem(item);
+				o.setPharmacyOrder(order);
+				Context.getService(PharmacyService.class).upsert(o);
+			}
+			
+			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
 		}
 		catch (ParseException e) {
 			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
@@ -161,121 +160,121 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-            PharmacyOrder order;
-            try {
-                order = this.constructOrder(uuid, propertiesToUpdate);
-                Context.getService(PharmacyService.class).upsert(order);
-
-                List<OrderDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
-                    "reception.id", order.getId(), 1000, 0);
-                for (int i = 0; i < detailList.size(); i++) {
-                    OrderDetail o = detailList.get(i);
-                    Context.getService(PharmacyService.class).delete(o);
-                }
-                order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
-                    order.getId());
-                List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(order.getOrderDetails());
-                for (int i = 0; i < list.size(); i++) {
-                    OrderDetail o = new OrderDetail();
-                    Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
-                        Integer.valueOf(list.get(i).get("item").toString()));
-                    o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
-                    o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
-                    o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
-                    o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
-                    OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
-                    o.setId(pk.hashCode());
-                    o.setPk(pk);
-                    o.setItem(item);
-                    o.setPharmacyOrder(order);
-                    Context.getService(PharmacyService.class).upsert(o);
-                }
-
-                return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
-            }
-            catch (ParseException ex) {
-                    Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-                    return null;
-            }
+		PharmacyOrder order;
+		try {
+			order = this.constructOrder(uuid, propertiesToUpdate);
+			Context.getService(PharmacyService.class).upsert(order);
+			
+			List<OrderDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
+			    "reception.id", order.getId(), 1000, 0);
+			for (int i = 0; i < detailList.size(); i++) {
+				OrderDetail o = detailList.get(i);
+				Context.getService(PharmacyService.class).delete(o);
+			}
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
+			    order.getId());
+			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(order.getOrderDetails());
+			for (int i = 0; i < list.size(); i++) {
+				OrderDetail o = new OrderDetail();
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
+				    Integer.valueOf(list.get(i).get("item").toString()));
+				o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
+				o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
+				o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
+				o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
+				OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
+				o.setId(pk.hashCode());
+				o.setPk(pk);
+				o.setItem(item);
+				o.setPharmacyOrder(order);
+				Context.getService(PharmacyService.class).upsert(o);
+			}
+			
+			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+		}
+		catch (ParseException ex) {
+			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 		
 	}
 	
 	@Override
 	protected void delete(PharmacyOrder order, String reason, RequestContext context) throws ResponseException {
-            List<OrderDetail> orderDetailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
-                "pharmacyOrder.id", order.getId(), 1000, 0);
-            for (int i = 0; i < orderDetailList.size(); i++) {
-                OrderDetail o = orderDetailList.get(i);
-                Context.getService(PharmacyService.class).delete(o);
-            }
-            Context.getService(PharmacyService.class).delete(order);
+		List<OrderDetail> orderDetailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
+		    "pharmacyOrder.id", order.getId(), 1000, 0);
+		for (int i = 0; i < orderDetailList.size(); i++) {
+			OrderDetail o = orderDetailList.get(i);
+			Context.getService(PharmacyService.class).delete(o);
+		}
+		Context.getService(PharmacyService.class).delete(order);
 	}
 	
 	@Override
 	public void purge(PharmacyOrder order, RequestContext context) throws ResponseException {
-            Context.getService(PharmacyService.class).delete(order);
+		Context.getService(PharmacyService.class).delete(order);
 	}
 	
 	private PharmacyOrder constructOrder(String uuid, SimpleObject properties) throws ParseException {
-            PharmacyOrder order;
-            DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            Supplier supplier = null;
-            if (properties.get("supplier") != null) {
-                Integer supplierId = properties.get("supplier");
-                supplier = (Supplier) Context.getService(PharmacyService.class).getEntityByid(Supplier.class, "id", supplierId);
-            }
-
-            if (uuid != null) {
-                order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByUuid(PharmacyOrder.class, uuid);
-                if (order == null) {
-                    throw new IllegalPropertyException("Orders not exist");
-                }
-
-                if (properties.get("name") != null) {
-                    order.setName((String) properties.get("name"));
-                }
-
-                if (properties.get("date") != null) {
-                    order.setDate(simpleDateFormat.parse(properties.get("date").toString()));
-                }
-
-                if (properties.get("dateApprobation") != null) {
-                    order.setDateApprobation(new Date());
-                }
-
-                if (properties.get("datePharmacyOrder") != null) {
-                    order.setDate(simpleDateFormat.parse(properties.get("datePharmacyOrder").toString()));
-                }
-
-                if (properties.get("amount") != null) {
-                    order.setAmount(Double.valueOf(properties.get("amount").toString()));
-                }
-
-                if (properties.get("orderDetails") != null) {
-                    List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
-                    Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
-                    order.setOrderDetails(set);
-                }
-
-            } else {
-                order = new PharmacyOrder();
-                order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
-                order.setDate(new Date());
-                order.setName(properties.get("name").toString());
-                if (properties.get("orderDetails") != null) {
-                    List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
-                    Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
-                    order.setOrderDetails(set);
-                }
-                if (properties.get("amount") != null)
-                    order.setAmount(Double.valueOf(properties.get("amount").toString()));
-                else
-                    order.setAmount(0.0);
-                order.setSupplier(supplier);
-            }
-
-            return order;
+		PharmacyOrder order;
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Supplier supplier = null;
+		if (properties.get("supplier") != null) {
+			Integer supplierId = properties.get("supplier");
+			supplier = (Supplier) Context.getService(PharmacyService.class).getEntityByid(Supplier.class, "id", supplierId);
+		}
+		
+		if (uuid != null) {
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByUuid(PharmacyOrder.class, uuid);
+			if (order == null) {
+				throw new IllegalPropertyException("Orders not exist");
+			}
+			
+			if (properties.get("name") != null) {
+				order.setName((String) properties.get("name"));
+			}
+			
+			if (properties.get("date") != null) {
+				order.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+			}
+			
+			if (properties.get("dateApprobation") != null) {
+				order.setDateApprobation(new Date());
+			}
+			
+			if (properties.get("datePharmacyOrder") != null) {
+				order.setDate(simpleDateFormat.parse(properties.get("datePharmacyOrder").toString()));
+			}
+			
+			if (properties.get("amount") != null) {
+				order.setAmount(Double.valueOf(properties.get("amount").toString()));
+			}
+			
+			if (properties.get("orderDetails") != null) {
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+				order.setOrderDetails(set);
+			}
+			
+		} else {
+			order = new PharmacyOrder();
+			order.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
+			order.setDate(new Date());
+			order.setName(properties.get("name").toString());
+			if (properties.get("orderDetails") != null) {
+				List<LinkedHashMap> list = (ArrayList<LinkedHashMap>) properties.get("orderDetails");
+				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
+				order.setOrderDetails(set);
+			}
+			if (properties.get("amount") != null)
+				order.setAmount(Double.valueOf(properties.get("amount").toString()));
+			else
+				order.setAmount(0.0);
+			order.setSupplier(supplier);
+		}
+		
+		return order;
 	}
 	
 	@Override

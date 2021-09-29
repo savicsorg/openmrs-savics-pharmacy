@@ -7,10 +7,10 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>
-        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Item" fetch="select" name="item">
+        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Item" fetch="select" name="item" lazy="true">
             <column name="item_id" not-null="true"/>
         </many-to-one>
-        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation" fetch="select" name="pharmacyLocation" >
+        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation" fetch="select" name="pharmacyLocation" lazy="true">
             <column name="location_id" not-null="true"/>
         </many-to-one>
         <property name="uuid" type="string">

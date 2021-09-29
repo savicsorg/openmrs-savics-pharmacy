@@ -70,7 +70,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-			description.addProperty("receptionDetails");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
