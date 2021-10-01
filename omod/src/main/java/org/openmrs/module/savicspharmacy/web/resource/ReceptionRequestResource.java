@@ -56,7 +56,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-			description.addProperty("receptionDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -78,7 +77,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("pharmacyOrder");
-			description.addProperty("receptionDetails");
 			description.addSelfLink();
 			return description;
 		}

@@ -58,7 +58,6 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
-			description.addProperty("orderDetails");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -88,7 +87,6 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
-			description.addProperty("orderDetails");
 			description.addSelfLink();
 			return description;
 		}
@@ -138,8 +136,8 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
 				    Integer.valueOf(list.get(i).get("item").toString()));
 				o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
-				o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
-				o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
+				o.setItemSoh(item.getSoh());
+				o.setItemAmc(0);
 				o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
 				OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
 				o.setId(pk.hashCode());
@@ -166,7 +164,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			Context.getService(PharmacyService.class).upsert(order);
 			
 			List<OrderDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
-			    "reception.id", order.getId(), 1000, 0);
+			    "pharmacyOrder.id", order.getId(), 1000, 0);
 			for (int i = 0; i < detailList.size(); i++) {
 				OrderDetail o = detailList.get(i);
 				Context.getService(PharmacyService.class).delete(o);
@@ -179,8 +177,8 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
 				    Integer.valueOf(list.get(i).get("item").toString()));
 				o.setOrderLineQuantity(Integer.valueOf(list.get(i).get("orderLineQuantity").toString()));
-				o.setItemSoh(Integer.valueOf(list.get(i).get("itemSoh").toString()));
-				o.setItemAmc(Integer.valueOf(list.get(i).get("itemAmc").toString()));
+				o.setItemSoh(item.getSoh());
+				o.setItemAmc(0);
 				o.setOrderLineAmount(Double.valueOf(list.get(i).get("orderLineAmount").toString()));
 				OrderDetailId pk = new OrderDetailId(item.getId(), order.getId());
 				o.setId(pk.hashCode());
