@@ -198,7 +198,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			
 			reception = (Reception) Context.getService(PharmacyService.class).getEntityByid(Reception.class, "id",
 			    reception.getId());
-			
+			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			//1. delete all ReceptionDetail
 			List<ReceptionDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(
 			    ReceptionDetail.class, "reception.id", reception.getId(), 1000, 0);
@@ -208,6 +208,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				    o.getItem().getId());
 				ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 				    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId() });
+				line.setItemExpiryDate(simpleDateFormat.parse(line.getItemExpiryDate().toString()));
 				line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
 				line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
 				it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
@@ -217,7 +218,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			}
 			
 			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(reception.getReceptionDetails());
-			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
 			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				ReceptionDetail o = new ReceptionDetail();
@@ -353,8 +354,10 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			}
 			if (order != null) {
 				reception.setPharmacyOrder(order);
-				//order.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
-				//Context.getService(PharmacyService.class).upsert(order);
+				PharmacyOrder toUpdate = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(
+				    PharmacyOrder.class, "id", order.getId());
+				toUpdate.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
+				Context.getService(PharmacyService.class).upsert(toUpdate);
 			}
 		}
 		return reception;
