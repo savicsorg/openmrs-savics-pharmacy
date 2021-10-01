@@ -180,6 +180,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setTransactionType(transactionType);//disp
 				//Upsert the transaction
 				Context.getService(PharmacyService.class).upsert(transaction);
+				
+				//Update the virtual quantities for item and itemsLine
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
+				item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
 			}
 			
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
@@ -223,7 +230,21 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				//				java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
 				//				
 				//				t.setDate(sqlDate);
+				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+				    t.getItem().getUuid());
 				
+				String[] ids = { "itemBatch" };
+				String[] values = { t.getItemBatch() };
+				
+				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+				    ItemsLine.class, ids, values);
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + t.getQuantity());
+				
+				item.setVirtualstock(item.getVirtualstock() + t.getQuantity());
+				
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
 				Context.getService(PharmacyService.class).delete(t);
 			}
 			
@@ -268,6 +289,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setTransactionType(transactionType);//disp
 				//Upsert the transaction
 				Context.getService(PharmacyService.class).upsert(transaction);
+				
+				//Update the virtual quantities for item and itemsLine
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
+				item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
+				Context.getService(PharmacyService.class).upsert(itemsLine);
+				Context.getService(PharmacyService.class).upsert(item);
 			}
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
@@ -305,9 +333,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
-				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - t.getQuantity());
+				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + t.getQuantity());
 				
-				item.setVirtualstock(item.getVirtualstock() - t.getQuantity());
+				item.setVirtualstock(item.getVirtualstock() + t.getQuantity());
 				
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
