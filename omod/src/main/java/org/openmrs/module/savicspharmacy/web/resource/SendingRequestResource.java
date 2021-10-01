@@ -196,8 +196,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		Sending sending;
 		try {
 			sending = this.constructOrder(uuid, propertiesToUpdate);
-			if (sending.getValidationDate() != null)
-                            sending.setValidationDate(new Date());
+			if (sending.getValidationDate() != null){
+                            sending.setValidationDate(new Date());                           
+                        }
+                            
 			Context.getService(PharmacyService.class).upsert(sending);
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			
