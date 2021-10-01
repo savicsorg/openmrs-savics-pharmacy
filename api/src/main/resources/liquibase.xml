@@ -223,7 +223,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="sending_details_quantity" type="INT"/>
-            <column name="sending_details_value" type="INT"/>
+            <column name="sending_details_value" type="DOUBLE"/>
             <column name="sending_item_batch" type="VARCHAR(50)"/>
             <column name="sending_item_expiry_date" type="date"/>
         </createTable>
