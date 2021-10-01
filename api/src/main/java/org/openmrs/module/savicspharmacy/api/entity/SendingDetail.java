@@ -22,7 +22,7 @@ public class SendingDetail extends BaseOpenmrsData implements java.io.Serializab
 	
 	private Integer sendingDetailsQuantity;
 	
-	private Integer sendingDetailsValue;
+	private Double sendingDetailsValue;
 	
 	private String sendingItemBatch;
 	
@@ -68,11 +68,11 @@ public class SendingDetail extends BaseOpenmrsData implements java.io.Serializab
 		this.sendingDetailsQuantity = sendingDetailsQuantity;
 	}
 	
-	public Integer getSendingDetailsValue() {
+	public Double getSendingDetailsValue() {
 		return this.sendingDetailsValue;
 	}
 	
-	public void setSendingDetailsValue(Integer sendingDetailsValue) {
+	public void setSendingDetailsValue(Double sendingDetailsValue) {
 		this.sendingDetailsValue = sendingDetailsValue;
 	}
 	

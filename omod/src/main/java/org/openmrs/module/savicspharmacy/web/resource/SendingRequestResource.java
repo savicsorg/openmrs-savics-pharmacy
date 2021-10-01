@@ -147,7 +147,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				SendingDetail o = new SendingDetail();
 				
 				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
-				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
+				o.setSendingDetailsValue(Double.valueOf(list.get(i).get("sendingDetailsValue").toString()));
 				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
 				
 				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
@@ -235,7 +235,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				SendingDetail o = new SendingDetail();
 				
 				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
-				o.setSendingDetailsValue(new Integer(list.get(i).get("sendingDetailsValue").toString()));
+				o.setSendingDetailsValue(Double.valueOf(list.get(i).get("sendingDetailsValue").toString()));
 				o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
 				
 				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(

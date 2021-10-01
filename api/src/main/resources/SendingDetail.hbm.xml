@@ -26,8 +26,8 @@
     <property name="sendingDetailsQuantity" type="java.lang.Integer">
       <column name="sending_details_quantity"/>
     </property>
-    <property name="sendingDetailsValue" type="java.lang.Integer">
-      <column name="sending_details_value"/>
+    <property name="sendingDetailsValue" type="java.lang.Double">
+      <column name="sending_details_value" precision="22" scale="0"/>
     </property>
     <property name="sendingItemBatch" type="string">
       <column length="50" name="sending_item_batch"/>
