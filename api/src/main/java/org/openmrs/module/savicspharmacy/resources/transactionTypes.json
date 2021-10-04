@@ -28,5 +28,11 @@
         "code": "disp",
         "name": "Drug dispense",
         "type": "Negative"
+    },
+    {
+        "id": 6,
+        "code": "rece",
+        "name": "Reception",
+        "type": "Positive"
     }
 ]

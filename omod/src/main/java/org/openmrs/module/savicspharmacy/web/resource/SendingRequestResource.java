@@ -185,6 +185,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
 				item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
+				
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 			}
@@ -203,10 +204,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		Sending sending;
 		try {
 			sending = this.constructOrder(uuid, propertiesToUpdate);
-			if (sending.getValidationDate() != null){
-                            sending.setValidationDate(new Date());                           
-                        }
-                            
+			if (sending.getValidationDate() != null) {
+				sending.setValidationDate(new Date());
+			}
+			
 			Context.getService(PharmacyService.class).upsert(sending);
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			
@@ -286,7 +287,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				//TODO
 				//transaction.setPersonId((Integer) properties.get("personId"));
-				transaction.setStatus("INIT");
+				if (sending.getValidationDate() != null)
+					transaction.setStatus("APPROVED");
+				else
+					transaction.setStatus("INIT");
 				int transactionType = 5; //disp
 				transaction.setTransactionType(transactionType);//disp
 				//Upsert the transaction
@@ -296,6 +300,11 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
 				item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
+				
+				if (sending.getValidationDate() != null) { // update soh
+					itemsLine.setItemSoh(itemsLine.getItemSoh() - o.getSendingDetailsQuantity());
+					item.setSoh(item.getSoh() - o.getSendingDetailsQuantity());
+				}
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 			}
