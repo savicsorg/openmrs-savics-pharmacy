@@ -104,9 +104,7 @@ public class StockAtRiskExcelExport {
 		style.setBorderLeft(BorderStyle.THIN);
 		
 		for (Item item : listItems) {
-			if (atriskOnly
-			        && (item.getNumberOfExpiredLots() > 0 || item.getSoh() > item.getStockMax() || item.getSoh() < item
-			                .getStockMin())) {
+			if (atriskOnly && (item.getNumberOfExpiredLots() > 0 || item.getSoh() < item.getStockMin())) {
 				
 				Row row = sheet.createRow(rowCount++);
 				int columnCount = 0;
