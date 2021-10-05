@@ -199,11 +199,11 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			}
 			
 			if (properties.get("buyPrice") != null) {
-				item.setBuyPrice((Integer) properties.get("buyPrice"));
+				item.setBuyPrice(new Double(properties.get("buyPrice").toString()));
 			}
 			
 			if (properties.get("sellPrice") != null) {
-				item.setSellPrice((Double) properties.get("sellPrice"));
+				item.setSellPrice(new Double(properties.get("sellPrice").toString()));
 			}
 			
 			if (properties.get("virtualstock") != null) {
