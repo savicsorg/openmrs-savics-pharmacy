@@ -206,8 +206,9 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				ReceptionDetail o = detailList.get(i);
 				Item it = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
 				    o.getItem().getId());
+				int itemId = o.getItem().getId();
 				ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-				    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), it.getId() });
+				    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), itemId });
 				line.setItemExpiryDate(simpleDateFormat.parse(line.getItemExpiryDate().toString()));
 				line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
 				line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());

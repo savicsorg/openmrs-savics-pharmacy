@@ -112,8 +112,10 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		List<ReceptionDetail> receptionDetailList = Context.getService(PharmacyService.class).getByMasterId(
 		    ReceptionDetail.class, "reception.id", value, context.getLimit(), context.getStartIndex());
 		for (int i = 0; i < receptionDetailList.size(); i++) {
+			ReceptionDetail o = receptionDetailList.get(i);
+			int itemId = o.getItem().getId();
 			String location = ((ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
-			    new String[] { "itemBatch" }, new Object[] { receptionDetailList.get(i).getItemBatch() }))
+			    new String[] { "itemBatch", "item.id" }, new Object[] { receptionDetailList.get(i).getItemBatch(), itemId }))
 			        .getPharmacyLocation().getUuid();
 			receptionDetailList.get(i).setItemLineLocation(location);
 		}
