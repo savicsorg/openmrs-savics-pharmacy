@@ -71,8 +71,8 @@ public class ExpiredStockExcelExport {
 		createCell(row, index++, "Code", cellStyle);
 		createCell(row, index++, "Désignation", cellStyle);
 		createCell(row, index++, "Lot", cellStyle);
-		createCell(row, index++, "Unité", cellStyle);
-		createCell(row, index++, "Route", cellStyle);
+		createCell(row, index++, "Forme", cellStyle);
+		createCell(row, index++, "Voie d’admission", cellStyle);
 		createCell(row, index++, "Quantité", cellStyle);
 		createCell(row, index++, "Date expiration", cellStyle);
 		createCell(row, index++, "Statut", cellStyle);
