@@ -69,6 +69,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("validationDate");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
 			return description;
@@ -83,6 +84,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("validationDate");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -98,6 +100,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("validationDate");
 			description.addSelfLink();
 			return description;
 		}
@@ -412,8 +415,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 			if (properties.get("person") != null) {
 				sending.setPerson(patient);
-				
-				sending.setCustomerType(new CustomerType());
 			} else if (properties.get("customer") != null) {
 				sending.setCustomer(customer);
 			}
@@ -443,14 +444,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		}
 		
 		return sending;
-	}
-	
-	public <T> List<T> jsonArrayToObjectList(String json, Class<T> tClass) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass);
-		List<T> ts = mapper.readValue(json, listType);
-		LOGGER.debug("class name: {}", ts.get(0).getClass().getName());
-		return ts;
 	}
 	
 	@Override
