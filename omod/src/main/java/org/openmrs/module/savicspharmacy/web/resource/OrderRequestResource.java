@@ -55,6 +55,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("amount");
 			description.addProperty("name");
 			description.addProperty("dateApprobation");
+			description.addProperty("dateReception");
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
@@ -69,6 +70,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("amount");
 			description.addProperty("name");
 			description.addProperty("dateApprobation");
+			description.addProperty("dateReception");
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
@@ -84,6 +86,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			description.addProperty("amount");
 			description.addProperty("name");
 			description.addProperty("dateApprobation");
+			description.addProperty("dateReception");
 			description.addProperty("date");
 			description.addProperty("person");
 			description.addProperty("supplier");
