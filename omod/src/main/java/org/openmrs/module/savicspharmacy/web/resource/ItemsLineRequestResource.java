@@ -147,6 +147,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
 			    itemsLine.getItem().getUuid());
 			item.setVirtualstock(item.getVirtualstock() + itemsLine.getItemVirtualstock());
+			item.setSoh(item.getSoh() + itemsLine.getItemSoh());
 			//2. Update the item
 			Context.getService(PharmacyService.class).upsert(item);
 			

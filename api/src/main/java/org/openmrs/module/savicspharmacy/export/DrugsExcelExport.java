@@ -44,7 +44,7 @@ public class DrugsExcelExport {
 	}
 	
 	private void writeHeaderLine() {
-		sheet = workbook.createSheet("Drugs List");
+		sheet = workbook.createSheet("Liste des médicaments");
 		
 		Row row = sheet.createRow(0);
 		XSSFFont font = workbook.createFont();
@@ -65,8 +65,8 @@ public class DrugsExcelExport {
 		int index = 0;
 		createCell(row, index++, "Code", cellStyle);
 		createCell(row, index++, "Designation", cellStyle);
-		createCell(row, index++, "Unité", cellStyle);
-		createCell(row, index++, "Route", cellStyle);
+		createCell(row, index++, "Forme", cellStyle);
+		createCell(row, index++, "Voie d’admission", cellStyle);
 		createCell(row, index++, "Min", cellStyle);
 		createCell(row, index++, "Max", cellStyle);
 		createCell(row, index++, "Prix d'achat (XOF)", cellStyle);

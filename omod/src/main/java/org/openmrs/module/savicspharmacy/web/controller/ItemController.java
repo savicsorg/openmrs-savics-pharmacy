@@ -76,7 +76,7 @@ public class ItemController {
 		
 		Boolean atriskOnly = false;
 		if (request.getParameter("atriskOnly") != null) {
-			atriskOnly = Boolean.valueOf(request.getParameter("expired"));
+			atriskOnly = Boolean.valueOf(request.getParameter("atriskOnly"));
 		}
 		
 		List<Item> itemList = pharmacyService.getAll(Item.class);

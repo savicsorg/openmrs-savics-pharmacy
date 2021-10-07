@@ -104,9 +104,7 @@ public class StockAtRiskExcelExport {
 		style.setBorderLeft(BorderStyle.THIN);
 		
 		for (Item item : listItems) {
-			if (atriskOnly
-			        && (item.getNumberOfExpiredLots() > 0 || item.getSoh() > item.getStockMax() || item.getSoh() < item
-			                .getStockMin())) {
+			if (atriskOnly && (item.getNumberOfExpiredLots() > 0 || item.getSoh() < item.getStockMin())) {
 				
 				Row row = sheet.createRow(rowCount++);
 				int columnCount = 0;
@@ -120,8 +118,8 @@ public class StockAtRiskExcelExport {
 				createCell(row, columnCount++, item.getVirtualstock(), style);
 				createCell(row, columnCount++, item.getSoh(), style);
 				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = (item.getSoh() != null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Over max quatity"
-				        : (item.getSoh() != null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "Under min quatity"
+				String status = (item.getSoh() != null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Quantité excédentaire"
+				        : (item.getSoh() != null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "En dessous de la quantité minimale"
 				                : "";
 				createCell(row, columnCount++, status, style);
 			} else if (!atriskOnly) {
@@ -137,8 +135,8 @@ public class StockAtRiskExcelExport {
 				createCell(row, columnCount++, item.getVirtualstock(), style);
 				createCell(row, columnCount++, item.getSoh(), style);
 				createCell(row, columnCount++, item.getExpiredQuantity(), style);
-				String status = (item.getSoh() != null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Over max quatity"
-				        : (item.getSoh() != null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "Under min quatity"
+				String status = (item.getSoh() != null && item.getStockMax() != null && item.getSoh() > item.getStockMax()) ? "Quantité excédentaire"
+				        : (item.getSoh() != null && item.getStockMin() != null && item.getSoh() < item.getStockMin()) ? "En dessous de la quantité minimale"
 				                : "";
 				createCell(row, columnCount++, status, style);
 			}
