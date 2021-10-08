@@ -204,10 +204,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if (2 == transaction.getTransactionType()) {//padj
+				if (2 == transaction.getTransactionType() || 7 == transaction.getTransactionType()) {//padj or pstocktake
 					item.setSoh(item.getSoh() + transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() + transaction.getQuantity());
-				} else if (1 == transaction.getTransactionType()) {//nadj
+				} else if (1 == transaction.getTransactionType() || 6 == transaction.getTransactionType()) {//nadj or nstocktake
 					item.setSoh(item.getSoh() - transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() - transaction.getQuantity());
 				}
@@ -224,10 +224,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if (2 == transaction.getTransactionType()) {//padj
+				if (2 == transaction.getTransactionType() || 7 == transaction.getTransactionType()) {//padj
 					item.setVirtualstock(item.getVirtualstock() - transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - transaction.getQuantity());
-				} else if (1 == transaction.getTransactionType()) {//nadj
+				} else if (1 == transaction.getTransactionType() || 6 == transaction.getTransactionType()) {//nadj
 					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
 				}
