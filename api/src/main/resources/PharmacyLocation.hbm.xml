@@ -16,12 +16,6 @@
     <property name="name" type="string">
       <column length="100" name="name"/>
     </property>
-    <set fetch="select" inverse="true" lazy="true" name="stocktakes" table="pharm_stocktake">
-      <key>
-        <column name="location_id" not-null="true"/>
-      </key>
-      <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.Stocktake"/>
-    </set>
     <set fetch="select" inverse="true" lazy="true" name="transactions" table="pharm_transaction">
       <key>
         <column name="location_id" not-null="true"/>

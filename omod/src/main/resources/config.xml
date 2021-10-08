@@ -65,8 +65,6 @@
             Route.hbm.xml
             Sending.hbm.xml
             SendingDetail.hbm.xml
-            Stocktake.hbm.xml
-            StocktakeDetail.hbm.xml
             Supplier.hbm.xml
             Transaction.hbm.xml
             Unit.hbm.xml

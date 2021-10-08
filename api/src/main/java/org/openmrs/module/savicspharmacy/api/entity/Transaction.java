@@ -37,8 +37,6 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	private Integer receptionId;
 	
-	private Integer stocktakeId;
-	
 	private Date adjustmentDate;
 	
 	private String reason;
@@ -145,14 +143,6 @@ public class Transaction extends BaseOpenmrsData implements java.io.Serializable
 	
 	public void setReceptionId(Integer receptionId) {
 		this.receptionId = receptionId;
-	}
-	
-	public Integer getStocktakeId() {
-		return this.stocktakeId;
-	}
-	
-	public void setStocktakeId(Integer stocktakeId) {
-		this.stocktakeId = stocktakeId;
 	}
 	
 	public Date getAdjustmentDate() {

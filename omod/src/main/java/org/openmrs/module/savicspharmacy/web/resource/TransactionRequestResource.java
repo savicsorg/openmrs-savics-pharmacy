@@ -54,7 +54,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -76,7 +75,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -99,7 +97,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -361,10 +358,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				transaction.setReceptionId((Integer) properties.get("receptionId"));
 			}
 			
-			if (properties.get("stocktakeId") != null) {
-				transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
-			}
-			
 			if (properties.get("adjustmentDate") != null) {
 				transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			}
@@ -401,8 +394,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			transaction.setSendingId((Integer) properties.get("sendingId"));
 			
 			transaction.setReceptionId((Integer) properties.get("receptionId"));
-			
-			transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
 			
 			transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			transaction.setTransactionType(transactionType);
