@@ -19,8 +19,6 @@ public class PharmacyLocation extends BaseOpenmrsData implements java.io.Seriali
 	
 	private String name;
 	
-	private Set stocktakes = new HashSet(0);
-	
 	private Set transactions = new HashSet(0);
 	
 	private Set itemsLines = new HashSet(0);
@@ -47,14 +45,6 @@ public class PharmacyLocation extends BaseOpenmrsData implements java.io.Seriali
 	
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public Set getStocktakes() {
-		return this.stocktakes;
-	}
-	
-	public void setStocktakes(Set stocktakes) {
-		this.stocktakes = stocktakes;
 	}
 	
 	public Set getTransactions() {

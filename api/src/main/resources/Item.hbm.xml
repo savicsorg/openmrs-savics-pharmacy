@@ -46,12 +46,6 @@
     <property name="AMC" type="java.lang.Double">
       <column name="AMC"/>
     </property>
-    <set fetch="select" inverse="true" lazy="true" name="stocktakeDetails" table="pharm_stocktake_detail">
-      <key>
-        <column name="item_id" not-null="true"/>
-      </key>
-      <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.StocktakeDetail"/>
-    </set>
     <set fetch="select" inverse="true" lazy="true" name="itemsLines" table="pharm_items_line">
       <key>
         <column name="item_id" not-null="true"/>

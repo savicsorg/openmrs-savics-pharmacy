@@ -54,7 +54,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -76,7 +75,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -99,7 +97,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			description.addProperty("status");
 			description.addProperty("sendingId");
 			description.addProperty("receptionId");
-			description.addProperty("stocktakeId");
 			description.addProperty("adjustmentDate");
 			description.addProperty("pharmacyLocation");
 			description.addProperty("transactionType");
@@ -204,10 +201,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if (2 == transaction.getTransactionType()) {//padj
+				if (2 == transaction.getTransactionType() || 7 == transaction.getTransactionType()) {//padj or pstocktake
 					item.setSoh(item.getSoh() + transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() + transaction.getQuantity());
-				} else if (1 == transaction.getTransactionType()) {//nadj
+				} else if (1 == transaction.getTransactionType() || 6 == transaction.getTransactionType()) {//nadj or nstocktake
 					item.setSoh(item.getSoh() - transaction.getQuantity());
 					itemsLine.setItemSoh(itemsLine.getItemSoh() - transaction.getQuantity());
 				}
@@ -224,10 +221,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    ItemsLine.class, ids, values);
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				
-				if (2 == transaction.getTransactionType()) {//padj
+				if (2 == transaction.getTransactionType() || 7 == transaction.getTransactionType()) {//padj
 					item.setVirtualstock(item.getVirtualstock() - transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - transaction.getQuantity());
-				} else if (1 == transaction.getTransactionType()) {//nadj
+				} else if (1 == transaction.getTransactionType() || 6 == transaction.getTransactionType()) {//nadj
 					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
 				}
@@ -361,10 +358,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				transaction.setReceptionId((Integer) properties.get("receptionId"));
 			}
 			
-			if (properties.get("stocktakeId") != null) {
-				transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
-			}
-			
 			if (properties.get("adjustmentDate") != null) {
 				transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			}
@@ -401,8 +394,6 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 			transaction.setSendingId((Integer) properties.get("sendingId"));
 			
 			transaction.setReceptionId((Integer) properties.get("receptionId"));
-			
-			transaction.setStocktakeId((Integer) properties.get("stocktakeId"));
 			
 			transaction.setAdjustmentDate(simpleDateFormat.parse(properties.get("adjustmentDate").toString()));
 			transaction.setTransactionType(transactionType);

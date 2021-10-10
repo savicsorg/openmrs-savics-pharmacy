@@ -228,41 +228,7 @@
             <column name="sending_item_expiry_date" type="date"/>
         </createTable>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-14">
-        <createTable tableName="pharm_stocktake">
-            <column autoIncrement="true" name="id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="uuid" type="VARCHAR(38)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="date" type="date"/>
-            <column name="name" type="VARCHAR(100)"/>
-            <column name="location_id" type="INT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-15">
-        <createTable tableName="pharm_stocktake_detail">
-            <column autoIncrement="true" name="id" type="INT">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="uuid" type="VARCHAR(38)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="item_id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="stocktake_id" type="INT">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="item_stock" type="INT"/>
-            <column name="item_physical_stock" type="INT"/>
-            <column name="stocktake_line_comments" type="VARCHAR(255)"/>
-            <column name="adjust_quantity" type="INT"/>
-        </createTable>
-    </changeSet>
+    
     <changeSet author="anatoleabe (generated)" id="1620641683809-16">
         <createTable tableName="pharm_supplier">
             <column autoIncrement="true" name="id" type="INT">
@@ -304,7 +270,6 @@
             <column name="status" type="VARCHAR(10)"/>
             <column name="sending_id" type="INT"/>
             <column name="reception_id" type="INT"/>
-            <column name="stocktake_id" type="INT"/>
             <column name="adjustment_date" type="date"/>
             <column name="reason" type="VARCHAR(128)"/>
         </createTable>
@@ -391,16 +356,6 @@
             <column name="sending_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-33">
-        <createIndex indexName="FKpharm_stoc255778" tableName="pharm_stocktake_detail">
-            <column name="stocktake_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-34">
-        <createIndex indexName="FKpharm_stoc941420" tableName="pharm_stocktake">
-            <column name="location_id"/>
-        </createIndex>
-    </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-36">
         <createIndex indexName="FKpharm_tran828906" tableName="pharm_transaction">
             <column name="location_id"/>
@@ -464,15 +419,6 @@
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-54">
         <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_sending_detail" constraintName="FKpharm_send540246" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-55">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="pharm_stocktake_detail" constraintName="FKpharm_stoc122383" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_item" />
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-56">
-        <addForeignKeyConstraint baseColumnNames="stocktake_id" baseTableName="pharm_stocktake_detail" constraintName="FKpharm_stoc255778" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_stocktake" />
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-57">
-        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="pharm_stocktake" constraintName="FKpharm_stoc941420" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_pharmacy_location" />
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-59">
         <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="pharm_transaction" constraintName="FKpharm_tran828906" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_pharmacy_location" />

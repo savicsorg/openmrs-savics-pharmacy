@@ -46,9 +46,6 @@
         <property name="receptionId" type="java.lang.Integer">
             <column name="reception_id"/>
         </property>
-        <property name="stocktakeId" type="java.lang.Integer">
-            <column name="stocktake_id"/>
-        </property>
         <property name="adjustmentDate" type="date">
             <column length="10" name="adjustment_date"/>
         </property>

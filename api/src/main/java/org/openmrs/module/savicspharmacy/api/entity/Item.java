@@ -40,8 +40,6 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Double AMC;
 	
-	private Set stocktakeDetails = new HashSet(0);
-	
 	private Set itemsLines = new HashSet(0);
 	
 	private Set orderDetails = new HashSet(0);
@@ -151,14 +149,6 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setStockMax(Integer stockMax) {
 		this.stockMax = stockMax;
-	}
-	
-	public Set getStocktakeDetails() {
-		return this.stocktakeDetails;
-	}
-	
-	public void setStocktakeDetails(Set stocktakeDetails) {
-		this.stocktakeDetails = stocktakeDetails;
 	}
 	
 	public Set getItemsLines() {
