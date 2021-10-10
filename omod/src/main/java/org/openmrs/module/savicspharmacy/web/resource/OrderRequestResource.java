@@ -106,9 +106,20 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		String value = context.getParameter("name");
-		List<PharmacyOrder> agentList = Context.getService(PharmacyService.class).doSearch(PharmacyOrder.class, "name",
-		    value, context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<PharmacyOrder>(context, agentList, false);
+		List<PharmacyOrder> list = null;
+		if (context.getParameter("name") != null)
+			list = Context.getService(PharmacyService.class).doSearch(PharmacyOrder.class, "name", value,
+			    context.getLimit(), context.getStartIndex());
+		else if (context.getParameter("notApproved") != null)
+			list = (List<PharmacyOrder>) Context.getService(PharmacyService.class).getListByAttributes(PharmacyOrder.class,
+			    new String[] { "dateApprobation" }, new Object[] { null });
+		else if (context.getParameter("notReceived") != null)
+			list = (List<PharmacyOrder>) Context.getService(PharmacyService.class).getListByAttributes(PharmacyOrder.class,
+			    new String[] { "dateReception" }, new Object[] { null });
+		else
+			list = Context.getService(PharmacyService.class).doSearch(PharmacyOrder.class, "name", "-1", context.getLimit(),
+			    context.getStartIndex());
+		return new AlreadyPaged<PharmacyOrder>(context, list, false);
 	}
 	
 	@Override
@@ -168,6 +179,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 			
 			List<OrderDetail> detailList = Context.getService(PharmacyService.class).getByMasterId(OrderDetail.class,
 			    "pharmacyOrder.id", order.getId(), 1000, 0);
+			
 			for (int i = 0; i < detailList.size(); i++) {
 				OrderDetail o = detailList.get(i);
 				Context.getService(PharmacyService.class).delete(o);

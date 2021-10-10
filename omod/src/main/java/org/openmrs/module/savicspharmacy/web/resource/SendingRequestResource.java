@@ -227,15 +227,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			    "sendingId", sending.getId(), 1000, 0);
 			for (int i = 0; i < transactionlList.size(); i++) {
 				Transaction t = transactionlList.get(i);
-				//				t.setStatus("CANCELED");
-				//				System.out.println("----- Date = " + t.getDate().toString() + " - - parsed = "
-				//				        + simpleDateFormat.parse(t.getDate().toString()));
-				//				
-				//				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-				//				Date myDate = formatter.parse(t.getDate().toString());
-				//				java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
-				//				
-				//				t.setDate(sqlDate);
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
 				    t.getItem().getUuid());
 				

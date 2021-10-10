@@ -142,6 +142,19 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	}
 	
 	@Override
+	public List getListByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException {
+		DbSession session = dbSessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(t);
+		for (int i = 0; i < ids.length; i++) {
+			if (values[i] == null)
+				criteria.add(Restrictions.isNull(ids[i]));
+			else
+				criteria.add(Restrictions.eq(ids[i], values[i]));
+		}
+		return criteria.list();
+	}
+	
+	@Override
 	public List getFromMasterId(Class t, String key, int value, Integer limit, Integer offset) {
 		getSession().createCriteria(t).list();
 		Criteria criteria = getSession().createCriteria(t);

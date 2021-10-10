@@ -88,6 +88,11 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	}
 	
 	@Override
+	public Serializable getListByAttributes(Class t, String[] ids, Object[] values) throws APIException {
+		return (T) this.dao.getListByAttributes(t, ids, values);
+	}
+	
+	@Override
 	public List getByMasterId(Class t, String key, int value, Integer limit, Integer offset) {
 		return this.dao.getFromMasterId(t, key, value, limit, offset);
 	}
