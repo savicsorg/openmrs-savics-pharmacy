@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.SQLQuery;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
@@ -325,6 +326,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			Integer orderId = Integer.valueOf(properties.get("pharmacyOrder").toString());
 			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
 			    orderId);
+			order.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
 		}
 		
 		if (uuid != null) {
@@ -346,6 +348,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				reception.setPharmacyOrder(order);
 		} else {
 			reception = new Reception();
+			
 			reception.setPerson(Context.getUserContext().getAuthenticatedUser().getPerson());
 			reception.setDate(simpleDateFormat.parse(properties.get("date").toString()));
 			if (properties.get("receptionDetails") != null) {
@@ -355,10 +358,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			}
 			if (order != null) {
 				reception.setPharmacyOrder(order);
-				PharmacyOrder toUpdate = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(
-				    PharmacyOrder.class, "id", order.getId());
-				toUpdate.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
-				Context.getService(PharmacyService.class).upsert(toUpdate);
 			}
 		}
 		return reception;
