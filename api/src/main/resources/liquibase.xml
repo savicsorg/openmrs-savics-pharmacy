@@ -681,7 +681,7 @@
         
     </changeSet>
     
-<!--    <changeSet id="pharm-202111171410" author="anatoleabe">
+    <changeSet id="pharm-202111171410" author="anatoleabe">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:add or edit drugs'</sqlCheck>
         </preConditions>
@@ -888,7 +888,7 @@
             <column name="description" value="Savics pharmacy: Approve Orders"/>
             <column name="uuid" value="b92a0ddd-d22b-493e-98e8-4d1de0623c1u"/>
         </insert>
-    </changeSet>-->
+    </changeSet>
     
 </databaseChangeLog>
 
