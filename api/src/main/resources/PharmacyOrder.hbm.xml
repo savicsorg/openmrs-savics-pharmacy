@@ -16,17 +16,17 @@
     <property name="name" type="string">
       <column name="name"/>
     </property>
-    <property name="date" type="date">
-      <column length="10" name="date"/>
+    <property name="date" type="java.util.Date" >
+      <column length="19" name="date"/>
     </property>
     <property name="amount" type="java.lang.Double">
       <column name="amount" precision="22" scale="0"/>
     </property>
-    <property name="dateApprobation" type="date">
-      <column length="10" name="date_approbation"/>
+    <property name="dateApprobation" type="java.util.Date">
+      <column length="19" name="date_approbation"/>
     </property>
-    <property name="dateReception" type="date">
-      <column length="10" name="date_reception"/>
+    <property name="dateReception" type="java.util.Date">
+      <column length="19" name="date_reception"/>
     </property>
     <property name="uuid" type="string">
       <column length="38" name="uuid" not-null="true"/>

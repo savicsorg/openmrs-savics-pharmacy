@@ -3,6 +3,8 @@ package org.openmrs.module.savicspharmacy.web.resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.SQLQuery;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
@@ -123,8 +124,9 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				ReceptionDetail o = new ReceptionDetail();
-				if (o.getOrderLineQuantity() != null)
+				if (o.getOrderLineQuantity() != null) {
 					o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
+				}
 				o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
 				o.setItemBatch(list.get(i).get("itemBatch").toString());
 				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
@@ -224,8 +226,9 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				ReceptionDetail o = new ReceptionDetail();
-				if (o.getOrderLineQuantity() != null)
+				if (o.getOrderLineQuantity() != null) {
 					o.setOrderLineQuantity(new Integer(list.get(i).get("orderLineQuantity").toString()));
+				}
 				o.setQuantityReceived(new Integer(list.get(i).get("quantityReceived").toString()));
 				o.setItemBatch(list.get(i).get("itemBatch").toString());
 				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
@@ -319,14 +322,14 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 	
 	private Reception constructOrder(String uuid, SimpleObject properties) throws ParseException {
 		Reception reception;
-		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-d");
 		
 		PharmacyOrder order = null;
 		if (properties.get("pharmacyOrder") != null) {
 			Integer orderId = Integer.valueOf(properties.get("pharmacyOrder").toString());
 			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
 			    orderId);
-			order.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
+			order.setDateReception(simpleDateFormat.parse(properties.get("date") + ""));
 		}
 		
 		if (uuid != null) {
@@ -344,8 +347,9 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				reception.setReceptionDetails(set);
 			}
 			
-			if (order != null)
+			if (order != null) {
 				reception.setPharmacyOrder(order);
+			}
 		} else {
 			reception = new Reception();
 			
