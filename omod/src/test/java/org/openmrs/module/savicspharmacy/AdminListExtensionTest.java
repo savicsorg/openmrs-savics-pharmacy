@@ -36,7 +36,7 @@ public class AdminListExtensionTest {
 	}
 	
 	/**
-	 * Check the media type of this extension class
+	 * Check the media type of this extension class //
 	 */
 	@Test
 	public void testMediaTypeIsHtml() {

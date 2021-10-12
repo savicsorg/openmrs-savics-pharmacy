@@ -325,6 +325,8 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			Integer orderId = Integer.valueOf(properties.get("pharmacyOrder").toString());
 			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
 			    orderId);
+			order.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
+			Context.getService(PharmacyService.class).upsert(order);
 		}
 		
 		if (uuid != null) {
@@ -355,10 +357,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			}
 			if (order != null) {
 				reception.setPharmacyOrder(order);
-				PharmacyOrder toUpdate = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(
-				    PharmacyOrder.class, "id", order.getId());
-				toUpdate.setDateReception(simpleDateFormat.parse(properties.get("date").toString()));
-				Context.getService(PharmacyService.class).upsert(toUpdate);
 			}
 		}
 		return reception;
