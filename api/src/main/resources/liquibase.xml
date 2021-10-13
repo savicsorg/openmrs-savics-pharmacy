@@ -681,208 +681,107 @@
         
     </changeSet>
     
-    <changeSet id="pharm-202111171410" author="anatoleabe">
+    <changeSet id="pharm-202113171413" author="anatoleabe">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:add or edit drugs'</sqlCheck>
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege like '%pharm%';</sqlCheck>
         </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:add or edit drugs"/>
             <column name="description" value="Savics pharmacy: Able to add or edit drugs"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4d1de0622a3b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171411" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:delete drug'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:delete a drug"/>
             <column name="description" value="Savics pharmacy: Able to delete a drug"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4g1de0620e2c"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171412" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:manage pharmacy settings'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:manage pharmacy settings"/>
             <column name="description" value="Savics pharmacy: Able to manage pharmacy settings"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0720e2g"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171210" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:register a drug order'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:register a drug order"/>
             <column name="description" value="Savics pharmacy: Able to register a drug order"/>
             <column name="uuid" value="f93a0ddd-d21b-493e-98e8-4f1de0620e4b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171413" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:validate drug order'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:validate drug order"/>
             <column name="description" value="Savics pharmacy: Able to validate drug order"/>
             <column name="uuid" value="q93a0ddd-d21b-493e-98e8-4f1de0620e2v"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171414" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:register a receipt of drug'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:register a receipt of drug"/>
             <column name="description" value="Savics pharmacy: Able to register a receipt of drug"/>
             <column name="uuid" value="b93a0ddd-d21b-483e-98e8-4f1de0620e2o"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171415" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:dispense drugs to patients'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:dispense drugs to patients"/>
             <column name="description" value="Savics pharmacy: Able to dispense drugs to patients"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0620f2i"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171416" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:validate drug dispensing'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:validate drug dispensing"/>
             <column name="description" value="Savics pharmacy: Able to validate drug dispensing"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0620k2b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171417" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:distribute drugs to departments'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:distribute drugs to departments"/>
             <column name="description" value="Savics pharmacy: Able to distribution of medications to departments"/>
             <column name="uuid" value="b93a0ddd-d21b-492e-98e8-4f1de0620o1b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171418" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:validate the distribution of drugs to departments'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:validate the distribution of drugs to departments"/>
             <column name="description" value="Savics pharmacy: Able to validate the distribution of drugs to departments"/>
             <column name="uuid" value="b93a0qdd-d21b-491e-97e8-4f1de0620e2b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171419" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:consult the stock of drugs'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:consult the stock of drugs"/>
             <column name="description" value="Savics pharmacy: Able to consult the stock of drugs"/>
             <column name="uuid" value="b93a0dud-d21b-493e-98e8-4f1de0620e2b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171420" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:make adjustments'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:make adjustments"/>
             <column name="description" value="Savics pharmacy: Able to make adjustments"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-97e8-4f1de0620e8b"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171421" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:validate adjustments'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:validate adjustments"/>
             <column name="description" value="Savics pharmacy: Able to validate adjustments"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-08e8-4f1de0620etb"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171422" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:entering inventories'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:entering inventories"/>
             <column name="description" value="Savics pharmacy: Able to entering inventories"/>
             <column name="uuid" value="b93a0ddd-d31b-493e-98e8-4f1de0620e8a"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171423" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:validate inventories'</sqlCheck>
-        </preConditions>
-        <insert tableName="privilege">
-            <column name="privilege" value="pharmacy:validate inventories"/>
-            <column name="description" value="Savics pharmacy: Able to validate inventories"/>
-            <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0620d3b"/>
-        </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111171424" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'pharmacy:editing reports to the pharmacy'</sqlCheck>
-        </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:edit pharmacy reports"/>
             <column name="description" value="Savics pharmacy: Able to edit pharmacy reports"/>
             <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0621e2c"/>
         </insert>
+        <insert tableName="privilege">
+            <column name="privilege" value="pharmacy:validate inventories"/>
+            <column name="description" value="Savics pharmacy: Able to validate inventories"/>
+            <column name="uuid" value="b93a0ddd-d21b-493e-98e8-4f1de0620d3b"/>
+        </insert>
+        
     </changeSet>
     
-    <changeSet id="pharm-202111271410" author="anatoleabe">
+    <changeSet id="pharm-202131271413" author="anatoleabe">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from role where role = 'Pharmacy: Manager'</sqlCheck>
+            <sqlCheck expectedResult="0">select count(*) from role where role like '%Pharmacy%';</sqlCheck>
         </preConditions>
         <insert tableName="role">
             <column name="role" value="Pharmacy: Manager"/>
             <column name="description" value="Savics pharmacy: the manager"/>
             <column name="uuid" value="b92a0ddd-d22b-493e-98e8-4d1de0621a8v"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111271411" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from role where role = 'Pharmacy: Administrator'</sqlCheck>
-        </preConditions>
         <insert tableName="role">
             <column name="role" value="Pharmacy: Administrator"/>
             <column name="description" value="Savics pharmacy: the Administrator"/>
             <column name="uuid" value="b92a0ddd-d22b-493e-98e8-4d1de0621a9v"/>
         </insert>
-    </changeSet>
-    
-    <changeSet id="pharm-202111281431" author="anatoleabe">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from role where role = 'Approve Orders'</sqlCheck>
-        </preConditions>
         <insert tableName="role">
             <column name="role" value="Approve Orders"/>
             <column name="description" value="Savics pharmacy: Approve Orders"/>
