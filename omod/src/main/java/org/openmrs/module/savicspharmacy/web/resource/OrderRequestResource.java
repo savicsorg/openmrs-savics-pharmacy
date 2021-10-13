@@ -113,10 +113,14 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 		else if (context.getParameter("notApproved") != null)
 			list = (List<PharmacyOrder>) Context.getService(PharmacyService.class).getListByAttributes(PharmacyOrder.class,
 			    new String[] { "dateApprobation" }, new Object[] { null });
-		else if (context.getParameter("notReceived") != null)
+		else if (context.getParameter("notReceived") != null) {
 			list = (List<PharmacyOrder>) Context.getService(PharmacyService.class).getListByAttributes(PharmacyOrder.class,
 			    new String[] { "dateReception" }, new Object[] { null });
-		else
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getDateApprobation() == null)
+					list.remove(i);
+			}
+		} else
 			list = Context.getService(PharmacyService.class).doSearch(PharmacyOrder.class, "name", "-1", context.getLimit(),
 			    context.getStartIndex());
 		return new AlreadyPaged<PharmacyOrder>(context, list, false);
