@@ -242,7 +242,8 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(transaction);
 				}
 				
-			} else if (propertiesToUpdate.get("status") != null && "CANCEL".equalsIgnoreCase(propertiesToUpdate.get("status").toString())) {//Case cancel of the dispense
+			} else if (propertiesToUpdate.get("status") != null
+			        && "CANCEL".equalsIgnoreCase(propertiesToUpdate.get("status").toString())) {//Case cancel of the dispense
 				sending.setValidationDate(new Date());
 				Context.getService(PharmacyService.class).upsert(sending);
 				
@@ -263,7 +264,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
 					
 					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
-                                        
+					
 					Context.getService(PharmacyService.class).upsert(itemsLine);
 					Context.getService(PharmacyService.class).upsert(item);
 					
