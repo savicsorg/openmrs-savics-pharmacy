@@ -32,7 +32,6 @@ import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.OrderDetail;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetail;
-import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Reception;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
@@ -238,9 +237,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			receptionDetail.setQuantityReceived(Integer.valueOf(properties.get("quantityReceived").toString()));
 			receptionDetail.setItemBatch(properties.get("itemBatch").toString());
 			receptionDetail.setItemExpiryDate(simpleDateFormat.parse(properties.get("itemExpiryDate").toString()));
-			ReceptionDetailId pk = new ReceptionDetailId(item.getId(), reception.getId());
-			receptionDetail.setId(pk.hashCode());
-			receptionDetail.setPk(pk);
 			receptionDetail.setItem(item);
 			receptionDetail.setReception(reception);
 		}
