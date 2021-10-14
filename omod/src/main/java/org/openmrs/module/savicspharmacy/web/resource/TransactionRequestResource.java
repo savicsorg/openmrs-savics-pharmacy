@@ -211,7 +211,7 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 				//End of item and itemline real  quantity update
-			} else if ("REJECT".equals(transaction.getStatus())) {//If a cancelation
+			} else if ("REJEC".equals(transaction.getStatus())) {//If a cancelation
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
 				    transaction.getItem().getUuid());
 				
