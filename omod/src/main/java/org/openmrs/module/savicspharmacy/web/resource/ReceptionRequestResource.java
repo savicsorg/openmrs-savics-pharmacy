@@ -31,7 +31,6 @@ import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder;
 import org.openmrs.module.savicspharmacy.api.entity.Reception;
 import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetail;
-import org.openmrs.module.savicspharmacy.api.entity.ReceptionDetailId;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
@@ -160,10 +159,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				    PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
 				itemLine.setPharmacyLocation(location);
 				Context.getService(PharmacyService.class).upsert(itemLine);
-				
-				ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
-				o.setId(0);
-				o.setPk(receptionDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
 				
 				//Create a transaction for this operation
@@ -264,10 +259,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				    PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
 				itemLine.setPharmacyLocation(location);
 				Context.getService(PharmacyService.class).upsert(itemLine);
-				
-				ReceptionDetailId receptionDetailId = new ReceptionDetailId(itemId, reception.getId());
 				o.setId(0);
-				o.setPk(receptionDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
 				
 				//Create a transaction for this operation

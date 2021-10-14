@@ -161,10 +161,10 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="reception_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="item_id" type="INT">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="order_line_quantity" type="INT"/>
             <column name="quantity_received" type="INT"/>
@@ -324,11 +324,6 @@
     <changeSet author="anatoleabe (generated)" id="1620641683809-26">
         <createIndex indexName="FKpharm_orde883098" tableName="pharm_pharmacy_order">
             <column name="supplier_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="anatoleabe (generated)" id="1620641683809-27">
-        <createIndex indexName="FKpharm_rece13494" tableName="pharm_reception_detail">
-            <column name="item_id"/>
         </createIndex>
     </changeSet>
     <changeSet author="anatoleabe (generated)" id="1620641683809-28">
