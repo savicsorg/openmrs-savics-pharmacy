@@ -32,7 +32,7 @@
     <property name="sendingItemBatch" type="string">
       <column length="50" name="sending_item_batch"/>
     </property>
-    <property name="sendingItemExpiryDate" type="date">
+    <property name="sendingItemExpiryDate" type="java.util.Date">
       <column length="10" name="sending_item_expiry_date"/>
     </property>
   </class>

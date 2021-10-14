@@ -149,8 +149,10 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
 					item.setSoh(item.getSoh() + o.getQuantityReceived());
 				} else {
-					itemLine.setItemVirtualstock(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
-					itemLine.setItemSoh(Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemVirtualstock(itemLine.getItemVirtualstock()
+					        + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
+					itemLine.setItemSoh(itemLine.getItemSoh()
+					        + Integer.valueOf(list.get(i).get("quantityReceived").toString()));
 					item.setVirtualstock(item.getVirtualstock() + o.getQuantityReceived());
 					item.setSoh(item.getSoh() + o.getQuantityReceived());
 				}
@@ -259,7 +261,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				    PharmacyLocation.class, list.get(i).get("itemLineLocation").toString());
 				itemLine.setPharmacyLocation(location);
 				Context.getService(PharmacyService.class).upsert(itemLine);
-				o.setId(0);
 				Context.getService(PharmacyService.class).upsert(o);
 				
 				//Create a transaction for this operation

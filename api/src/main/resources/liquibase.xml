@@ -78,7 +78,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="item_batch" type="VARCHAR(50)"/>
-            <column name="item_expiry_date" type="date"/>
+            <column name="item_expiry_date" type="datetime"/>
             <column name="item_virtualstock" type="INT"/>
             <column name="item_soh" type="INT"/>
         </createTable>
@@ -124,7 +124,7 @@
             <column name="supplier_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="date" type="date"/>
+            <column name="date" type="datetime"/>
             <column name="person_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -141,7 +141,7 @@
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="date" type="date">
+            <column name="date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="order_id" type="INT">
@@ -169,7 +169,7 @@
             <column name="order_line_quantity" type="INT"/>
             <column name="quantity_received" type="INT"/>
             <column name="item_batch" type="VARCHAR(50)"/>
-            <column name="item_expiry_date" type="date"/>
+            <column name="item_expiry_date" type="datetime"/>
             <column defaultValue="" name="uuid" type="VARCHAR(38)">
                 <constraints nullable="false"/>
             </column>
@@ -192,7 +192,7 @@
             <column autoIncrement="true" name="id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="date" type="date"/>
+            <column name="date" type="datetime"/>
             <column name="customer_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -225,7 +225,7 @@
             <column name="sending_details_quantity" type="INT"/>
             <column name="sending_details_value" type="DOUBLE"/>
             <column name="sending_item_batch" type="VARCHAR(50)"/>
-            <column name="sending_item_expiry_date" type="date"/>
+            <column name="sending_item_expiry_date" type="datetime"/>
         </createTable>
     </changeSet>
     
@@ -252,7 +252,7 @@
             <column name="uuid" type="VARCHAR(38)">
                 <constraints nullable="false"/>
             </column>
-            <column name="date" type="date"/>
+            <column name="date" type="datetime"/>
             <column name="transaction_type" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -261,7 +261,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="item_batch" type="VARCHAR(50)"/>
-            <column name="item_expiry_date" type="date"/>
+            <column name="item_expiry_date" type="datetime"/>
             <column name="location_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -270,7 +270,7 @@
             <column name="status" type="VARCHAR(10)"/>
             <column name="sending_id" type="INT"/>
             <column name="reception_id" type="INT"/>
-            <column name="adjustment_date" type="date"/>
+            <column name="adjustment_date" type="datetime"/>
             <column name="reason" type="VARCHAR(128)"/>
         </createTable>
     </changeSet>

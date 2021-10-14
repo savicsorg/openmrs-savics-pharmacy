@@ -13,7 +13,7 @@
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.PharmacyOrder" fetch="select" name="pharmacyOrder">
       <column name="order_id" not-null="false"/>
     </many-to-one>
-    <property name="date" type="date">
+    <property name="date" type="java.util.Date">
       <column length="10" name="date" not-null="true"/>
     </property>
     <property name="uuid" type="string">

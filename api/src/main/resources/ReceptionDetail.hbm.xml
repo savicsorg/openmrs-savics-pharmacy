@@ -22,7 +22,7 @@
     <property name="itemBatch" type="string">
       <column length="50" name="item_batch"/>
     </property>
-    <property name="itemExpiryDate" type="date">
+    <property name="itemExpiryDate" type="java.util.Date">
       <column length="10" name="item_expiry_date"/>
     </property>
     <property name="uuid" type="string">

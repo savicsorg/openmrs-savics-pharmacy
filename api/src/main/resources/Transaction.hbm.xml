@@ -16,7 +16,7 @@
         <property name="uuid" type="string">
             <column length="38" name="uuid" not-null="true"/>
         </property>
-        <property name="date" type="date">
+        <property name="date" type="java.util.Date">
             <column length="10" name="date"/>
         </property>
         <property name="transactionType" type="int">
@@ -28,7 +28,7 @@
         <property name="itemBatch" type="string">
             <column length="50" name="item_batch"/>
         </property>
-        <property name="itemExpiryDate" type="date">
+        <property name="itemExpiryDate" type="java.util.Date">
             <column length="10" name="item_expiry_date"/>
         </property>
         <property name="personId" type="java.lang.Integer">
@@ -46,7 +46,7 @@
         <property name="receptionId" type="java.lang.Integer">
             <column name="reception_id"/>
         </property>
-        <property name="adjustmentDate" type="date">
+        <property name="adjustmentDate" type="java.util.Date">
             <column length="10" name="adjustment_date"/>
         </property>
         <property name="reason" type="string">
