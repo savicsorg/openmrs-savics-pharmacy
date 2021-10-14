@@ -51,7 +51,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		if (rep instanceof DefaultRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
@@ -66,7 +65,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			return description;
 		} else if (rep instanceof FullRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
@@ -82,7 +80,6 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 			return description;
 		} else if (rep instanceof RefRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("reception");
 			description.addProperty("id");
