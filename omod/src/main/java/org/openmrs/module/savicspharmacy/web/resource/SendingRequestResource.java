@@ -242,6 +242,38 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(transaction);
 				}
 				
+			} else if (propertiesToUpdate.get("status") != null && "CANCEL".equalsIgnoreCase(propertiesToUpdate.get("status").toString())) {//Case cancel of the dispense
+				sending.setValidationDate(new Date());
+				Context.getService(PharmacyService.class).upsert(sending);
+				
+				List<Transaction> transactionlList = Context.getService(PharmacyService.class).getByMasterId(
+				    Transaction.class, "sendingId", sending.getId(), 1000, 0);
+				
+				for (int i = 0; i < transactionlList.size(); i++) {
+					Transaction transaction = transactionlList.get(i);
+					Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+					    transaction.getItem().getUuid());
+					
+					String[] ids = { "itemBatch" };
+					String[] values = { transaction.getItemBatch() };
+					
+					ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+					    ItemsLine.class, ids, values);
+					itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
+					
+					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
+                                        
+					Context.getService(PharmacyService.class).upsert(itemsLine);
+					Context.getService(PharmacyService.class).upsert(item);
+					
+					transaction.setStatus("REJECT");
+					transaction.setItemExpiryDate(simpleDateFormat.parse(transaction.getItemExpiryDate().toString()));
+					transaction.setDate(simpleDateFormat.parse(transaction.getDate().toString()));
+					
+					Context.getService(PharmacyService.class).upsert(transaction);
+				}
+				
 			} else {
 				//case update
 				Context.getService(PharmacyService.class).upsert(sending);
