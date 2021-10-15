@@ -160,7 +160,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			
 			//TODO
 			//			transaction.setPersonId((Integer) properties.get("personId"));
-			transaction.setStatus("INIT");
+			transaction.setStatus("VALID");
 			transaction.setAdjustmentDate(new Date());
 			
 			int transactionType = 3; //bcreate
