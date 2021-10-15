@@ -130,7 +130,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				o.setItemBatch(list.get(i).get("itemBatch").toString());
 				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
 				
-				Integer itemId = new Integer(list.get(i).get("item").toString());
+				Integer itemId =  new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				
 				ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
@@ -162,7 +162,6 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				itemLine.setPharmacyLocation(location);
 				Context.getService(PharmacyService.class).upsert(itemLine);
 				Context.getService(PharmacyService.class).upsert(o);
-				
 				//Create a transaction for this operation
 				transaction = new Transaction();
 				transaction.setDate(new Date());
@@ -171,12 +170,10 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				transaction.setItem(item);
 				transaction.setPharmacyLocation(itemLine.getPharmacyLocation());
 				transaction.setItemBatch(itemLine.getItemBatch());
-				transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
-				//TODO
+				transaction.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
 				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
 				transaction.setStatus("VALIDATED");
-				int transactionType = 6; //rece
-				transaction.setTransactionType(transactionType);//disp
+				transaction.setTransactionType(6);//rece
 				//Upsert the transaction
 				Context.getService(PharmacyService.class).upsert(transaction);
 			}
@@ -209,7 +206,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				int itemId = o.getItem().getId();
 				ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 				    ItemsLine.class, new String[] { "itemBatch", "item.id" }, new Object[] { o.getItemBatch(), itemId });
-				line.setItemExpiryDate(simpleDateFormat.parse(line.getItemExpiryDate().toString()));
+				line.setItemExpiryDate(line.getItemExpiryDate());
 				line.setItemVirtualstock(line.getItemVirtualstock() - o.getQuantityReceived());
 				line.setItemSoh(line.getItemSoh() - o.getQuantityReceived());
 				it.setVirtualstock(it.getVirtualstock() - o.getQuantityReceived());
