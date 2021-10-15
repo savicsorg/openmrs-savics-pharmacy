@@ -59,7 +59,7 @@ public class OrderController {
 	public BigInteger orderNextIncrement() throws IOException {
 		DbSession session = Context.getService(PharmacyService.class).getSession();
 		Query query = session.createSQLQuery(
-		    "SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'pharm_pharmacy_order'").addScalar(
+		    "SELECT `auto_increment` as num FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'pharm_pharmacy_order'").addScalar(
 		    "num", StandardBasicTypes.BIG_INTEGER);
 		
 		return ((BigInteger) query.uniqueResult());
