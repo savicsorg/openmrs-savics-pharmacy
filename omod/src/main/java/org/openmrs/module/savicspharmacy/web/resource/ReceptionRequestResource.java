@@ -130,7 +130,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				o.setItemBatch(list.get(i).get("itemBatch").toString());
 				o.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
 				
-				Integer itemId =  new Integer(list.get(i).get("item").toString());
+				Integer itemId = new Integer(list.get(i).get("item").toString());
 				Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 				
 				ItemsLine itemLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
