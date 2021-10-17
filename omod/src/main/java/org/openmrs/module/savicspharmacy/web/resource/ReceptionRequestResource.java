@@ -290,7 +290,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 	protected void delete(Reception reception, String reason, RequestContext context) throws ResponseException {
 		PharmacyOrder order = null;
 		if (reception.getPharmacyOrder() != null) {
-			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id",
+			order = (PharmacyOrder) Context.getService(PharmacyService.class).getEntityByid(PharmacyOrder.class, "id",
 			    reception.getPharmacyOrder().getId());
 			order.setDateReception(null);
 			Context.getService(PharmacyService.class).upsert(order);
