@@ -172,7 +172,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				transaction.setItemBatch(itemLine.getItemBatch());
 				transaction.setItemExpiryDate(simpleDateFormat.parse(list.get(i).get("itemExpiryDate").toString()));
 				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
-				transaction.setStatus("VALIDATED");
+				transaction.setStatus("VALID");
 				transaction.setTransactionType(6);//rece
 				//Upsert the transaction
 				Context.getService(PharmacyService.class).upsert(transaction);
@@ -271,7 +271,7 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				transaction.setItemExpiryDate(simpleDateFormat.parse(itemLine.getItemExpiryDate().toString()));
 				//TODO
 				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getPersonId());
-				transaction.setStatus("VALIDATED");
+				transaction.setStatus("VALID");
 				int transactionType = 6; //rece
 				transaction.setTransactionType(transactionType);//disp
 				//Upsert the transaction
