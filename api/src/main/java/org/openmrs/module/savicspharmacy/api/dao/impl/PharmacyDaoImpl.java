@@ -8,6 +8,7 @@ package org.openmrs.module.savicspharmacy.api.dao.impl;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
+import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
@@ -26,6 +27,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	DbSessionFactory dbSessionFactory;
 	
 	public void setDbSessionFactory(DbSessionFactory dbSessionFactory) {
+            dbSessionFactory.getCurrentSession().setCacheMode(CacheMode.IGNORE);
 		this.dbSessionFactory = dbSessionFactory;
 	}
 	
