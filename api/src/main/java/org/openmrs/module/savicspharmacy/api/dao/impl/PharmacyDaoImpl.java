@@ -40,7 +40,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	public DbSession getSession() {
 		try {
                         DbSession dbSession = dbSessionFactory.getCurrentSession();
-                        dbSession.setCacheMode(CacheMode.IGNORE);
+                        dbSession.clear();
 			return dbSession;
 		}
 		catch (NoSuchMethodError ex) {
