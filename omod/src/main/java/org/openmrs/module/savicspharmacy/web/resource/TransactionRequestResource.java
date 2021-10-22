@@ -267,12 +267,13 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				    itemsLine.getItem().getUuid());
 				
 				if ("padj".equals(propertiesToUpdate.get("transactionTypeCode").toString())) {
-					if ("padj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+					System.out.println("oldTransactionTypeCode = " + propertiesToUpdate.get("oldTransactionTypeCode"));
+					if ("padj".equals(propertiesToUpdate.get("oldTransactionTypeCode").toString())) {
 						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
 						        - (Integer) propertiesToUpdate.get("oldQuantity"));
 						item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToUpdate.get("oldQuantity"));
 						
-					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionTypeCode").toString())) {
 						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
 						        + (Integer) propertiesToUpdate.get("oldQuantity"));
 						item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("oldQuantity"));
@@ -282,12 +283,12 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 					item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("quantity"));
 					
 				} else if ("nadj".equals(propertiesToUpdate.get("transactionTypeCode").toString())) {
-					if ("padj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+					if ("padj".equals(propertiesToUpdate.get("oldTransactionTypeCode").toString())) {
 						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
 						        - (Integer) propertiesToUpdate.get("oldQuantity"));
 						item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToUpdate.get("oldQuantity"));
 						
-					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionType").toString())) {
+					} else if ("nadj".equals(propertiesToUpdate.get("oldTransactionTypeCode").toString())) {
 						itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
 						        + (Integer) propertiesToUpdate.get("oldQuantity"));
 						item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToUpdate.get("oldQuantity"));
