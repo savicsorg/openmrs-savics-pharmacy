@@ -1,12 +1,8 @@
 package org.openmrs.module.savicspharmacy.web.resource;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -15,8 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.CollectionType;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
@@ -46,7 +40,6 @@ import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
-import static org.terracotta.modules.ehcache.store.TerracottaClusteredInstanceFactory.LOGGER;
 
 @Resource(name = RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE + "/sending", supportedClass = Sending.class, supportedOpenmrsVersions = { "2.*.*" })
 public class SendingRequestResource extends DataDelegatingCrudResource<Sending> {
