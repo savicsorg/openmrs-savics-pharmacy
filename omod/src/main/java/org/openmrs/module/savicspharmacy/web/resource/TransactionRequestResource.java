@@ -143,6 +143,28 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 		        || propertiesToCreate.get("transactionType") == null) {
 			throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
 		}
+		//		List<Transaction> unapprovedBCreate = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "bcreate", "INIT" });
+		//		List<Transaction> unapprovedBRemove = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "bremove", "INIT" });
+		//		List<Transaction> unapprovedNAdj = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "nadj", "INIT" });
+		//		List<Transaction> unapprovedPAdj = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "padj", "INIT" });
+		//		List<Transaction> unapprovedNStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "nstocktake", "INIT" });
+		//		List<Transaction> unapprovedPStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
+		//		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status" },
+		//		            new Object[] { "pstocktake", "INIT" });
+		//		if (unapprovedBCreate.size() > 0 || unapprovedBRemove.size() > 0 || unapprovedNAdj.size() > 0
+		//		        || unapprovedPAdj.size() > 0 || unapprovedNStockTake.size() > 0 || unapprovedPStockTake.size() > 0) {
+		//			throw new ConversionException("UNAPPROVED_TRANSACTIONS");
+		//		}
 		Transaction transaction;
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {

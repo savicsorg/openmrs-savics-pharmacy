@@ -273,6 +273,7 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				Set<LinkedHashMap> set = new HashSet<LinkedHashMap>(list);
 				order.setOrderDetails(set);
 			}
+			order.setSupplier(supplier);
 			
 		} else {
 			order = new PharmacyOrder();
