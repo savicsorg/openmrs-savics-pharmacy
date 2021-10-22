@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.APIException;
@@ -36,11 +35,9 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	 * 
 	 * @return the current hibernate session.
 	 */
-	@Override
 	public DbSession getSession() {
 		try {
-			DbSession dbSession = dbSessionFactory.getCurrentSession();
-			return dbSession;
+			return dbSessionFactory.getCurrentSession();
 		}
 		catch (NoSuchMethodError ex) {
 			try {
