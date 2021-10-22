@@ -27,7 +27,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	DbSessionFactory dbSessionFactory;
 	
 	public void setDbSessionFactory(DbSessionFactory dbSessionFactory) {
-            dbSessionFactory.getCurrentSession().setCacheMode(CacheMode.IGNORE);
+		dbSessionFactory.getCurrentSession().setCacheMode(CacheMode.IGNORE);
 		this.dbSessionFactory = dbSessionFactory;
 	}
 	
@@ -36,10 +36,10 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	 * 
 	 * @return the current hibernate session.
 	 */
-        @Override
+	@Override
 	public DbSession getSession() {
 		try {
-                        DbSession dbSession = dbSessionFactory.getCurrentSession();
+			DbSession dbSession = dbSessionFactory.getCurrentSession();
 			return dbSession;
 		}
 		catch (NoSuchMethodError ex) {
