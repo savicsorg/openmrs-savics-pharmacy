@@ -1,11 +1,11 @@
-[
-    
+[   
     {
         "id": 1,
         "code": "nadj",
         "name": "Negative adjustement",
         "type": "Negative"
-    },{
+    },
+    {
         "id": 2,
         "code": "padj",
         "name": "Positive adjustement",
