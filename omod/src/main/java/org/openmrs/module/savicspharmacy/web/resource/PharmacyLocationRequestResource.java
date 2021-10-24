@@ -66,7 +66,6 @@ public class PharmacyLocationRequestResource extends DataDelegatingCrudResource<
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		System.out.println("---- doGetAll ");
 		List<PharmacyLocation> districtList = Context.getService(PharmacyService.class).getAll(PharmacyLocation.class,
 		    context.getLimit(), context.getStartIndex());
 		System.out.println(districtList.toString());

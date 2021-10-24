@@ -11,6 +11,9 @@ package org.openmrs.module.savicspharmacy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 
 /**
@@ -20,11 +23,24 @@ public class SavicsPharmacyModuleActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
+	private AdministrationService administrationService;
+	
+	public static final String GLOBAL_PROPERTY_PHARMACY_EXPIRED_DELAY = "savics.pharmacy.batches.expiration.prevision.delay";
+	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
 		log.info("Started Savics Pharmacy Module");
+		administrationService = Context.getAdministrationService();
+		GlobalProperty gp;
+		
+		String property = administrationService.getGlobalProperty(GLOBAL_PROPERTY_PHARMACY_EXPIRED_DELAY);
+		if (property == null || property.isEmpty()) {
+			gp = new GlobalProperty(GLOBAL_PROPERTY_PHARMACY_EXPIRED_DELAY, "30");
+			gp.setDescription("Savics Pharmacy expiration prevision delay (in days). Default 30 days");
+			administrationService.saveGlobalProperty(gp);
+		}
 	}
 	
 	/**
