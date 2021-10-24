@@ -134,8 +134,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		try {
 			Sending sending = this.constructOrder(null, propertiesToCreate);
 			sending = (Sending) Context.getService(PharmacyService.class).upsert(sending);
-			sending = (Sending) Context.getService(PharmacyService.class)
-			        .getEntityByid(Sending.class, "id", sending.getId());
 			List<LinkedHashMap> list = new ArrayList<LinkedHashMap>(sending.getSendingDetails());
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Transaction transaction;
@@ -181,16 +179,16 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
 				item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
-				
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 			}
-			
+			sending = (Sending) Context.getService(PharmacyService.class)
+			        .getEntityByid(Sending.class, "id", sending.getId());
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException e) {
 			Logger.getLogger(SendingRequestResource.class.getName()).log(Level.SEVERE, null, e);
-			return null;
+			throw new ConversionException(e);
 		}
 		
 	}
@@ -360,6 +358,8 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(item);
 				}
 			}
+			sending = (Sending) Context.getService(PharmacyService.class)
+			        .getEntityByid(Sending.class, "id", sending.getId());
 			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
 		}
 		catch (ParseException ex) {
