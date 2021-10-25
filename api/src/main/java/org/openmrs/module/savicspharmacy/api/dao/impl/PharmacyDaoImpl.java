@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.APIException;
@@ -49,32 +50,24 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	}
 	
 	public T getByUuid(Class t, String uuid) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		return (T) dbSession.createCriteria(t).add(Restrictions.eq("uuid", uuid)).uniqueResult();
+		return (T) getSession().createCriteria(t).add(Restrictions.eq("uuid", uuid)).uniqueResult();
 	}
 	
 	public T saveAgent(T t) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		dbSession.saveOrUpdate(t);
+		getSession().saveOrUpdate(t);
 		return t;
 	}
 	
 	@Override
 	public List getAll(Class t) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		List entityList = dbSession.createCriteria(t).list();
+		List entityList = getSession().createCriteria(t).list();
 		return entityList;
 	}
 	
 	@Override
 	public List getAll(Class t, Integer limit, Integer offset) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
 		//TODO adapt this
-		Criteria criteria = dbSession.createCriteria(t);
+		Criteria criteria = getSession().createCriteria(t);
 		
 		if (limit != null) {
 			criteria.setMaxResults(limit);
@@ -88,9 +81,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	
 	@Override
 	public List doSearch(Class t, String key, String value, Integer limit, Integer offset) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		dbSession.createCriteria(t).list();
+		getSession().createCriteria(t).list();
 		//		String[] keys = value.split(",");
 		Criteria criteria = getSession().createCriteria(t);
 		//		Disjunction dj = Restrictions.disjunction();
@@ -105,7 +96,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public T getEntity(Class t, Object id) {
 		DbSession session = dbSessionFactory.getCurrentSession();
-		session.clear();
 		Criteria criteria = session.createCriteria(t);
 		criteria.add(Restrictions.eq("id", id));
 		return (T) criteria.uniqueResult();
@@ -114,7 +104,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public T getEntityByUuid(Class t, String uuid) {
 		DbSession session = dbSessionFactory.getCurrentSession();
-		session.clear();
 		Criteria criteria = session.createCriteria(t);
 		criteria.add(Restrictions.eq("uuid", uuid));
 		return (T) criteria.uniqueResult();
@@ -123,7 +112,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public Serializable upsert(Serializable entity) {
 		DbSession session = this.dbSessionFactory.getCurrentSession();
-		session.clear();
 		session.saveOrUpdate(entity);
 		session.flush();
 		return entity;
@@ -132,14 +120,12 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public void delete(Serializable entity) {
 		DbSession session = this.dbSessionFactory.getCurrentSession();
-		session.clear();
 		session.delete(entity);
 	}
 	
 	@Override
 	public T getEntityByid(Class<T> t, String idName, Integer id) throws APIException {
 		DbSession session = dbSessionFactory.getCurrentSession();
-		session.clear();
 		Criteria criteria = session.createCriteria(t);
 		criteria.add(Restrictions.eq(idName, id));
 		return (T) criteria.uniqueResult();
@@ -148,7 +134,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public T getEntityByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException {
 		DbSession session = dbSessionFactory.getCurrentSession();
-		session.clear();
 		Criteria criteria = session.createCriteria(t);
 		for (int i = 0; i < ids.length; i++) {
 			criteria.add(Restrictions.eq(ids[i], values[i]));
@@ -159,7 +144,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	@Override
 	public List getListByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException {
 		DbSession session = dbSessionFactory.getCurrentSession();
-		session.clear();
 		Criteria criteria = session.createCriteria(t);
 		for (int i = 0; i < ids.length; i++) {
 			if (values[i] == null)
@@ -172,9 +156,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	
 	@Override
 	public List getFromMasterId(Class t, String key, int value, Integer limit, Integer offset) {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		dbSession.createCriteria(t).list();
+		getSession().createCriteria(t).list();
 		Criteria criteria = getSession().createCriteria(t);
 		criteria.add(Restrictions.eq(key, value));
 		return criteria.list();
@@ -182,9 +164,7 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 	
 	@Override
 	public List<T> getFromMasterId(Class<T> t, String key, int value) throws APIException {
-		DbSession dbSession = getSession();
-		dbSession.clear();
-		dbSession.createCriteria(t).list();
+		getSession().createCriteria(t).list();
 		Criteria criteria = getSession().createCriteria(t);
 		criteria.add(Restrictions.eq(key, value));
 		return criteria.list();
