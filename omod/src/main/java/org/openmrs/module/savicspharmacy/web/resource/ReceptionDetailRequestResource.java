@@ -52,7 +52,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		if (rep instanceof DefaultRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("item");
-			description.addProperty("reception");
+			//			description.addProperty("reception");
 			description.addProperty("id");
 			description.addProperty("orderLineQuantity");
 			description.addProperty("itemExpiryDate");
@@ -66,7 +66,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		} else if (rep instanceof FullRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("item");
-			description.addProperty("reception");
+			//			description.addProperty("reception");
 			description.addProperty("id");
 			description.addProperty("orderLineQuantity");
 			description.addProperty("itemExpiryDate");
@@ -81,7 +81,7 @@ public class ReceptionDetailRequestResource extends DelegatingCrudResource<Recep
 		} else if (rep instanceof RefRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
 			description.addProperty("item");
-			description.addProperty("reception");
+			//			description.addProperty("reception");
 			description.addProperty("id");
 			description.addProperty("orderLineQuantity");
 			description.addProperty("itemExpiryDate");
