@@ -189,9 +189,11 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				Context.getService(PharmacyService.class).upsert(itemsLine);
 				Context.getService(PharmacyService.class).upsert(item);
 				//End of itemsline virtual quantity update
-				System.out.println(" >>>>>>>>>>>< context.getRepresentation() = " + context.getRepresentation());
 				
-				return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+				Object object = ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+				Context.flushSession();
+				Context.clearSession();
+				return object;
 			}
 			catch (ParseException ex) {
 				Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,7 +300,10 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 				Context.getService(PharmacyService.class).upsert(item);
 			}
 			
-			return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+			Object object = ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException ex) {
 			Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);

@@ -165,7 +165,10 @@ public class OrderRequestResource extends DelegatingCrudResource<PharmacyOrder> 
 				Context.getService(PharmacyService.class).upsert(o);
 			}
 			
-			return ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+			Object object = ConversionUtil.convertToRepresentation(order, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException e) {
 			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);

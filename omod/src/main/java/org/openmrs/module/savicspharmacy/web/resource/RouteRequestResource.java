@@ -96,9 +96,6 @@ public class RouteRequestResource extends DataDelegatingCrudResource<Route> {
 		if (propertiesToCreate.get("name") == null || propertiesToCreate.get("code") == null) {
 			throw new ConversionException("Required properties: name, code");
 		}
-		System.out.println("-----------------------------");
-		System.out.println(propertiesToCreate);
-		System.out.println();
 		Route route = this.constructRoute(null, propertiesToCreate);
 		Context.getService(PharmacyService.class).upsert(route);
 		return ConversionUtil.convertToRepresentation(route, context.getRepresentation());

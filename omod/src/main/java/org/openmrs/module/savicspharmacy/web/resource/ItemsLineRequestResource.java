@@ -173,7 +173,10 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			Context.getService(PharmacyService.class).upsert(transaction);
 			itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByid(ItemsLine.class, "id",
 			    itemsLine.getId());
-			return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+			Object object = ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException ex) {
 			Logger.getLogger(ItemsLineRequestResource.class.getName()).log(Level.SEVERE, null, ex);

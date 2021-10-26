@@ -184,7 +184,11 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			}
 			sending = (Sending) Context.getService(PharmacyService.class)
 			        .getEntityByid(Sending.class, "id", sending.getId());
-			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
+			
+			Object object = ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException e) {
 			Logger.getLogger(SendingRequestResource.class.getName()).log(Level.SEVERE, null, e);
@@ -422,7 +426,11 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			}
 			sending = (Sending) Context.getService(PharmacyService.class)
 			        .getEntityByid(Sending.class, "id", sending.getId());
-			return ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
+			
+			Object object = ConversionUtil.convertToRepresentation(sending, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException ex) {
 			Logger.getLogger(SendingRequestResource.class.getName()).log(Level.SEVERE, null, ex);

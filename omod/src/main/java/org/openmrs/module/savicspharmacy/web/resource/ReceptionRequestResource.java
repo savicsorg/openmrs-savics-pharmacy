@@ -179,8 +179,10 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				//Upsert the transaction
 				Context.getService(PharmacyService.class).upsert(transaction);
 			}
-			
-			return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+			Object object = ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException e) {
 			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, e);
@@ -280,7 +282,10 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 				Context.getService(PharmacyService.class).upsert(transaction);
 			}
 			
-			return ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+			Object object = ConversionUtil.convertToRepresentation(reception, context.getRepresentation());
+			Context.flushSession();
+			Context.clearSession();
+			return object;
 		}
 		catch (ParseException ex) {
 			Logger.getLogger(OrderRequestResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -312,6 +317,8 @@ public class ReceptionRequestResource extends DelegatingCrudResource<Reception> 
 			Context.getService(PharmacyService.class).delete(o);
 		}
 		Context.getService(PharmacyService.class).delete(reception);
+		Context.flushSession();
+		Context.clearSession();
 	}
 	
 	@Override
