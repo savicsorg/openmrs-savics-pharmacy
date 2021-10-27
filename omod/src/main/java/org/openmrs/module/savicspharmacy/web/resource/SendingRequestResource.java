@@ -218,7 +218,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					
 					ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 					    ItemsLine.class, ids, values);
-					itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					try {
+						itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (ParseException e) {
+						itemsLine.setItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
+					
 					itemsLine.setItemSoh(itemsLine.getItemSoh() - transaction.getQuantity());
 					
 					item.setSoh(item.getSoh() - transaction.getQuantity());
@@ -227,8 +233,20 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(item);
 					
 					transaction.setStatus("VALID");
-					transaction.setItemExpiryDate(simpleDateFormat.parse(transaction.getItemExpiryDate().toString()));
-					transaction.setDate(simpleDateFormat.parse(transaction.getDate().toString()));
+					
+					try {
+						transaction.setItemExpiryDate(simpleDateFormat.parse(transaction.getItemExpiryDate().toString()));
+					}
+					catch (ParseException e) {
+						transaction.setItemExpiryDate(transaction.getItemExpiryDate());
+					}
+					
+					try {
+						transaction.setDate(simpleDateFormat.parse(transaction.getDate().toString()));
+					}
+					catch (ParseException e) {
+						transaction.setDate(transaction.getDate());
+					}
 					
 					Context.getService(PharmacyService.class).upsert(transaction);
 				}
@@ -251,7 +269,14 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					
 					ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 					    ItemsLine.class, ids, values);
-					itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					
+					try {
+						itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (Exception e) {
+						itemsLine.setItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
+					
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + transaction.getQuantity());
 					
 					item.setVirtualstock(item.getVirtualstock() + transaction.getQuantity());
@@ -260,8 +285,20 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(item);
 					
 					transaction.setStatus("REJECT");
-					transaction.setItemExpiryDate(simpleDateFormat.parse(transaction.getItemExpiryDate().toString()));
-					transaction.setDate(simpleDateFormat.parse(transaction.getDate().toString()));
+					
+					try {
+						transaction.setItemExpiryDate(simpleDateFormat.parse(transaction.getItemExpiryDate().toString()));
+					}
+					catch (ParseException e) {
+						transaction.setItemExpiryDate(transaction.getItemExpiryDate());
+					}
+					
+					try {
+						transaction.setDate(simpleDateFormat.parse(transaction.getDate().toString()));
+					}
+					catch (ParseException e) {
+						transaction.setDate(transaction.getDate());
+					}
 					
 					Context.getService(PharmacyService.class).upsert(transaction);
 				}
@@ -293,7 +330,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					
 					ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 					    ItemsLine.class, ids, values);
-					itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					
+					try {
+						itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (Exception e) {
+						itemsLine.setItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + t.getQuantity());
 					
 					item.setVirtualstock(item.getVirtualstock() + t.getQuantity());
@@ -317,7 +360,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
 					    ItemsLine.class, new String[] { "itemBatch" }, new Object[] { o.getSendingItemBatch() });
 					
-					o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					try {
+						o.setSendingItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (Exception e) {
+						o.setSendingItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
+					
 					Integer itemId = new Integer(list.get(i).get("item").toString());
 					Item item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 					o.setItem(item);
@@ -336,7 +385,13 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					transaction.setItem(item);
 					transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
 					transaction.setItemBatch(itemsLine.getItemBatch());
-					transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					try {
+						transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (ParseException e) {
+						transaction.setItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
+					
 					//TODO
 					//transaction.setPersonId((Integer) properties.get("personId"));
 					if (sending.getValidationDate() != null) {
@@ -350,7 +405,14 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					Context.getService(PharmacyService.class).upsert(transaction);
 					
 					//Update the virtual quantities for item and itemsLine
-					itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					
+					try {
+						itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+					}
+					catch (ParseException e) {
+						itemsLine.setItemExpiryDate(itemsLine.getItemExpiryDate());
+					}
+					
 					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() - o.getSendingDetailsQuantity());
 					item.setVirtualstock(item.getVirtualstock() - o.getSendingDetailsQuantity());
 					
@@ -371,44 +433,43 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	
 	@Override
 	protected void delete(Sending sending, String reason, RequestContext context) throws ResponseException {
-		try {
-			List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(
-			    SendingDetail.class, "sending.id", sending.getId(), 1000, 0);
-			for (int i = 0; i < sendingDetailList.size(); i++) {
-				SendingDetail o = sendingDetailList.get(i);
-				Context.getService(PharmacyService.class).delete(o);
-			}
-			Context.getService(PharmacyService.class).delete(sending);
-			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			
-			//2. update all old transactions as canceled
-			List<Transaction> transactionlList = Context.getService(PharmacyService.class).getByMasterId(Transaction.class,
-			    "sendingId", sending.getId(), 1000, 0);
-			for (int i = 0; i < transactionlList.size(); i++) {
-				Transaction t = transactionlList.get(i);
-				
-				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
-				    t.getItem().getUuid());
-				
-				String[] ids = { "itemBatch" };
-				String[] values = { t.getItemBatch() };
-				
-				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
-				    ItemsLine.class, ids, values);
-				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
-				itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + t.getQuantity());
-				
-				item.setVirtualstock(item.getVirtualstock() + t.getQuantity());
-				
-				Context.getService(PharmacyService.class).upsert(itemsLine);
-				Context.getService(PharmacyService.class).upsert(item);
-				
-				Context.getService(PharmacyService.class).delete(t);
-			}
-			
+		List<SendingDetail> sendingDetailList = Context.getService(PharmacyService.class).getByMasterId(SendingDetail.class,
+		    "sending.id", sending.getId(), 1000, 0);
+		for (int i = 0; i < sendingDetailList.size(); i++) {
+			SendingDetail o = sendingDetailList.get(i);
+			Context.getService(PharmacyService.class).delete(o);
 		}
-		catch (ParseException ex) {
-			Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
+		Context.getService(PharmacyService.class).delete(sending);
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		//2. update all old transactions as canceled
+		List<Transaction> transactionlList = Context.getService(PharmacyService.class).getByMasterId(Transaction.class,
+		    "sendingId", sending.getId(), 1000, 0);
+		for (int i = 0; i < transactionlList.size(); i++) {
+			Transaction t = transactionlList.get(i);
+			
+			Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class, t.getItem().getUuid());
+			
+			String[] ids = { "itemBatch" };
+			String[] values = { t.getItemBatch() };
+			
+			ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(
+			    ItemsLine.class, ids, values);
+			
+			try {
+				itemsLine.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
+			}
+			catch (ParseException e) {
+				itemsLine.setItemExpiryDate(itemsLine.getItemExpiryDate());
+			}
+			
+			itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock() + t.getQuantity());
+			
+			item.setVirtualstock(item.getVirtualstock() + t.getQuantity());
+			
+			Context.getService(PharmacyService.class).upsert(itemsLine);
+			Context.getService(PharmacyService.class).upsert(item);
+			
+			Context.getService(PharmacyService.class).delete(t);
 		}
 	}
 	

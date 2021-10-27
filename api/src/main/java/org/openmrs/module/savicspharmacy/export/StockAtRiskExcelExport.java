@@ -22,7 +22,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @author anatoleabe

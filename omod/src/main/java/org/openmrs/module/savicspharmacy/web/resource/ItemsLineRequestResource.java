@@ -29,6 +29,7 @@ import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.PharmacyLocation;
+import org.openmrs.module.savicspharmacy.api.entity.Sending;
 import org.openmrs.module.savicspharmacy.api.entity.Transaction;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
@@ -170,7 +171,8 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			transaction.setPharmacyLocation(itemsLine.getPharmacyLocation());
 			//3. Update the transaction
 			Context.getService(PharmacyService.class).upsert(transaction);
-			
+			itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByid(ItemsLine.class, "id",
+			    itemsLine.getId());
 			return ConversionUtil.convertToRepresentation(itemsLine, context.getRepresentation());
 		}
 		catch (ParseException ex) {
