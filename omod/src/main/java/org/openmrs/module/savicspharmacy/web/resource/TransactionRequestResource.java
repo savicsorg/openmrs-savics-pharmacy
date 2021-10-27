@@ -139,76 +139,66 @@ public class TransactionRequestResource extends DataDelegatingCrudResource<Trans
 	
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-		if (propertiesToCreate.get("item") == null || propertiesToCreate.get("pharmacyLocation") == null
-		        || propertiesToCreate.get("transactionType") == null) {
-			throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
-		}
-                
-			
+            if (propertiesToCreate.get("item") == null || propertiesToCreate.get("pharmacyLocation") == null
+                    || propertiesToCreate.get("transactionType") == null) {
+                    throw new ConversionException("Required properties: Item, PharmacyLocation, TransactionType");
+            }
+
             try {
                 Transaction transaction;
                 DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String itemsLineUuid = propertiesToCreate.get("selectedBatchUuid");
-				
+
                 ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByUuid(ItemsLine.class,
                     itemsLineUuid);
                 itemsLine.setItemExpiryDate(simpleDateFormat.parse(propertiesToCreate.get("itemExpiryDate").toString()));
-                
-		List<Transaction> unapprovedNAdj = (List<Transaction>) Context.getService(PharmacyService.class)
-		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status", "item.id", "itemBatch" },
-		            new Object[] { 1, "INIT",itemsLine.getItem().getId(), itemsLine.getItemBatch() });
-		List<Transaction> unapprovedPAdj = (List<Transaction>) Context.getService(PharmacyService.class)
-		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status", "item.id", "itemBatch" },
-		            new Object[] { 2, "INIT",itemsLine.getItem().getId(), itemsLine.getItemBatch() });
-		List<Transaction> unapprovedNStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
-		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status", "item.id", "itemBatch" },
-		            new Object[] { 7, "INIT",itemsLine.getItem().getId(), itemsLine.getItemBatch() });
-		List<Transaction> unapprovedPStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
-		        .getListByAttributes(Transaction.class, new String[] { "transactionType", "status", "item.id", "itemBatch" },
-		            new Object[] { 8, "INIT",itemsLine.getItem().getId(), itemsLine.getItemBatch() });
-		if (unapprovedNAdj.size() > 0 || unapprovedPAdj.size() > 0 || unapprovedNStockTake.size() > 0
-		        || unapprovedPStockTake.size() > 0) {
-			throw new ConversionException("UNAPPROVED_TRANSACTIONS");
-		} else {
-			Transaction transaction;
-			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				transaction = this.constructTransaction(null, propertiesToCreate);
-				Context.getService(PharmacyService.class).upsert(transaction);
-				
-				/**
-				 * Starting updating itemsline virtual quantity
-				 */
-				String itemsLineUuid = propertiesToCreate.get("selectedBatchUuid");
-				
-				ItemsLine itemsLine = (ItemsLine) Context.getService(PharmacyService.class).getEntityByUuid(ItemsLine.class,
-				    itemsLineUuid);
-				itemsLine.setItemExpiryDate(simpleDateFormat.parse(propertiesToCreate.get("itemExpiryDate").toString()));
-				
-				Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
-				    itemsLine.getItem().getUuid());
-				
-				if ("padj".equals(propertiesToCreate.get("transactionTypeCode").toString())) {
-					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
-					        + (Integer) propertiesToCreate.get("quantity"));
-					item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToCreate.get("quantity"));
-				} else {
-					itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
-					        - (Integer) propertiesToCreate.get("quantity"));
-					item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToCreate.get("quantity"));
-				}
-				Context.getService(PharmacyService.class).upsert(itemsLine);
-				Context.getService(PharmacyService.class).upsert(item);
-				//End of itemsline virtual quantity update
-				System.out.println(" >>>>>>>>>>>< context.getRepresentation() = " + context.getRepresentation());
-				
-				return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
-			}
-			catch (ParseException ex) {
-				Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
-				return null;
-			}
-		}
+
+                List<Transaction> unapprovedNAdj = (List<Transaction>) Context.getService(PharmacyService.class)
+                        .getListByAttributes(Transaction.class,
+                            new String[] { "transactionType", "status", "item.id", "itemBatch" },
+                            new Object[] { 1, "INIT", itemsLine.getItem().getId(), itemsLine.getItemBatch() });
+                List<Transaction> unapprovedPAdj = (List<Transaction>) Context.getService(PharmacyService.class)
+                        .getListByAttributes(Transaction.class,
+                            new String[] { "transactionType", "status", "item.id", "itemBatch" },
+                            new Object[] { 2, "INIT", itemsLine.getItem().getId(), itemsLine.getItemBatch() });
+                List<Transaction> unapprovedNStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
+                        .getListByAttributes(Transaction.class,
+                            new String[] { "transactionType", "status", "item.id", "itemBatch" },
+                            new Object[] { 7, "INIT", itemsLine.getItem().getId(), itemsLine.getItemBatch() });
+                List<Transaction> unapprovedPStockTake = (List<Transaction>) Context.getService(PharmacyService.class)
+                        .getListByAttributes(Transaction.class,
+                            new String[] { "transactionType", "status", "item.id", "itemBatch" },
+                            new Object[] { 8, "INIT", itemsLine.getItem().getId(), itemsLine.getItemBatch() });
+                if (unapprovedNAdj.size() > 0 || unapprovedPAdj.size() > 0 || unapprovedNStockTake.size() > 0
+                        || unapprovedPStockTake.size() > 0) {
+                        throw new ConversionException("UNAPPROVED_TRANSACTIONS");
+                } else {
+                    transaction = this.constructTransaction(null, propertiesToCreate);
+                    Context.getService(PharmacyService.class).upsert(transaction);
+
+                    /**
+                     * Starting updating itemsline virtual quantity
+                     */
+                    itemsLine.setItemExpiryDate(simpleDateFormat.parse(propertiesToCreate.get("itemExpiryDate").toString()));
+
+                    Item item = (Item) Context.getService(PharmacyService.class).getEntityByUuid(Item.class,
+                        itemsLine.getItem().getUuid());
+
+                    if ("padj".equals(propertiesToCreate.get("transactionTypeCode").toString())) {
+                            itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+                                    + (Integer) propertiesToCreate.get("quantity"));
+                            item.setVirtualstock(item.getVirtualstock() + (Integer) propertiesToCreate.get("quantity"));
+                    } else {
+                            itemsLine.setItemVirtualstock(itemsLine.getItemVirtualstock()
+                                    - (Integer) propertiesToCreate.get("quantity"));
+                            item.setVirtualstock(item.getVirtualstock() - (Integer) propertiesToCreate.get("quantity"));
+                    }
+                    Context.getService(PharmacyService.class).upsert(itemsLine);
+                    Context.getService(PharmacyService.class).upsert(item);
+                    //End of itemsline virtual quantity update
+                    System.out.println(" >>>>>>>>>>>< context.getRepresentation() = " + context.getRepresentation());
+                    return ConversionUtil.convertToRepresentation(transaction, context.getRepresentation());
+                }
             }
             catch (ParseException ex) {
                     Logger.getLogger(TransactionRequestResource.class.getName()).log(Level.SEVERE, null, ex);
