@@ -678,7 +678,7 @@
     
     <changeSet id="pharm-202113171413" author="anatoleabe">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">select count(*) from privilege where privilege like '%pharm%';</sqlCheck>
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege like '%pharmacy:add or edit drugs%';</sqlCheck>
         </preConditions>
         <insert tableName="privilege">
             <column name="privilege" value="pharmacy:add or edit drugs"/>
