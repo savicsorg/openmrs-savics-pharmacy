@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Person;
+import org.openmrs.Role;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
 import org.openmrs.module.savicspharmacy.api.entity.CustomerType;
@@ -102,13 +103,30 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		List<Sending> agentList = Context.getService(PharmacyService.class).getAll(Sending.class, context.getLimit(),
-		    context.getStartIndex());
+		List<Sending> agentList;
+		boolean isDistributor = false;
+		Set<Role> roles = Context.getUserContext().getAuthenticatedUser().getRoles();
+		for (Role r : roles) {
+			if (r.getName().equalsIgnoreCase("Pharmacy: distributor")) {
+				isDistributor = true;
+				break;
+			}
+		}
+		System.out.println("-------- >ROles = " + roles);
+		if (isDistributor) {
+			agentList = (List<Sending>) Context.getService(PharmacyService.class).getListByAttributes(Sending.class,
+			    new String[] { "customerType.id" }, new Object[] { 1 });
+		} else {
+			agentList = Context.getService(PharmacyService.class).getAll(Sending.class, context.getLimit(),
+			    context.getStartIndex());
+		}
+		
 		return new AlreadyPaged<Sending>(context, agentList, false);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
+		System.out.println("-------- >ROles recherche= ");
 		String value = context.getParameter("sendingAmount");
 		List<Sending> agentList = Context.getService(PharmacyService.class).doSearch(Sending.class, "sendingAmount", value,
 		    context.getLimit(), context.getStartIndex());
@@ -168,7 +186,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				transaction.setItemBatch(itemsLine.getItemBatch());
 				transaction.setItemExpiryDate(simpleDateFormat.parse(itemsLine.getItemExpiryDate().toString()));
 				//TODO
-				//transaction.setPersonId((Integer) properties.get("personId"));
+				transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getId());
 				transaction.setStatus("INIT");
 				int transactionType = 5; //disp
 				transaction.setTransactionType(transactionType);//disp
@@ -397,7 +415,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					}
 					
 					//TODO
-					//transaction.setPersonId((Integer) properties.get("personId"));
+					transaction.setPersonId(Context.getUserContext().getAuthenticatedUser().getPerson().getId());
 					if (sending.getValidationDate() != null) {
 						transaction.setStatus("APPROVED");
 					} else {

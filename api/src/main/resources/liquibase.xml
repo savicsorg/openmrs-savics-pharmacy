@@ -784,5 +784,22 @@
         </insert>
     </changeSet>
     
+    <changeSet id="pharm-202111231413" author="anatoleabe">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from role where role like '%Pharmacy: Distributor%';</sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="role" value="Pharmacy: Distributor"/>
+            <column name="description" value="Savics pharmacy: the distributor"/>
+            <column name="uuid" value="b92a0ddd-d22b-493e-98e8-4d1de0621a7v"/>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="anatoleabe" id="pharm-20211620641663079-14">
+        <sql>
+            ALTER TABLE pharm_item MODIFY code VARCHAR(120)
+        </sql>
+    </changeSet>
+    
 </databaseChangeLog>
 
