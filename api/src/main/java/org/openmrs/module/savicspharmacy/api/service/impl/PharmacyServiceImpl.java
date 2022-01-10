@@ -101,4 +101,14 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	public List getByMasterId(Class t, String key, int value) {
 		return this.dao.getFromMasterId(t, key, value);
 	}
+	
+	@Override
+	public Long doCount(Class t) throws APIException {
+		return this.dao.doCount(t);
+	}
+	
+	@Override
+	public Long doCount(Class t, String key, String value) throws APIException {
+		return this.dao.doCount(t, key, value);
+	}
 }

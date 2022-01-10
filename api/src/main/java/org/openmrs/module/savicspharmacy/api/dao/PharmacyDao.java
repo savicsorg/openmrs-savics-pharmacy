@@ -61,4 +61,10 @@ public interface PharmacyDao<T extends Serializable> {
 	@Transactional(readOnly = true)
 	public List<T> getFromMasterId(Class<T> t, String key, int value) throws APIException;
 	
+	@Transactional(readOnly = true)
+	public Long doCount(Class<T> t) throws APIException;
+	
+	@Transactional(readOnly = true)
+	public Long doCount(Class<T> t, String key, String value) throws APIException;
+	
 }

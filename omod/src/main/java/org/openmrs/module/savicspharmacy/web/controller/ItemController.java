@@ -9,7 +9,6 @@
  */
 package org.openmrs.module.savicspharmacy.web.controller;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import static org.hibernate.criterion.Projections.count;
 import org.openmrs.api.context.Context;
 import org.springframework.stereotype.Controller;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
@@ -29,7 +29,10 @@ import org.openmrs.module.savicspharmacy.export.DrugsExcelExport;
 import org.openmrs.module.savicspharmacy.export.ExpiredStockExcelExport;
 import org.openmrs.module.savicspharmacy.export.StockAtRiskExcelExport;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
+import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -112,5 +115,15 @@ public class ItemController {
 		ExpiredStockExcelExport expiredStockExcelExport = new ExpiredStockExcelExport(itemLinestList, expiredOnly);
 		
 		expiredStockExcelExport.export(response);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE
+	        + "/items/count")
+	public void doCount(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		Long count = Context.getService(PharmacyService.class).doCount(Item.class);
+		String content = "{\"count\":" + count + "}";
+		response.setContentType("application/json");
+		response.setContentLength(content.length());
+		response.getWriter().write(content);
 	}
 }

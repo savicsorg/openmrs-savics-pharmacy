@@ -10,11 +10,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.APIException;
-import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,5 +170,20 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		Criteria criteria = getSession().createCriteria(t);
 		criteria.add(Restrictions.eq(key, value));
 		return criteria.list();
+	}
+	
+	@Override
+	public Long doCount(Class<T> t) throws APIException {
+		Criteria crit = getSession().createCriteria(t);
+		crit.setProjection(Projections.rowCount());
+		return (Long) crit.uniqueResult();
+	}
+	
+	@Override
+	public Long doCount(Class<T> t, String key, String value) throws APIException {
+		Criteria crit = getSession().createCriteria(t);
+		crit.setProjection(Projections.rowCount());
+		crit.add(Restrictions.eq(key, value));
+		return (Long) crit.uniqueResult();
 	}
 }

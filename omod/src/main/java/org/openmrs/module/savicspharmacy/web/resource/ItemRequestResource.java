@@ -111,7 +111,10 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		List<Item> itemList = Context.getService(PharmacyService.class).getAll(Item.class, context.getLimit(),
 		    context.getStartIndex());
-		return new AlreadyPaged<Item>(context, itemList, false);
+		
+		Long count = Context.getService(PharmacyService.class).doCount(Item.class);
+		boolean hasMore = count > context.getStartIndex() + context.getLimit();
+		return new AlreadyPaged<Item>(context, itemList, hasMore, count);
 	}
 	
 	@Override
@@ -119,18 +122,23 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 		String value = context.getParameter("name");
 		String code = context.getParameter("code");
 		List<Item> itemList = new ArrayList<Item>();
-		
+		Long count;
+		boolean hasMore = false;
 		if (code != null) {
 			DbSession session = Context.getService(PharmacyService.class).getSession();
 			Criteria criteria = session.createCriteria(Item.class);
 			criteria.add(Restrictions.eq("code", code));
 			itemList = (List<Item>) criteria.list();
+			count = Context.getService(PharmacyService.class).doCount(Item.class, "code", value);
+			hasMore = count > context.getStartIndex() + context.getLimit();
 		} else {
 			itemList = Context.getService(PharmacyService.class).doSearch(Item.class, "name", value, context.getLimit(),
 			    context.getStartIndex());
+			count = Context.getService(PharmacyService.class).doCount(Item.class, "name", value);
+			hasMore = count > context.getStartIndex() + context.getLimit();
 		}
 		
-		return new AlreadyPaged<Item>(context, itemList, false);
+		return new AlreadyPaged<Item>(context, itemList, hasMore, count);
 	}
 	
 	@Override

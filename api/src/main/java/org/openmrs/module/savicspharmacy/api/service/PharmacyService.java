@@ -33,6 +33,12 @@ public interface PharmacyService<T extends Serializable> extends OpenmrsService 
 	public List<T> doSearch(Class<T> t, String key, String value, Integer limit, Integer offset) throws APIException;
 	
 	@Transactional(readOnly = true)
+	public Long doCount(Class<T> t) throws APIException;
+	
+	@Transactional(readOnly = true)
+	public Long doCount(Class<T> t, String key, String value) throws APIException;
+	
+	@Transactional(readOnly = true)
 	T getEntity(Class<T> t, Object id) throws APIException;
 	
 	@Transactional(readOnly = true)
