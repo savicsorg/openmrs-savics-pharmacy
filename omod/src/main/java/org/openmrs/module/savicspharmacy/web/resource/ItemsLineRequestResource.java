@@ -111,7 +111,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 		if (itemid != null) {
 			DbSession session = Context.getService(PharmacyService.class).getSession();
 			Criteria criteria = session.createCriteria(ItemsLine.class);
-			criteria.add(Restrictions.gt("itemSoh", quantity - 1));
+			criteria.add(Restrictions.gt("itemVirtualstock", quantity - 1));
 			criteria.add(Restrictions.eq("item.id", itemid));
 			criteria.add(Restrictions.gt("itemExpiryDate", new Date()));
 			criteria.addOrder(Order.asc("itemExpiryDate"));
