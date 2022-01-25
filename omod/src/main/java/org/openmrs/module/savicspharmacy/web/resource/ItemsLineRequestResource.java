@@ -105,16 +105,20 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 	protected PageableResult doSearch(RequestContext context) {
 		String itemBatch = context.getParameter("itemBatch");
 		Integer itemid = Integer.parseInt(context.getParameter("item"));
-		Integer quantity = Integer.parseInt(context.getParameter("quantity"));
+		
 		List<ItemsLine> itemLinestList = new ArrayList<ItemsLine>();
 		
 		if (itemid != null) {
 			DbSession session = Context.getService(PharmacyService.class).getSession();
 			Criteria criteria = session.createCriteria(ItemsLine.class);
-			criteria.add(Restrictions.gt("itemVirtualstock", quantity - 1));
 			criteria.add(Restrictions.eq("item.id", itemid));
-			criteria.add(Restrictions.gt("itemExpiryDate", new Date()));
-			criteria.addOrder(Order.asc("itemExpiryDate"));
+			if (context.getParameter("quantity") != null) {
+				Integer quantity = Integer.parseInt(context.getParameter("quantity"));
+				criteria.add(Restrictions.gt("itemVirtualstock", quantity - 1));
+				criteria.add(Restrictions.gt("itemExpiryDate", new Date()));
+				criteria.addOrder(Order.asc("itemExpiryDate"));
+			}
+			
 			if (itemBatch != null) {
 				criteria.add(Restrictions.like("itemBatch", itemBatch + "%").ignoreCase());
 			}
