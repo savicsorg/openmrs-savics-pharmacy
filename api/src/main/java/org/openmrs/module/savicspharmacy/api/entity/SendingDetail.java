@@ -1,7 +1,6 @@
 package org.openmrs.module.savicspharmacy.api.entity;
 
 // Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1
-
 import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 
@@ -15,6 +14,8 @@ public class SendingDetail extends BaseOpenmrsData implements java.io.Serializab
 	private Item item;
 	
 	private Sending sending;
+	
+	private ItemsLine itemsLine;
 	
 	private Integer id;
 	
@@ -90,6 +91,14 @@ public class SendingDetail extends BaseOpenmrsData implements java.io.Serializab
 	
 	public void setSendingItemExpiryDate(Date sendingItemExpiryDate) {
 		this.sendingItemExpiryDate = sendingItemExpiryDate;
+	}
+	
+	public ItemsLine getItemsLine() {
+		return itemsLine;
+	}
+	
+	public void setItemsLine(ItemsLine itemsLine) {
+		this.itemsLine = itemsLine;
 	}
 	
 }

@@ -19,9 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author anatoleabe
@@ -35,9 +33,6 @@ public class StockAtRiskExcelExport {
 	private List<Item> listItems;
 	
 	private Boolean atriskOnly;
-	
-	@Autowired
-	private MessageSourceService messageSourceService;
 	
 	public StockAtRiskExcelExport(List<Item> listItems, Boolean atriskOnly) {
 		this.listItems = listItems;

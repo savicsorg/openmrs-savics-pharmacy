@@ -11,12 +11,15 @@ public class SendingDetailId implements java.io.Serializable {
 	
 	private int sendingId;
 	
+	private int itemsLineId;
+	
 	public SendingDetailId() {
 	}
 	
-	public SendingDetailId(int itemId, int sendingId) {
+	public SendingDetailId(int itemId, int sendingId, int itemsLineId) {
 		this.itemId = itemId;
 		this.sendingId = sendingId;
+		this.itemsLineId = itemsLineId;
 	}
 	
 	public int getItemId() {
@@ -35,6 +38,14 @@ public class SendingDetailId implements java.io.Serializable {
 		this.sendingId = sendingId;
 	}
 	
+	public int getItemsLineId() {
+		return itemsLineId;
+	}
+	
+	public void setItemsLineId(int itemsLineId) {
+		this.itemsLineId = itemsLineId;
+	}
+	
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -44,7 +55,8 @@ public class SendingDetailId implements java.io.Serializable {
 			return false;
 		SendingDetailId castOther = (SendingDetailId) other;
 		
-		return (this.getItemId() == castOther.getItemId()) && (this.getSendingId() == castOther.getSendingId());
+		return (this.getItemId() == castOther.getItemId()) && (this.getSendingId() == castOther.getSendingId())
+		        && (this.getItemsLineId() == castOther.getItemsLineId());
 	}
 	
 	public int hashCode() {
@@ -52,6 +64,7 @@ public class SendingDetailId implements java.io.Serializable {
 		
 		result = 37 * result + this.getItemId();
 		result = 37 * result + this.getSendingId();
+		result = 37 * result + this.getItemsLineId();
 		return result;
 	}
 	

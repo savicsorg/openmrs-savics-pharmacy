@@ -171,7 +171,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				o.setItem(item);
 				o.setSending(sending);
 				
-				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
+				SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId(), itemsLine.getId());
 				o.setId(0);
 				o.setPk(sendingDetailId);
 				Context.getService(PharmacyService.class).upsert(o);
@@ -394,7 +394,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					o.setItem(item);
 					o.setSending(sending);
 					
-					SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId());
+					SendingDetailId sendingDetailId = new SendingDetailId(itemId, sending.getId(), itemsLine.getId());
 					o.setId(0);
 					o.setPk(sendingDetailId);
 					Context.getService(PharmacyService.class).upsert(o);

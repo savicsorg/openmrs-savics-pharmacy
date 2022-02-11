@@ -115,6 +115,7 @@ public class ItemsLineRequestResource extends DelegatingCrudResource<ItemsLine> 
 			if (context.getParameter("quantity") != null) {
 				Integer quantity = Integer.parseInt(context.getParameter("quantity"));
 				criteria.add(Restrictions.gt("itemVirtualstock", quantity - 1));
+				criteria.add(Restrictions.gt("itemVirtualstock", 0));
 				criteria.add(Restrictions.gt("itemExpiryDate", new Date()));
 				criteria.addOrder(Order.asc("itemExpiryDate"));
 			}

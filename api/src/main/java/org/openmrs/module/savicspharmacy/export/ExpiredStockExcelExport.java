@@ -20,11 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @author anatoleabe
@@ -38,9 +34,6 @@ public class ExpiredStockExcelExport {
 	private List<ItemsLine> listItemsLines;
 	
 	private boolean expiredOnly;
-	
-	@Autowired
-	private MessageSourceService messageSourceService;
 	
 	public ExpiredStockExcelExport(List<ItemsLine> listItemsLines, boolean expiredOnly) {
 		this.listItemsLines = listItemsLines;

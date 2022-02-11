@@ -45,9 +45,11 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		if (rep instanceof DefaultRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("uuid");
 			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("sending");
+			description.addProperty("itemsLine");
 			description.addProperty("id");
 			description.addProperty("sendingDetailsQuantity");
 			description.addProperty("sendingDetailsValue");
@@ -59,9 +61,11 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			return description;
 		} else if (rep instanceof FullRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("uuid");
 			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("sending");
+			description.addProperty("itemsLine");
 			description.addProperty("id");
 			description.addProperty("sendingDetailsQuantity");
 			description.addProperty("sendingDetailsValue");
@@ -73,9 +77,11 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			return description;
 		} else if (rep instanceof RefRepresentation) {
 			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("uuid");
 			description.addProperty("pk");
 			description.addProperty("item");
 			description.addProperty("sending");
+			description.addProperty("itemsLine");
 			description.addProperty("id");
 			description.addProperty("sendingDetailsQuantity");
 			description.addProperty("sendingDetailsValue");
@@ -116,8 +122,8 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 	@Override
 	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
 		try {
-			if (propertiesToCreate.get("sendingLineQuantity") == null) {
-				throw new ConversionException("Required properties: sendingLineQuantity");
+			if (propertiesToCreate.get("sendingLineQuantity") == null || propertiesToCreate.get("sendingItemBatch") == null) {
+				throw new ConversionException("Required properties: sendingLineQuantity, sendingItemBatch");
 			}
 			
 			SendingDetail sendingDetail = this.constructSendingDetail(null, propertiesToCreate);
@@ -162,9 +168,9 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 			Integer itemId = properties.get("item");
 			item = (Item) Context.getService(PharmacyService.class).getEntityByid(Item.class, "id", itemId);
 		}
-		
+		ItemsLine line = null;
 		if (properties.get("sendingItemBatch") != null && uuid == null && properties.get("sendingDetailsQuantity") != null) {
-			ItemsLine line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
+			line = (ItemsLine) Context.getService(PharmacyService.class).getEntityByAttributes(ItemsLine.class,
 			    new String[] { "itemBatch" }, new Object[] { properties.get("sendingItemBatch").toString() });
 			line.setItemVirtualstock(line.getItemVirtualstock()
 			        + Integer.valueOf(properties.get("sendingDetailsQuantity").toString()));
@@ -225,7 +231,7 @@ public class SendingDetailRequestResource extends DelegatingCrudResource<Sending
 				        .parse(properties.get("sendingLineAmount").toString()));
 			}
 			
-			SendingDetailId pk = new SendingDetailId(item.getId(), sending.getId());
+			SendingDetailId pk = new SendingDetailId(item.getId(), sending.getId(), line.getId());
 			sendingDetail.setId(pk.hashCode());
 			sendingDetail.setPk(pk);
 			sendingDetail.setItem(item);

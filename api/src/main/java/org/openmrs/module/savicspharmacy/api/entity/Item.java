@@ -7,11 +7,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import static org.joda.time.Period.days;
 import org.openmrs.BaseOpenmrsData;
-import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
-import static org.openmrs.logic.Duration.days;
 import org.openmrs.module.savicspharmacy.SavicsPharmacyModuleActivator;
 
 /**

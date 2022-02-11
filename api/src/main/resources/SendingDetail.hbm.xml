@@ -10,12 +10,18 @@
       <key-property name="sendingId" type="int">
         <column name="sending_id"/>
       </key-property>
+      <key-property name="itemsLineId" type="int">
+        <column name="item_line_id"/>
+      </key-property>
     </composite-id>
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Item" fetch="select" insert="false" name="item" update="false">
       <column name="item_id" not-null="true"/>
     </many-to-one>
     <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Sending" fetch="select" insert="false" name="sending" update="false">
       <column name="sending_id" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.ItemsLine" fetch="select" insert="false" name="itemsLine" update="false">
+      <column name="item_line_id" not-null="true"/>
     </many-to-one>
     <property name="id" type="int">
       <column name="id" not-null="true" unique="true"/>

@@ -222,6 +222,9 @@
             <column name="sending_id" type="INT">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="item_line_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="sending_details_quantity" type="INT"/>
             <column name="sending_details_value" type="DOUBLE"/>
             <column name="sending_item_batch" type="VARCHAR(50)"/>
@@ -800,6 +803,20 @@
             ALTER TABLE pharm_item MODIFY code VARCHAR(120)
         </sql>
     </changeSet>
+    
+    <changeSet author="anatoleabe (generated)" id="1620641683809-54_1">
+        <addForeignKeyConstraint baseColumnNames="item_line_id" baseTableName="pharm_sending_detail" constraintName="FKpharm_send540246_1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_items_line" />
+    </changeSet>
+    
+<!--    <changeSet author="anatoleabe" id="pharm-20211620641663079-15">
+        <addColumn tableName="pharm_sending_detail" >
+            <column  name="item_line_id" type="INT"/> 
+        </addColumn>
+        <dropPrimaryKey tableName="pharm_sending_detail"/>
+        <addPrimaryKey columnNames="item_id, sending_id, item_line_id" constraintName="FKpharm_sendAA540246" tableName="pharm_sending_detail" />
+        <addForeignKeyConstraint baseColumnNames="item_line_id" baseTableName="pharm_sending_detail" constraintName="FKpharm_sendAA540246" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_items_line" />
+        
+    </changeSet>-->
     
 </databaseChangeLog>
 
