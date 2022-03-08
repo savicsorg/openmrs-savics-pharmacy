@@ -1,0 +1,20 @@
+[
+    {
+        "id": "coreapps.patientDashboard",        // unique id for this app, unique across all apps, typically starts with your module id
+        "description": "Basic page summarizing patient's visits and demographics",        // plain text or a message code (not displayed to end-users)
+        "extensionPoints": [        // defines where other apps can plug functionality into this app
+            {
+                "id": "coreapps.patientDashboard.visitActions",        // unique id for this extension point, must be unique across all loaded apps
+                "description": "coreapps.patientDashboard.extension.visits.description"        // plain text or message code (not displayed to end-users)
+            },
+            {
+                "id": "coreapps.patientDashboard.overallActions",
+                "description" : "coreapps.patientDashboard.extension.actions.description"
+            }
+        ],
+        "contextModel": [        // extensions may count on the app providing these values (dev documentation, not enforced by the framework)
+            "patientId",
+            "activeVisitId"
+        ]
+    }
+]

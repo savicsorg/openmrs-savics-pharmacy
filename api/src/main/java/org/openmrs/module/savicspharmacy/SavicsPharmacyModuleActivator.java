@@ -27,6 +27,8 @@ public class SavicsPharmacyModuleActivator extends BaseModuleActivator {
 	
 	public static final String GLOBAL_PROPERTY_PHARMACY_EXPIRED_DELAY = "savics.pharmacy.batches.expiration.prevision.delay";
 	
+	public static final String GLOBAL_PROPERTY_TASK_AUTO_CLOSE_VISIT_DELAY = "savics.pharmacy.tasks.autoCloseExternalVisitAfter";
+	
 	/**
 	 * @see #started()
 	 */
@@ -39,6 +41,13 @@ public class SavicsPharmacyModuleActivator extends BaseModuleActivator {
 		if (property == null || property.isEmpty()) {
 			gp = new GlobalProperty(GLOBAL_PROPERTY_PHARMACY_EXPIRED_DELAY, "30");
 			gp.setDescription("Savics Pharmacy expiration prevision delay (in days). Default 30 days");
+			administrationService.saveGlobalProperty(gp);
+		}
+		
+		String property2 = administrationService.getGlobalProperty(GLOBAL_PROPERTY_TASK_AUTO_CLOSE_VISIT_DELAY);
+		if (property2 == null || property2.isEmpty()) {
+			gp = new GlobalProperty(GLOBAL_PROPERTY_TASK_AUTO_CLOSE_VISIT_DELAY, "7");
+			gp.setDescription("Savics task: number of days after which external visit will automacically be closed. Default 7 days");
 			administrationService.saveGlobalProperty(gp);
 		}
 	}
