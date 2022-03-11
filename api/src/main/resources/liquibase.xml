@@ -808,15 +808,18 @@
         <addForeignKeyConstraint baseColumnNames="item_line_id" baseTableName="pharm_sending_detail" constraintName="FKpharm_send540246_1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_items_line" />
     </changeSet>
     
-<!--    <changeSet author="anatoleabe" id="pharm-20211620641663079-15">
-        <addColumn tableName="pharm_sending_detail" >
-            <column  name="item_line_id" type="INT"/> 
-        </addColumn>
-        <dropPrimaryKey tableName="pharm_sending_detail"/>
-        <addPrimaryKey columnNames="item_id, sending_id, item_line_id" constraintName="FKpharm_sendAA540246" tableName="pharm_sending_detail" />
-        <addForeignKeyConstraint baseColumnNames="item_line_id" baseTableName="pharm_sending_detail" constraintName="FKpharm_sendAA540246" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_items_line" />
-        
-    </changeSet>-->
+    <changeSet author="anatoleabe" id="1620641683809-55"> 
+        <addColumn tableName="pharm_sending" >
+            <column  name="visit_id" type="INT"/> 
+        </addColumn>  
+    </changeSet>
     
+    <changeSet author="anatoleabe" id="1620641683809-56">
+        <addForeignKeyConstraint baseColumnNames="visit_id" baseTableName="pharm_sending" constraintName="FKpharm_send223203" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="visit_id" referencedTableName="visit" />
+    </changeSet>
+    
+    <changeSet  author="anatoleabe"  id="1620641683809-58">  
+        <dropNotNullConstraint  columnDataType="int" columnName="visit_id" tableName="pharm_sending"/>  
+    </changeSet>
 </databaseChangeLog>
 

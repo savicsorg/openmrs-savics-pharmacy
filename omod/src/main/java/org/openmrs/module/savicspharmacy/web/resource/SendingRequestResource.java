@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Person;
 import org.openmrs.Role;
+import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
 import org.openmrs.module.savicspharmacy.api.entity.CustomerType;
@@ -112,7 +113,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				break;
 			}
 		}
-		System.out.println("-------- >ROles = " + roles);
 		if (isDistributor) {
 			agentList = (List<Sending>) Context.getService(PharmacyService.class).getListByAttributes(Sending.class,
 			    new String[] { "customerType.id" }, new Object[] { 1 });
@@ -126,7 +126,6 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
-		System.out.println("-------- >ROles recherche= ");
 		String value = context.getParameter("sendingAmount");
 		List<Sending> agentList = Context.getService(PharmacyService.class).doSearch(Sending.class, "sendingAmount", value,
 		    context.getLimit(), context.getStartIndex());
@@ -518,6 +517,12 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			String patientId = properties.get("person");
 			patient = (Person) Context.getService(PharmacyService.class).getEntityByUuid(Person.class, patientId);
 		}
+		Visit visit = null;
+		if (properties.get("visit") != null) {
+			String visitId = properties.get("visit");
+			visit = (Visit) Context.getService(PharmacyService.class).getEntityByUuid(Visit.class, visitId);
+		}
+		
 		CustomerType customerType = null;
 		if (properties.get("customerType") != null) {
 			Integer customerTypeId = properties.get("customerType");
@@ -551,6 +556,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			
 			if (properties.get("person") != null) {
 				sending.setPerson(patient);
+				sending.setVisit(visit);
 			} else if (properties.get("customer") != null) {
 				sending.setCustomer(customer);
 			}
@@ -560,6 +566,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			sending.setCustomerType(customerType);
 			if (properties.get("person") != null) {
 				sending.setPerson(patient);
+				sending.setVisit(visit);
 			} else {
 				sending.setCustomer(customer);
 			}

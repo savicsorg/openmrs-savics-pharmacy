@@ -27,4 +27,7 @@
     <bean id="pharmacyDao" class="org.openmrs.module.savicspharmacy.api.dao.impl.PharmacyDaoImpl">
         <property name="dbSessionFactory" ref="dbSessionFactory"></property>
     </bean>
+    <bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
+        <property name="moduleId" value="${project.parent.artifactId}"/>
+    </bean>
 </beans>
