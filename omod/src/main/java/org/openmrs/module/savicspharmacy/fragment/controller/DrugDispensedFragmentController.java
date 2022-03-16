@@ -5,6 +5,7 @@
  */
 package org.openmrs.module.savicspharmacy.fragment.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,15 @@ public class DrugDispensedFragmentController {
 		Map<Date, List<Sending>> map = new HashMap<Date, List<Sending>>();
 		for (Visit v : patientVisits) {
 			sendings = Context.getService(PharmacyService.class).getByMasterId(Sending.class, "visit.id", v.getId());
+			List<Sending> validatedSendings = new ArrayList<Sending>();
+			
 			if (sendings != null && sendings.size() > 0) {
-				map.put(v.getStartDatetime(), sendings);
+				for (Sending s : sendings) {
+					if (s.getValidationDate() != null) {
+						validatedSendings.add(s);
+					}
+				}
+				map.put(v.getStartDatetime(), validatedSendings);
 			}
 		}
 		

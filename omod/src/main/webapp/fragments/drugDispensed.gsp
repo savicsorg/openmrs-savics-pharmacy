@@ -12,7 +12,7 @@
 
     <div class="info-header">
         <i class="icon-medicine"></i>
-        <h3>MEDICAMENTS DISPENSés</h3>
+        <h3>MEDICAMENTS DISPENSES</h3>
     </div>
 
     <div class="info-body active-drug-orders">
