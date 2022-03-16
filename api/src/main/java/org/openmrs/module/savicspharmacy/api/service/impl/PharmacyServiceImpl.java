@@ -91,6 +91,11 @@ public class PharmacyServiceImpl<T extends Serializable> extends BaseOpenmrsServ
 	public Serializable getListByAttributes(Class t, String[] ids, Object[] values) throws APIException {
 		return (T) this.dao.getListByAttributes(t, ids, values);
 	}
+        
+	@Override
+	public Serializable getListByAttributes(Class t, String[] ids, Object[] values, String[] notNullIds) throws APIException {
+		return (T) this.dao.getListByAttributes(t, ids, values, notNullIds);
+	}
 	
 	@Override
 	public List getByMasterId(Class t, String key, int value, Integer limit, Integer offset) {

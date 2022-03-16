@@ -36,16 +36,10 @@ public class DrugDispensedFragmentController {
 		List<Visit> patientVisits = visitService.getVisitsByPatient(patient);
 		Map<Date, List<Sending>> map = new HashMap<Date, List<Sending>>();
 		for (Visit v : patientVisits) {
-			sendings = Context.getService(PharmacyService.class).getByMasterId(Sending.class, "visit.id", v.getId());
-			List<Sending> validatedSendings = new ArrayList<Sending>();
-			
+			sendings = (List<Sending>) Context.getService(PharmacyService.class).getListByAttributes(Sending.class,
+			            new String[] { "visit.id"}, new Object[] {v.getId()}, new String[] { "validationDate"});
 			if (sendings != null && sendings.size() > 0) {
-				for (Sending s : sendings) {
-					if (s.getValidationDate() != null) {
-						validatedSendings.add(s);
-					}
-				}
-				map.put(v.getStartDatetime(), validatedSendings);
+				map.put(v.getStartDatetime(), sendings);
 			}
 		}
 		

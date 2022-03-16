@@ -153,7 +153,24 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		}
 		return criteria.list();
 	}
-	
+
+        @Override
+        public List getListByAttributes(Class<T> t, String[] ids, Object[] values, String[] notNullIds) throws APIException {
+            DbSession session = dbSessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(t);
+		for (int i = 0; i < ids.length; i++) {
+			if (values[i] == null)
+				criteria.add(Restrictions.isNull(ids[i]));
+			else
+				criteria.add(Restrictions.eq(ids[i], values[i]));
+		}
+                
+                for (String neId : notNullIds) {
+                    criteria.add(Restrictions.isNotNull(neId));
+                }
+		return criteria.list();
+        }
+
 	@Override
 	public List getFromMasterId(Class t, String key, int value, Integer limit, Integer offset) {
 		getSession().createCriteria(t).list();
@@ -184,4 +201,6 @@ public class PharmacyDaoImpl<T extends Serializable> implements PharmacyDao<T> {
 		crit.add(Restrictions.eq(key, value));
 		return (Long) crit.uniqueResult();
 	}
+
+
 }

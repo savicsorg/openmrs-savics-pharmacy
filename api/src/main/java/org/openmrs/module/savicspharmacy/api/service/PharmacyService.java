@@ -55,6 +55,9 @@ public interface PharmacyService<T extends Serializable> extends OpenmrsService 
 	
 	@Transactional(readOnly = true)
 	T getListByAttributes(Class<T> t, String[] ids, Object[] values) throws APIException;
+        
+	@Transactional(readOnly = true)
+	T getListByAttributes(Class<T> t, String[] ids, Object[] values, String[] notNullIds) throws APIException;
 	
 	@Transactional
 	T upsert(T entity) throws APIException;
