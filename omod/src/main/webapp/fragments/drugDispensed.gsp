@@ -29,20 +29,17 @@
                     <th>Date</th>
                     <th>Médicament</th>
                 </tr>
-
-                <tr>
                     <% def text = "- "; %>
                     <% def drug = ""; %>
                     <% it.value.each { entry -> %>
-                        
-                        <td>${ ui.format(entry.date) }</td>
-                        <% entry.sendingDetails.each { sendingDetail -> %>
-                            <% text = text + sendingDetail.item.name + '(Qte: '+ sendingDetail.sendingDetailsQuantity + '), \n - '%>
-                        <% } %>
-                        <td>${ ui.format(text) }</td>
+                        <tr>
+                            <td>${ ui.format(entry.date) }</td>
+                            <% entry.sendingDetails.each { sendingDetail -> %>
+                                <% text = text + sendingDetail.item.name + '(Qte: '+ sendingDetail.sendingDetailsQuantity + '), \n - '%>
+                            <% } %>
+                            <td>${ ui.format(text) }</td>
+                        </tr>
                     <% } %>
-                </tr>
-
             </table>
 
         <% } %>
