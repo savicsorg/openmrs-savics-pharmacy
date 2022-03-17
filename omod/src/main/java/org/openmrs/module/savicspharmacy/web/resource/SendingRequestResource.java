@@ -64,6 +64,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("visit");
 			description.addProperty("validationDate");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
 			description.addSelfLink();
@@ -79,6 +80,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("visit");
 			description.addProperty("validationDate");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -95,6 +97,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			description.addProperty("customerType");
 			description.addProperty("numberOfBatches");
 			description.addProperty("quantity");
+			description.addProperty("visit");
 			description.addProperty("validationDate");
 			description.addSelfLink();
 			return description;
@@ -521,7 +524,9 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		if (properties.get("visit") != null) {
 			String visitId = properties.get("visit");
 			visit = (Visit) Context.getService(PharmacyService.class).getEntityByUuid(Visit.class, visitId);
+			System.out.println("Visit ID = " + visit.getId());
 		}
+		System.out.println("Visit ID 2 = " + visit);
 		
 		CustomerType customerType = null;
 		if (properties.get("customerType") != null) {
