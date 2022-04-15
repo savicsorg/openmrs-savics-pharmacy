@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -109,13 +110,19 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		List<Sending> agentList;
 		boolean isDistributor = false;
-		Set<Role> roles = Context.getUserContext().getAuthenticatedUser().getRoles();
-		for (Role r : roles) {
-			if (r.getName().equalsIgnoreCase("Pharmacy: distributor")) {
-				isDistributor = true;
-				break;
+		try {
+			Set<Role> roles = Context.getUserContext().getAuthenticatedUser().getRoles();
+			for (Role r : roles) {
+				if (r.getName().equalsIgnoreCase("Pharmacy: distributor")) {
+					isDistributor = true;
+					break;
+				}
 			}
 		}
+		catch (Exception e) {
+			
+		}
+		
 		if (isDistributor) {
 			agentList = (List<Sending>) Context.getService(PharmacyService.class).getListByAttributes(Sending.class,
 			    new String[] { "customerType.id" }, new Object[] { 1 });
@@ -509,6 +516,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	private Sending constructOrder(String uuid, SimpleObject properties) throws ParseException {
 		Sending sending;
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat simpleDateFormatApprove = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
 		
 		Customer customer = null;
 		if (properties.get("customer") != null) {
@@ -524,9 +532,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 		if (properties.get("visit") != null) {
 			String visitId = properties.get("visit");
 			visit = (Visit) Context.getService(PharmacyService.class).getEntityByUuid(Visit.class, visitId);
-			System.out.println("Visit ID = " + visit.getId());
 		}
-		System.out.println("Visit ID 2 = " + visit);
 		
 		CustomerType customerType = null;
 		if (properties.get("customerType") != null) {
@@ -542,10 +548,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			}
 			
 			if (properties.get("date") != null) {
-				sending.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+				sending.setDate(simpleDateFormatApprove.parse(properties.get("date").toString()));
 			}
 			if (properties.get("validationDate") != null) {
-				sending.setValidationDate(simpleDateFormat.parse(properties.get("validationDate").toString()));
+				sending.setValidationDate(simpleDateFormatApprove.parse(properties.get("validationDate").toString()));
 			}
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
@@ -576,10 +582,10 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				sending.setCustomer(customer);
 			}
 			if (properties.get("date") != null) {
-				sending.setDate(simpleDateFormat.parse(properties.get("date").toString()));
+				sending.setDate(simpleDateFormatApprove.parse(properties.get("date").toString()));
 			}
 			if (properties.get("validationDate") != null) {
-				sending.setValidationDate(simpleDateFormat.parse(properties.get("validationDate").toString()));
+				sending.setValidationDate(simpleDateFormatApprove.parse(properties.get("validationDate").toString()));
 			}
 			if (properties.get("sendingAmount") != null) {
 				sending.setSendingAmount(Double.valueOf(properties.get("sendingAmount").toString()));
