@@ -34,6 +34,8 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	
 	private Set sendingDetails = new HashSet(0);
 	
+	private Set drugItemOrders = new HashSet(0);
+	
 	//Not persistance fields
 	private Integer numberOfBatches;
 	
@@ -117,6 +119,14 @@ public class Sending extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public void setCustomerType(CustomerType customerType) {
 		this.customerType = customerType;
+	}
+	
+	public Set getDrugItemOrders() {
+		return drugItemOrders;
+	}
+	
+	public void setDrugItemOrders(Set drugItemOrders) {
+		this.drugItemOrders = drugItemOrders;
 	}
 	
 	public Integer getQuantity() {

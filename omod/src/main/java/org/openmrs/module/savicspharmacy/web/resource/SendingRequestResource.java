@@ -10,14 +10,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openmrs.Drug;
+import org.openmrs.Encounter;
 import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.api.entity.Customer;
 import org.openmrs.module.savicspharmacy.api.entity.CustomerType;
+import org.openmrs.module.savicspharmacy.api.entity.DrugItemOrder;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
 import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -166,6 +170,21 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			Transaction transaction;
 			for (int i = 0; i < list.size(); i++) {
 				SendingDetail o = new SendingDetail();
+				
+				DrugItemOrder dio = new DrugItemOrder();
+				if (list.get(i).get("encounter") != null && list.get(i).get("drug") != null) {
+					Encounter encounter = (Encounter) Context.getService(PharmacyService.class).getEntityByid(
+					    Encounter.class, "id", new Integer(list.get(i).get("encounter").toString()));
+					Drug drug = (Drug) Context.getService(PharmacyService.class).getEntityByid(Drug.class, "id",
+					    new Integer(list.get(i).get("drug").toString()));
+					dio.setEncounter(encounter);
+					dio.setDrug(drug);
+                                        dio.setSending(sending);
+					dio.setVisit(sending.getVisit());
+					dio.setQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
+					dio.setDate(new Date());
+					Context.getService(PharmacyService.class).upsert(dio);
+				}
 				
 				o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 				o.setSendingDetailsValue(Double.valueOf(list.get(i).get("sendingDetailsValue").toString()));
@@ -384,6 +403,31 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 				for (int i = 0; i < list.size(); i++) {
 					SendingDetail o = new SendingDetail();
 					
+					DrugItemOrder dio = new DrugItemOrder();
+					if (list.get(i).get("encounter") != null && list.get(i).get("drug") != null) {
+						
+						//1. delete all SendingDetail
+						List<DrugItemOrder> drugItemOrders = Context.getService(PharmacyService.class).getByMasterId(
+						    DrugItemOrder.class, "sending.id", sending.getId(), 1000, 0);
+						
+						for (int k = 0; k < drugItemOrders.size(); k++) {
+							DrugItemOrder dco = drugItemOrders.get(k);
+							Context.getService(PharmacyService.class).delete(dco);
+						}
+						
+						Encounter encounter = (Encounter) Context.getService(PharmacyService.class).getEntityByid(
+						    Encounter.class, "id", new Integer(list.get(i).get("encounter").toString()));
+						Drug drug = (Drug) Context.getService(PharmacyService.class).getEntityByid(Drug.class, "id",
+						    new Integer(list.get(i).get("drug").toString()));
+						dio.setEncounter(encounter);
+						dio.setDrug(drug);
+						dio.setVisit(sending.getVisit());
+                                                dio.setSending(sending);
+						dio.setQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
+						dio.setDate(new Date());
+						Context.getService(PharmacyService.class).upsert(dio);
+					}
+					
 					o.setSendingDetailsQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 					o.setSendingDetailsValue(Double.valueOf(list.get(i).get("sendingDetailsValue").toString()));
 					o.setSendingItemBatch(list.get(i).get("sendingItemBatch").toString());
@@ -505,6 +549,14 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			Context.getService(PharmacyService.class).upsert(item);
 			
 			Context.getService(PharmacyService.class).delete(t);
+                        //1. delete all SendingDetail
+                        List<DrugItemOrder> drugItemOrders = Context.getService(PharmacyService.class).getByMasterId(
+                            DrugItemOrder.class, "sending.id", sending.getId(), 1000, 0);
+
+                        for (int k = 0; k < drugItemOrders.size(); k++) {
+                                DrugItemOrder dco = drugItemOrders.get(k);
+                                Context.getService(PharmacyService.class).delete(dco);
+                        }
 		}
 	}
 	
@@ -515,8 +567,8 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 	
 	private Sending constructOrder(String uuid, SimpleObject properties) throws ParseException {
 		Sending sending;
-		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat simpleDateFormatApprove = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+		simpleDateFormatApprove.setTimeZone(TimeZone.getTimeZone("GMT+1"));
 		
 		Customer customer = null;
 		if (properties.get("customer") != null) {

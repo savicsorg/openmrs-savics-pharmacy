@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.savicspharmacy.SavicsPharmacyModuleActivator;
 
@@ -21,6 +22,8 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	private Route route;
 	
 	private Unit unit;
+	
+	private Drug drug;
 	
 	private String uuid;
 	
@@ -79,6 +82,14 @@ public class Item extends BaseOpenmrsData implements java.io.Serializable {
 	
 	public Unit getUnit() {
 		return this.unit;
+	}
+	
+	public Drug getDrug() {
+		return drug;
+	}
+	
+	public void setDrug(Drug drug) {
+		this.drug = drug;
 	}
 	
 	public void setUnit(Unit unit) {

@@ -30,12 +30,13 @@
         </property>
         <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.CustomerType" fetch="select" name="customerType">
             <column name="customer_type_id" not-null="true"/>
-          </many-to-one>
-    <set fetch="select" inverse="true" lazy="true" name="sendingDetails" table="pharm_sending_detail">
+        </many-to-one>
+        <set fetch="select" inverse="true" lazy="true" name="sendingDetails" table="pharm_sending_detail">
             <key>
                 <column name="sending_id" not-null="true"/>
             </key>
             <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.SendingDetail"/>
-    </set>
+        </set>
+
     </class>
 </hibernate-mapping>

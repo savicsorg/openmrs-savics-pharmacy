@@ -18,9 +18,9 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Drug;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.savicspharmacy.api.entity.Item;
-import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.Route;
 import org.openmrs.module.savicspharmacy.api.entity.Unit;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
@@ -56,6 +56,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("drug");
 			description.addProperty("numberOfExpiredLots");
 			description.addProperty("numberOfNearExpiredLots");
 			description.addLink("ref", ".?v=" + RestConstants.REPRESENTATION_REF);
@@ -77,6 +78,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("drug");
 			description.addProperty("numberOfExpiredLots");
 			description.addProperty("numberOfNearExpiredLots");
 			description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -99,6 +101,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			description.addProperty("AMC");
 			description.addProperty("unit");
 			description.addProperty("route");
+			description.addProperty("drug");
 			description.addProperty("numberOfExpiredLots");
 			description.addProperty("numberOfNearExpiredLots");
 			description.addSelfLink();
@@ -182,6 +185,10 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 	private Item constructItem(String uuid, SimpleObject properties) {
 		Item item;
 		Unit unit = null;
+		Drug drug = null;
+		if (properties.get("drug") != null) {
+			drug = (Drug) Context.getService(PharmacyService.class).getEntityByUuid(Drug.class,  properties.get("drug").toString());
+		}
 		if (properties.get("unit") != null) {
 			Integer unitId = properties.get("unit");
 			unit = (Unit) Context.getService(PharmacyService.class).getEntityByid(Unit.class, "id", unitId);
@@ -239,6 +246,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			
 			item.setUnit(unit);
 			item.setRoute(route);
+			item.setDrug(drug);
 		} else {
 			item = new Item();
 			if (properties.get("name") == null || properties.get("code") == null) {
@@ -257,6 +265,7 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 			item.setAMC((Double) properties.get("AMC"));
 			item.setUnit(unit);
 			item.setRoute(route);
+			item.setDrug(drug);
 		}
 		
 		return item;

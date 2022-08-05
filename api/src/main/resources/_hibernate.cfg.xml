@@ -45,6 +45,7 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pharm?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
+    <mapping resource="org/openmrs/module/savicspharmacy/DrugItemOrder.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Item.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/OrderDetail.hbm.xml"/>
     <mapping resource="org/openmrs/module/savicspharmacy/Sending.hbm.xml"/>

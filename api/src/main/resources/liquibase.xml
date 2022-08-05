@@ -821,5 +821,71 @@
     <changeSet  author="anatoleabe"  id="1620641683809-58">  
         <dropNotNullConstraint  columnDataType="int" columnName="visit_id" tableName="pharm_sending"/>  
     </changeSet>
+    
+    <changeSet author="anatoleabe" id="1820641683801-60"> 
+        <addColumn tableName="pharm_item" >
+            <column  name="drug_id" type="INT"/> 
+        </addColumn>  
+    </changeSet>
+                
+    <changeSet  author="anatoleabe"  id="1820641683801-61">  
+        <dropNotNullConstraint  columnDataType="int" columnName="drug_id" tableName="pharm_item"/>  
+    </changeSet>
+    
+    <changeSet author="anatoleabe" id="1720641683809-59">
+        <createIndex indexName="FKpharm_item581237" tableName="pharm_item">
+            <column name="drug_id"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet author="anatoleabe" id="1720641683801-40">
+        <addForeignKeyConstraint baseColumnNames="drug_id" baseTableName="pharm_item" constraintName="FKpharm_item581237" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="drug_id" referencedTableName="drug" />
+    </changeSet>
+    
+    <changeSet author="anatoleabe" id="1720641683801-41">
+        <createTable tableName="pharm_drug_item_order">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="date" type="datetime"/>
+            <column name="drug_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visit_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="uuid" type="VARCHAR(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encounter_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT"/>
+        </createTable>
+        <createIndex indexName="FKpharm_drugitemorder581237" tableName="pharm_drug_item_order">
+            <column name="drug_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="drug_id" baseTableName="pharm_drug_item_order" constraintName="FKpharm_drugitemorder581237" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="drug_id" referencedTableName="drug" />
+        
+        <createIndex indexName="FKpharm_drugitemorder581234" tableName="pharm_drug_item_order">
+            <column name="visit_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="visit_id" baseTableName="pharm_drug_item_order" constraintName="FKpharm_drugitemorder581234" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="visit_id" referencedTableName="visit" />
+        
+        <createIndex indexName="FKpharm_drugitemorder581235" tableName="pharm_drug_item_order">
+            <column name="encounter_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="encounter_id" baseTableName="pharm_drug_item_order" constraintName="FKpharm_drugitemorder581235" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="encounter_id" referencedTableName="encounter" />
+    </changeSet>
+    
+    <changeSet author="anatoleabe" id="1720641683801-42">
+        <addColumn tableName="pharm_drug_item_order" >
+            <column  name="sending_id" type="INT"/> 
+        </addColumn> 
+        <createIndex indexName="FKpharm_drugitemorder591233" tableName="pharm_drug_item_order">
+            <column name="sending_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="sending_id" baseTableName="pharm_drug_item_order" constraintName="FKpharm_drugitemorder591233" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pharm_sending" />
+    </changeSet>
 </databaseChangeLog>
 

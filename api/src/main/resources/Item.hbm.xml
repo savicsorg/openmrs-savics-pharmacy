@@ -43,6 +43,9 @@
     <property name="stockMax" type="java.lang.Integer">
       <column name="stock_max"/>
     </property>
+    <many-to-one class="org.openmrs.Drug" fetch="select" name="drug">
+        <column name="drug_id" not-null="false"/>
+    </many-to-one>
     <property name="AMC" type="java.lang.Double">
       <column name="AMC"/>
     </property>

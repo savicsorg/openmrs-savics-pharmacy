@@ -10,12 +10,25 @@
 package org.openmrs.module.savicspharmacy.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.antlr.v4.runtime.misc.Array2DHashSet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Drug;
+import org.openmrs.Encounter;
+import org.openmrs.Obs;
+import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.savicspharmacy.api.entity.DrugItemOrder;
+import org.openmrs.module.savicspharmacy.api.entity.Item;
+import org.openmrs.module.savicspharmacy.api.entity.ItemsLine;
 import org.openmrs.module.savicspharmacy.api.entity.Sending;
+import org.openmrs.module.savicspharmacy.api.entity.SendingDetail;
+import org.openmrs.module.savicspharmacy.api.entity.Transaction;
 import org.springframework.stereotype.Controller;
 import org.openmrs.module.savicspharmacy.api.service.PharmacyService;
 import org.openmrs.module.savicspharmacy.rest.v1_0.resource.PharmacyRest;
@@ -43,6 +56,85 @@ public class SendingController {
 		response.setContentType("application/json");
 		response.setContentLength(content.length());
 		response.getWriter().write(content);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/" + RestConstants.VERSION_1 + PharmacyRest.PHARMACY_NAMESPACE
+	        + "/activeVisitPrescription")
+	public void getActiveVisitPrescription(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		response.setContentType("application/octet-stream");
+		List<String> listOfPrescribedDrugs = new ArrayList<String>();
+		if (request.getParameter("visit") != null) {
+			
+			Visit visit = null;
+			if (request.getParameter("visit") != null) {
+				String visitId = request.getParameter("visit");
+				visit = (Visit) Context.getService(PharmacyService.class).getEntityByUuid(Visit.class, visitId);
+			}
+			
+			if (visit.getVoided() == false) {
+				Set<Encounter> visitEncounterList = visit.getEncounters();
+				for (Encounter e : visitEncounterList) {
+					Set<Obs> obsByEncounterList = e.getObs();
+					String itemContent = "{";
+					Integer drugQuantity = 0;
+					Drug drug = null;
+					for (Obs o : obsByEncounterList) {
+						
+						if (o.getValueNumeric() != null && o.getVoided() == false
+						        && "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".equalsIgnoreCase(o.getConcept().getUuid())) {
+							drugQuantity = o.getValueNumeric().intValue();
+							if (!"{".equals(itemContent)) {
+								itemContent = itemContent + ",\"quantity\":" + drugQuantity;
+							} else {
+								itemContent = itemContent + "\"quantity\":" + drugQuantity;
+							}
+							
+						}
+						
+						drug = o.getValueDrug();
+						if (o.getValueDrug() != null && o.getVoided() == false) {
+							if (!"{".equals(itemContent)) {
+								itemContent = itemContent + ",";
+							}
+							SendingDetail sd = new SendingDetail();
+							Item item = (Item) Context.getService(PharmacyService.class).getEntityByAttributes(Item.class,
+							    new String[] { "drug.drugId" }, new Object[] { drug.getDrugId()});
+							
+							Set<ItemsLine> itemsLines = item.getItemsLines();
+							
+							itemContent = itemContent + "\"name\":\"" + item.getName() + "\"," + "\"id\":" + item.getId()
+							        + ", \"code\":\"" + item.getCode() + "\",\"uuid\":\"" + item.getUuid()
+							        + "\",\"sellPrice\":" + item.getSellPrice()  + ",\"encounter\":\"" + e.getId()
+							        + "\"" + ",\"drug\":\"" + drug.getId() + "\"";
+						}
+						
+					}
+					itemContent = itemContent + "}";
+					
+					if (drug != null) {// In case the encounter does not contains a drug prescription
+						System.out.println(" ------------ ");
+						System.out.println("Visit ID = " + visit.getVisitId());
+						System.out.println("Encounter ID = " + e.getEncounterId());
+						System.out.println("Drug ID = " + drug.getDrugId());
+						List<DrugItemOrder> drugItemOrders = (List<DrugItemOrder>) Context.getService(PharmacyService.class)
+						        .getListByAttributes(DrugItemOrder.class,
+						            new String[] { "visit.visitId", "encounter.encounterId", "drug.drugId" },
+						            new Object[] { visit.getVisitId(), e.getEncounterId(), drug.getDrugId() });
+						
+						if (drugItemOrders != null && drugItemOrders.isEmpty()) {//Here we check if this prescription has already been dispensed. drugItemOrders isEmpty if not yet dispensed
+							if (!"{}".equals(itemContent)) {
+								listOfPrescribedDrugs.add(itemContent);
+							}
+						}
+					}
+					
+				}
+			}
+		}
+		String result = "{\"results\":" + listOfPrescribedDrugs.toString() + "}";
+		response.setContentType("application/json");
+		response.setContentLength(listOfPrescribedDrugs.size());
+		response.getWriter().write(result);
 	}
 	
 }

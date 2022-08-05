@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 7, 2021 3:23:28 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class  name="org.openmrs.module.savicspharmacy.api.entity.DrugItemOrder" table="pharm_drug_item_order">
+        <id name="id" type="java.lang.Integer">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+        <many-to-one class="org.openmrs.Drug" fetch="select" name="drug">
+            <column name="drug_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one class="org.openmrs.Visit" fetch="select" name="visit">
+            <column name="visit_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one class="org.openmrs.Encounter" fetch="select" name="encounter">
+            <column name="encounter_id" not-null="false"/>
+        </many-to-one>
+        <property name="date" type="java.util.Date">
+            <column length="10" name="date"/>
+        </property>
+        <property name="uuid" type="string">
+            <column length="38" name="uuid" not-null="true"/>
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity"/>
+        </property>
+        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Sending" fetch="select" insert="false" name="sending" update="false">
+            <column name="sending_id" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -57,6 +57,7 @@
             Customer.hbm.xml
             CustomerType.hbm.xml
             Item.hbm.xml
+            DrugItemOrder.hbm.xml
             ItemsLine.hbm.xml
             OrderDetail.hbm.xml
             PharmacyLocation.hbm.xml
