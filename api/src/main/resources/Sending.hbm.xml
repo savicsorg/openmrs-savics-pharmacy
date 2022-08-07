@@ -37,6 +37,12 @@
             </key>
             <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.SendingDetail"/>
         </set>
+        <set fetch="select" inverse="true" lazy="true" name="drugItemOrders" table="pharm_drug_item_order">
+            <key>
+                <column name="sending_id" not-null="true"/>
+            </key>
+            <one-to-many class="org.openmrs.module.savicspharmacy.api.entity.DrugItemOrder"/>
+        </set>
 
     </class>
 </hibernate-mapping>

@@ -187,7 +187,8 @@ public class ItemRequestResource extends DataDelegatingCrudResource<Item> {
 		Unit unit = null;
 		Drug drug = null;
 		if (properties.get("drug") != null) {
-			drug = (Drug) Context.getService(PharmacyService.class).getEntityByUuid(Drug.class,  properties.get("drug").toString());
+			drug = (Drug) Context.getService(PharmacyService.class).getEntityByUuid(Drug.class,
+			    properties.get("drug").toString());
 		}
 		if (properties.get("unit") != null) {
 			Integer unitId = properties.get("unit");

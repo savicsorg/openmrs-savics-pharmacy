@@ -77,9 +77,11 @@ public class SendingController {
 					Set<Obs> obsByEncounterList = e.getObs();
 					String itemContent = "{";
 					Integer drugQuantity = 0;
-					Drug drug = null;
+					
+					Drug selectedDrug = null;
+					
 					for (Obs o : obsByEncounterList) {
-						
+						Drug drug;
 						if (o.getValueNumeric() != null && o.getVoided() == false
 						        && "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".equalsIgnoreCase(o.getConcept().getUuid())) {
 							drugQuantity = o.getValueNumeric().intValue();
@@ -92,36 +94,33 @@ public class SendingController {
 						}
 						
 						drug = o.getValueDrug();
-						if (o.getValueDrug() != null && o.getVoided() == false) {
+						if (drug != null && o.getVoided() == false) {
+							selectedDrug = drug;
 							if (!"{".equals(itemContent)) {
 								itemContent = itemContent + ",";
 							}
 							SendingDetail sd = new SendingDetail();
 							Item item = (Item) Context.getService(PharmacyService.class).getEntityByAttributes(Item.class,
-							    new String[] { "drug.drugId" }, new Object[] { drug.getDrugId()});
+							    new String[] { "drug.drugId" }, new Object[] { drug.getDrugId() });
 							
 							Set<ItemsLine> itemsLines = item.getItemsLines();
 							
 							itemContent = itemContent + "\"name\":\"" + item.getName() + "\"," + "\"id\":" + item.getId()
 							        + ", \"code\":\"" + item.getCode() + "\",\"uuid\":\"" + item.getUuid()
-							        + "\",\"sellPrice\":" + item.getSellPrice()  + ",\"encounter\":\"" + e.getId()
-							        + "\"" + ",\"drug\":\"" + drug.getId() + "\"";
+							        + "\",\"sellPrice\":" + item.getSellPrice() + ",\"encounter\":\"" + e.getId() + "\""
+							        + ",\"drug\":\"" + drug.getId() + "\"";
 						}
 						
 					}
 					itemContent = itemContent + "}";
 					
-					if (drug != null) {// In case the encounter does not contains a drug prescription
-						System.out.println(" ------------ ");
-						System.out.println("Visit ID = " + visit.getVisitId());
-						System.out.println("Encounter ID = " + e.getEncounterId());
-						System.out.println("Drug ID = " + drug.getDrugId());
+					if (selectedDrug != null) {// In case the encounter does not contains a drug prescription
 						List<DrugItemOrder> drugItemOrders = (List<DrugItemOrder>) Context.getService(PharmacyService.class)
 						        .getListByAttributes(DrugItemOrder.class,
 						            new String[] { "visit.visitId", "encounter.encounterId", "drug.drugId" },
-						            new Object[] { visit.getVisitId(), e.getEncounterId(), drug.getDrugId() });
+						            new Object[] { visit.getVisitId(), e.getEncounterId(), selectedDrug.getDrugId() });
 						
-						if (drugItemOrders != null && drugItemOrders.isEmpty()) {//Here we check if this prescription has already been dispensed. drugItemOrders isEmpty if not yet dispensed
+						if (drugItemOrders == null || (drugItemOrders != null && drugItemOrders.isEmpty())) {//Here we check if this prescription has already been dispensed. drugItemOrders isEmpty if not yet dispensed
 							if (!"{}".equals(itemContent)) {
 								listOfPrescribedDrugs.add(itemContent);
 							}

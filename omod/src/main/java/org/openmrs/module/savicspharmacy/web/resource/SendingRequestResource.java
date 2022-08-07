@@ -179,7 +179,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 					    new Integer(list.get(i).get("drug").toString()));
 					dio.setEncounter(encounter);
 					dio.setDrug(drug);
-                                        dio.setSending(sending);
+					dio.setSending(sending);
 					dio.setVisit(sending.getVisit());
 					dio.setQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 					dio.setDate(new Date());
@@ -422,7 +422,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 						dio.setEncounter(encounter);
 						dio.setDrug(drug);
 						dio.setVisit(sending.getVisit());
-                                                dio.setSending(sending);
+						dio.setSending(sending);
 						dio.setQuantity(new Integer(list.get(i).get("sendingDetailsQuantity").toString()));
 						dio.setDate(new Date());
 						Context.getService(PharmacyService.class).upsert(dio);
@@ -518,6 +518,15 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			SendingDetail o = sendingDetailList.get(i);
 			Context.getService(PharmacyService.class).delete(o);
 		}
+		
+		List<DrugItemOrder> drugItemOrders = Context.getService(PharmacyService.class).getByMasterId(DrugItemOrder.class,
+		    "sending.id", sending.getId(), 1000, 0);
+		
+		for (int k = 0; k < drugItemOrders.size(); k++) {
+			DrugItemOrder dco = drugItemOrders.get(k);
+			Context.getService(PharmacyService.class).delete(dco);
+		}
+		
 		Context.getService(PharmacyService.class).delete(sending);
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		//2. update all old transactions as canceled
@@ -549,14 +558,7 @@ public class SendingRequestResource extends DataDelegatingCrudResource<Sending> 
 			Context.getService(PharmacyService.class).upsert(item);
 			
 			Context.getService(PharmacyService.class).delete(t);
-                        //1. delete all SendingDetail
-                        List<DrugItemOrder> drugItemOrders = Context.getService(PharmacyService.class).getByMasterId(
-                            DrugItemOrder.class, "sending.id", sending.getId(), 1000, 0);
-
-                        for (int k = 0; k < drugItemOrders.size(); k++) {
-                                DrugItemOrder dco = drugItemOrders.get(k);
-                                Context.getService(PharmacyService.class).delete(dco);
-                        }
+			
 		}
 	}
 	

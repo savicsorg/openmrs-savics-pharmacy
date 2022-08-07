@@ -25,7 +25,7 @@
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity"/>
         </property>
-        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Sending" fetch="select" insert="false" name="sending" update="false">
+        <many-to-one class="org.openmrs.module.savicspharmacy.api.entity.Sending" fetch="select" name="sending">
             <column name="sending_id" not-null="true"/>
         </many-to-one>
     </class>
